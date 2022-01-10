@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function run-npm-command() {
-  local command="$1"
+  local args=("$@")
   local status=0
   local stdout=''
   local stderr=''
@@ -16,8 +16,8 @@ function run-npm-command() {
   local stdout_file="$tmpdir/stdout"
   local stderr_file="$tmpdir/stderr"
 
-  echo "[DEBUG] Running npm command: $command" >&2
-  npm run "$command" >"$stdout_file" 2>"$stderr_file"
+  echo "[DEBUG] Running npm command: ${args[*]}" >&2
+  npm run "${args[@]}" >"$stdout_file" 2>"$stderr_file"
   status="$?"
 
   stdout="$(< "$stdout_file")"
