@@ -1,0 +1,33 @@
+---
+
+name: 'Run npm-test action'
+
+on:
+  pull_request:
+    paths:
+      - actions/npm-setup/*
+      - actions/npm-run/*
+      - actions/npm-test/*
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-npm-run-action:
+    name: 'Uses the npm-run action'
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: 'Checkout actions'
+        uses: actions/checkout@v2
+      -
+        name: 'Checkout hello world project'
+        uses: actions/checkout@v2
+        with:
+          repository: mike-carey/hello-world-nodejs
+          path: ./hello-world
+      -
+        name: 'Run npm tests'
+        uses: ./actions/npm-test
+        working-directory: ./hello-world

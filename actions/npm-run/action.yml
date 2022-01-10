@@ -1,0 +1,38 @@
+---
+
+name: 'Run npm command'
+description: 'Runs an npm command'
+
+inputs:
+  node-version:
+    description: 'The node version to use, defaults to the version specified in .nvmrc or .node-version'
+    default: ''
+  command:
+    description: 'The npm command to run'
+    required: true
+
+outputs:
+  node-version:
+    description: 'The determined node version'
+    value: ${{ steps.setup.outputs.node-version }}
+  stdout:
+    description: 'Standard out from the npm run command'
+    value: ${{ steps.run.outputs.stdout }}
+  stderr:
+    description: 'Standard error from the npm run command'
+    value: ${{ steps.run.outputs.stderr }}
+
+runs:
+  using: composite
+  steps:
+    -
+      name: 'Setup node'
+      id: setup
+      uses: shopsmart/github-actions/actions/npm-setup@main
+      with:
+        node-version: ${{ inputs.node-version }}
+    -
+      name: 'Run npm command'
+      id: run
+      shell: bash
+      run: $GITHUB_ACTION_PATH/run-npm-command.sh

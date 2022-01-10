@@ -1,0 +1,37 @@
+###
+# This action is meant 
+##
+---
+
+name: 'Run npm test'
+description: 'Runs npm test suite'
+
+inputs:
+  node-version:
+    description: 'The node version to use, defaults to the version specified in .nvmrc or .node-version'
+    default: ''
+  command:
+    description: 'The npm command to run'
+    default: 'test'
+
+outputs:
+  node-version:
+    description: 'The determined node version'
+    value: ${{ steps.run.outputs.node-version }}
+  stdout:
+    description: 'Standard out from the npm run command'
+    value: ${{ steps.run.outputs.stdout }}
+  stderr:
+    description: 'Standard error from the npm run command'
+    value: ${{ steps.run.outputs.stderr }}
+
+runs:
+  using: composite
+  steps:
+    -
+      name: 'Run npm test'
+      id: run
+      uses: shopsmart/github-actions/actions/npm-run@main
+      with:
+        node-version: ${{ inputs.node-version }}
+        command: ${{ inputs.command }}
