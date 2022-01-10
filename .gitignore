@@ -1,0 +1,41 @@
+# General ignore
+
+# Environment variables
+.env
+
+# Docker Storage
+.docker/
+
+# Common build directories
+build/
+dist/
+out/
+tmp/
+
+# Temp storage
+*.bak
+*.log
+*.tmp
+
+# Archives
+*.gz
+*.tar
+*.tgz
+*.zip
+
+# OS Files
+
+## Mac OS
+.DS_Store
+._*
+.Trashes/
+
+## Linux
+*~
+*.swp
+
+## Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
