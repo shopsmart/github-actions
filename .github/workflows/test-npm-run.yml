@@ -29,6 +29,6 @@ jobs:
       -
         name: 'Run npm tests'
         uses: ./actions/npm-run
-        working-directory: ./hello-world
         with:
           command: test
+          working-directory: ./hello-world
