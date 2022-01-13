@@ -7,6 +7,9 @@ inputs:
   node-version:
     description: 'The node version to use, defaults to the version specified in .nvmrc or .node-version'
     default: ''
+  working-directory:
+    description: 'The directory to run the setup and command within'
+    default: ''
   command:
     description: 'The npm command to run'
     required: true
@@ -31,8 +34,10 @@ runs:
       uses: shopsmart/github-actions/actions/npm-setup@npm-wrappers
       with:
         node-version: ${{ inputs.node-version }}
+        working-directory: ${{ inputs.working-directory }}
     -
       name: 'Run npm command'
       id: run
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: $GITHUB_ACTION_PATH/run-npm-command.sh

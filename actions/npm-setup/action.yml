@@ -7,6 +7,9 @@ inputs:
   node-version:
     description: 'The node version to use, defaults to the version specified in .nvmrc or .node-version'
     default: ''
+  working-directory:
+    description: 'The directory to run the setup within'
+    default: ''
 
 outputs:
   node-version:
@@ -21,6 +24,7 @@ runs:
       id: version
       run: ${{ github.action_path }}/determine-node-version.sh
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         NODE_VERSION: ${{ inputs.node-version }}
     -
@@ -39,3 +43,4 @@ runs:
       name: 'Install npm dependencies'
       run: npm ci
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
