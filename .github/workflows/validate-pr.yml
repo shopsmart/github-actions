@@ -38,5 +38,5 @@ jobs:
         name: 'Install bats'
         run: brew install bats-core
       -
-        name: 'Run tests'
-        run: bats -r **/*.bats
+        name: 'Run action tests'
+        run: bats -r actions/*/*.bats
