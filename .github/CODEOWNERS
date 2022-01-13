@@ -1,0 +1,3 @@
+# Protect github settings
+.github/settings.yml  @shopsmart/tech-ops
+.github/CODEOWNERS    @shopsmart/tech-ops

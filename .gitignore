@@ -1,7 +1,7 @@
 # General ignore
 
 # Environment variables
-.env
+/.env
 
 # Docker Storage
 .docker/
