@@ -12,7 +12,7 @@ function run-npm-command() {
   # https://github.com/koalaman/shellcheck/wiki/SC2064
   # We want this variable to expand now
   trap "rm -rf $tmpdir" EXIT
-  
+
   local stdout_file="$tmpdir/stdout"
   local stderr_file="$tmpdir/stderr"
 

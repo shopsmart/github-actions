@@ -21,7 +21,7 @@ function teardown() {
 @test "it should use the provided node version" {
   pushd "$BATS_TEST_TMPDIR" >/dev/null
   export NODE_VERSION=10.x
-  
+
   run determine-node-version
   popd >/dev/null
 
@@ -32,7 +32,7 @@ function teardown() {
 @test "it should use the node version from .nvmrc" {
   pushd "$BATS_TEST_TMPDIR" >/dev/null
   echo v10.x > .nvmrc
-  
+
   run determine-node-version
   popd >/dev/null
 

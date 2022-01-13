@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 function determine-node-version() {
-  set -eo pipefail  
+  set -eo pipefail
 
   local node_version="${NODE_VERSION:-}"
   if [ -n "$node_version" ]; then
     echo "[DEBUG] Node version provided via input: $node_version" >&2
   elif [ -f .nvmrc ]; then
     echo "[DEBUG] Found .nvmrc file" >&2
-    
+
     node_version="$(< .nvmrc)"
     # NVM keeps the v in the version file
     node_version="${node_version/v/}"
