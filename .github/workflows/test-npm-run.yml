@@ -30,5 +30,6 @@ jobs:
         name: 'Run npm tests'
         uses: ./actions/npm-run
         with:
-          command: test
+          node-version: '14'
           working-directory: ./hello-world
+          command: test

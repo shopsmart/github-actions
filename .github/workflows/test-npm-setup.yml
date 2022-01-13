@@ -29,6 +29,7 @@ jobs:
         name: 'Run npm setup'
         uses: ./actions/npm-setup
         with:
+          node-version: '14'
           working-directory: ./hello-world
       -
         name: 'Run npm tests'
