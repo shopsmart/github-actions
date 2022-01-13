@@ -31,7 +31,7 @@ runs:
     -
       name: 'Setup node'
       id: setup
-      uses: shopsmart/github-actions/actions/npm-setup@npm-wrappers
+      uses: shopsmart/github-actions/actions/npm-setup@v1
       with:
         node-version: ${{ inputs.node-version }}
         working-directory: ${{ inputs.working-directory }}
