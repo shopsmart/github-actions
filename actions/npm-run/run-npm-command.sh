@@ -33,6 +33,17 @@ function run-npm-command() {
   stderr="${stderr//$'\n'/'%0A'}"
   stderr="${stderr//$'\r'/'%0D'}"
 
+  # Dump stdout and stderr for debugging purposes
+  {
+    echo "-------------------- BEGIN STDOUT --------------------"
+    cat "$stdout_file"
+    echo "-------------------- END STDOUT   --------------------"
+
+    echo "-------------------- BEGIN STDERR --------------------"
+    cat "$stderr_file"
+    echo "-------------------- END STDERR   --------------------"
+  } >&2
+
   # Outputs
   echo "::set-output name=stdout::$stdout"
   echo "::set-output name=stderr::$stderr"
