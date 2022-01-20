@@ -80,13 +80,13 @@ runs:
       shell: bash
       run: brew install gh
       # Only if we are downloading assets from gh release
-      if: ${{ inputs.tag }} != ''
+      if: inputs.tag != ''
 
     - name: 'Download static assets'
       shell: bash
       run: gh -R "${{ github.repository }}" release download -p "${{ inputs.pattern }}" "${{ inputs.tag }}"
       # Only if we are downloading assets from gh release
-      if: ${{ inputs.tag }} != ''
+      if: inputs.tag != ''
 
     - name: 'Unpack release assets'
       id: unpack
@@ -102,13 +102,13 @@ runs:
         role-to-assume: ${{ inputs.role-to-assume }}
         role-duration-seconds: ${{ inputs.role-duration-seconds }}
       # Only if we are using AWS S3
-      if: ${{ steps.info.outputs.configure-aws-credentials }} == 'true'
+      if: steps.info.outputs.configure-aws-credentials == 'true'
 
     - name: 'Upload static assets'
       shell: bash
       run: $GITHUB_ACTION_PATH/upload-static-assets.sh "${{ steps.unpack.outputs.path }}"
       # Only if we are using AWS S3
-      if: ${{ steps.info.outputs.configure-aws-credentials }} == 'true'
+      if: steps.info.outputs.configure-aws-credentials == 'true'
 
     - name: 'Tag static assets'
       shell: bash
@@ -117,4 +117,4 @@ runs:
         S3_BUCKET: ${{ inputs.s3-bucket }}
         S3_TAGS: ${{ inputs.s3-tags }}
       # Only if we are using AWS S3
-      if: ${{ steps.info.outputs.configure-aws-credentials }} == 'true' && ${{ inputs.s3-tags }} != ''
+      if: steps.info.outputs.configure-aws-credentials == 'true' && inputs.s3-tags != ''
