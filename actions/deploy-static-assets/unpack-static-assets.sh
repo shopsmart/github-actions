@@ -22,10 +22,12 @@ function unpack-static-assets() {
   [ -n "$type" ] || {
     type="$(basename "$file")"
     type="${type#*.}"
+    echo "[DEBUG] Interpreted file type: $type" >&2
   }
 
   mkdir -p "$path"
 
+  echo "[DEBUG] Unpacking $type file $file to $path" >&2
   case "$type" in
     tar )
       echo "[DEBUG] Found a tar, unpacking to $path" >&2
