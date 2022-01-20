@@ -106,7 +106,7 @@ runs:
 
     - name: 'Upload static assets'
       shell: bash
-      run: $GITHUB_ACTION_PATH/upload-static-assets.sh "${{ steps.unpack.outputs.path "
+      run: $GITHUB_ACTION_PATH/upload-static-assets.sh "${{ steps.unpack.outputs.path }}"
       # Only if we are using AWS S3
       if: ${{ steps.info.outputs.configure-aws-credentials }} == 'true'
 
