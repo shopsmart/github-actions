@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load unpack-static-assets.sh
+load unpack-archive.sh
 
 function setup() {
   create_archives
@@ -9,7 +9,6 @@ function setup() {
   export TAR_GZ_FILE="$BATS_TEST_TMPDIR/archive.tar.gz"
   export TGZ_FILE="$BATS_TEST_TMPDIR/archive.tgz"
   export ZIP_FILE="$BATS_TEST_TMPDIR/archive.zip"
-  export TARGZIP_FILE="$BATS_TEST_TMPDIR/archive.targzip"
   export ARCHIVE_DIRECTORY="$BATS_TEST_TMPDIR/archive"
   export INDEX_FILE="$BATS_TEST_TMPDIR/archive/public/index.html"
 
@@ -29,11 +28,11 @@ function create_archives() {
     mkdir -p archive/public
 
     echo "<html><head></head><body>Hello world</body></html>" > archive/public/index.html
+    echo "head p { color: black; }" > archive/public/style.css
 
     tar -cf archive.tar -C archive/ .
     tar -zcf archive.tar.gz -C archive/ .
     tar -zcf archive.tgz -C archive/ .
-    tar -zcf archive.targzip -C archive/ .
 
     pushd archive >/dev/null
       zip -r ../archive.zip .
@@ -42,66 +41,62 @@ function create_archives() {
 }
 
 @test "it should unpack the .tar" {
-  run unpack-static-assets "$TAR_FILE" "$DESTINATION"
+  run unpack-archive "$TAR_FILE" "$DESTINATION"
 
   [ "$status" -eq 0 ]
   [ -d "$DESTINATION/public" ]
   [ -f "$DESTINATION/public/index.html" ]
+  [ -f "$DESTINATION/public/style.css" ]
 }
 
 @test "it should unpack the .tar.gz" {
-  run unpack-static-assets "$TAR_GZ_FILE" "$DESTINATION"
+  run unpack-archive "$TAR_GZ_FILE" "$DESTINATION"
 
   [ "$status" -eq 0 ]
   [ -d "$DESTINATION/public" ]
   [ -f "$DESTINATION/public/index.html" ]
+  [ -f "$DESTINATION/public/style.css" ]
 }
 
 @test "it should unpack the .tgz" {
-  run unpack-static-assets "$TGZ_FILE" "$DESTINATION"
+  run unpack-archive "$TGZ_FILE" "$DESTINATION"
 
   [ "$status" -eq 0 ]
   [ -d "$DESTINATION/public" ]
   [ -f "$DESTINATION/public/index.html" ]
+  [ -f "$DESTINATION/public/style.css" ]
 }
 
 @test "it should unpack the .zip" {
-  run unpack-static-assets "$ZIP_FILE" "$DESTINATION"
+  run unpack-archive "$ZIP_FILE" "$DESTINATION"
   echo "$output"
 
   [ "$status" -eq 0 ]
   [ -d "$DESTINATION/public" ]
   [ -f "$DESTINATION/public/index.html" ]
-}
-
-@test "it should unpack the .tgzip as .tgz" {
-  export FILE_TYPE=tgz
-
-  run unpack-static-assets "$TARGZIP_FILE" "$DESTINATION"
-
-  [ "$status" -eq 0 ]
-  [ -d "$DESTINATION/public" ]
-  [ -f "$DESTINATION/public/index.html" ]
+  [ -f "$DESTINATION/public/style.css" ]
 }
 
 @test "it should copy the directory to the path" {
-  run unpack-static-assets "$ARCHIVE_DIRECTORY" "$DESTINATION"
+  run unpack-archive "$ARCHIVE_DIRECTORY" "$DESTINATION"
 
   [ "$status" -eq 0 ]
   [ -d "$DESTINATION/public" ]
   [ -f "$DESTINATION/public/index.html" ]
+  [ -f "$DESTINATION/public/style.css" ]
 }
 
 @test "it should error out if it cannot determine the type" {
-  run unpack-static-assets "$INDEX_FILE" "$DESTINATION"
+  run unpack-archive "$INDEX_FILE" "$DESTINATION"
 
   [ "$status" -ne 0 ]
 }
 
 @test "it should expand the wildcard" {
-  run unpack-static-assets "$WILDCARD_FILE" "$DESTINATOIN"
+  run unpack-archive "$WILDCARD_FILE" "$DESTINATION"
 
   [ "$status" -eq 0 ]
   [ -d "$DESTINATION/public" ]
   [ -f "$DESTINATION/public/index.html" ]
+  [ -f "$DESTINATION/public/style.css" ]
 }

@@ -96,8 +96,10 @@ runs:
 
     - name: 'Unpack release assets'
       id: unpack
-      shell: bash
-      run: $GITHUB_ACTION_PATH/unpack-static-assets.sh "${{ inputs.pattern }}"
+      uses: shopsmart/github-actions/actions/unpack-archive@feature/static-assets
+      with:
+        filename: ${{ inputs.pattern }}
+        destination: static-assets
 
     - name: 'Configure AWS credentials'
       uses: aws-actions/configure-aws-credentials@v1
