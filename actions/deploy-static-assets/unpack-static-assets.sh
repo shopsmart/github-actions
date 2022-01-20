@@ -7,6 +7,16 @@ function unpack-static-assets() {
   local type="${FILE_TYPE:-}"
   local path="${2:-static-assets}"
 
+  [ -n "$file" ] || {
+    echo "[ERROR] File is required" >&2
+    return 1
+  }
+  # shellcheck disable=SC2116,SC2086
+  # https://github.com/koalaman/shellcheck/wiki/SC2116
+  # https://github.com/koalaman/shellcheck/wiki/SC2086
+  # We would like the wildcard to expand here so we get the actual filename
+  file="$(builtin echo $file)"
+
   [ -n "$type" ] || {
     type="$(basename "$file")"
     type="${type#*.}"
