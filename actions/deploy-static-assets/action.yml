@@ -27,6 +27,10 @@ inputs:
     default: ''
 
   # GH release Options
+  github-token:
+    description: 'The github token to allow for searching for release assets'
+    type: string
+    default: ${{ github.token }}
   tag:
     description: 'The github release tag to pull that assets from'
     default: ''
@@ -85,6 +89,8 @@ runs:
     - name: 'Download static assets'
       shell: bash
       run: gh -R "${{ github.repository }}" release download -p "${{ inputs.pattern }}" "${{ inputs.tag }}"
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       # Only if we are downloading assets from gh release
       if: inputs.tag != ''
 
