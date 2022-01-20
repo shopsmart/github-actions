@@ -30,7 +30,7 @@ jobs:
           mkdir -p static-assets
           echo "<html><head></head><body>Hello world</body></html>" > static-assets/index.html
           echo "head p { color: black; }" > static-assets/style.css
-          tar -zxvf static-assets.tgz -C static-assets/ .
+          tar -zcvf static-assets.tgz -C static-assets/ .
           rm -rf static-assets/
 
       - name: 'Run deploy static assets'
