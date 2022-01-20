@@ -16,22 +16,21 @@ jobs:
     name: 'Uses the npm-setup action'
     runs-on: ubuntu-latest
     steps:
-      -
-        name: 'Checkout actions'
+      - name: 'Checkout actions'
         uses: actions/checkout@v2
-      -
-        name: 'Checkout hello world project'
+
+      - name: 'Checkout hello world project'
         uses: actions/checkout@v2
         with:
           repository: mike-carey/hello-world-nodejs
           path: ./hello-world
-      -
-        name: 'Run npm setup'
+
+      - name: 'Run npm setup'
         uses: ./actions/npm-setup
         with:
           node-version: '14'
           working-directory: ./hello-world
-      -
-        name: 'Run npm tests'
+
+      - name: 'Run npm tests'
         working-directory: ./hello-world
         run: npm run test
