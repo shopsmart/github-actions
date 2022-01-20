@@ -13,6 +13,8 @@ function setup() {
   export ARCHIVE_DIRECTORY="$BATS_TEST_TMPDIR/archive"
   export INDEX_FILE="$BATS_TEST_TMPDIR/archive/public/index.html"
 
+  export WILDCARD_FILE="$BATS_TEST_TMPDIR/archive*.gz"
+
   export DESTINATION="$BATS_TEST_TMPDIR/static-assets"
 
   pushd "$BATS_TEST_TMPDIR" >/dev/null
@@ -94,4 +96,12 @@ function create_archives() {
   run unpack-static-assets "$INDEX_FILE" "$DESTINATION"
 
   [ "$status" -ne 0 ]
+}
+
+@test "it should expand the wildcard" {
+  run unpack-static-assets "$WILDCARD_FILE" "$DESTINATOIN"
+
+  [ "$status" -eq 0 ]
+  [ -d "$DESTINATION/public" ]
+  [ -f "$DESTINATION/public/index.html" ]
 }

@@ -12,13 +12,11 @@ function unpack-static-assets() {
     return 1
   }
   [ "$file" = "${file#*\*}" ] || {
+    echo "[DEBUG] Found a wildcard file" >&2
     local pre_wildcard="${file%\**}"
     local post_wildcard="${file#*\*}"
-    # shellcheck disable=SC2116,SC2086
-    # https://github.com/koalaman/shellcheck/wiki/SC2116
-    # https://github.com/koalaman/shellcheck/wiki/SC2086
-    # We would like the wildcard to expand here so we get the actual filename
     file="$(builtin echo "$pre_wildcard"*"$post_wildcard")"
+    echo "[DEBUG] Expanded '$pre_wildcard*$post_wildcard' to $file" >&2
   }
 
   [ -n "$type" ] || {
