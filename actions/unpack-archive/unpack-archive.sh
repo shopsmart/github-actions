@@ -47,7 +47,7 @@ function unpack-archive() {
       ;;
     inode/directory )
       echo "[DEBUG] Found a directory, copying to $destination" >&2
-      cp -r "$file/" "$destination"
+      cp -r "$file/." "$destination"
       ;;
     * )
       echo "[ERROR] Unknown file type: $mime" >&2
