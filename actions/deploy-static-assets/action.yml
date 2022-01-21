@@ -114,13 +114,13 @@ runs:
 
     - name: 'Upload static assets'
       shell: bash
-      run: $GITHUB_ACTION_PATH/upload-static-assets.sh "${{ steps.unpack.outputs.path }}"
+      run: $GITHUB_ACTION_PATH/upload-static-assets.sh "${{ steps.unpack.outputs.destination }}"
       # Only if we are using AWS S3
       if: steps.info.outputs.configure-aws-credentials == 'true'
 
     - name: 'Tag static assets'
       shell: bash
-      run: $GITHUB_ACTION_PATH/tag-static-assets.sh "${{ steps.unpack.outputs.path }}"
+      run: $GITHUB_ACTION_PATH/tag-static-assets.sh "${{ steps.unpack.outputs.destination }}"
       env:
         S3_BUCKET: ${{ inputs.s3-bucket }}
         S3_TAGS: ${{ inputs.s3-tags }}
