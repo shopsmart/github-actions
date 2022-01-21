@@ -80,6 +80,9 @@ function create_archives() {
 @test "it should copy the directory to the path" {
   run unpack-archive "$ARCHIVE_DIRECTORY" "$DESTINATION"
 
+  echo "$output"
+  tree "$DESTINATION"
+
   [ "$status" -eq 0 ]
   [ -d "$DESTINATION/public" ]
   [ -f "$DESTINATION/public/index.html" ]
