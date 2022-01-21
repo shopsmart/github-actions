@@ -6,12 +6,11 @@
 ##
 ---
 
-name: 'Run deploy-static-assets action'
+name: 'Run unpack-archive action'
 
 on:
   pull_request:
     paths:
-      - actions/deploy-static-assets/*
       - actions/unpack-archive/*
 
 defaults:
@@ -19,8 +18,8 @@ defaults:
     shell: bash
 
 jobs:
-  test-deploy-static-assets-action:
-    name: 'Uses the deploy-static-assets action'
+  test-unpack-archive-action:
+    name: 'Uses the unpack-archive action'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout actions'
@@ -34,7 +33,7 @@ jobs:
           tar -zcvf static-assets.tgz -C static-assets/ .
           rm -rf static-assets/
 
-      - name: 'Run deploy static assets'
-        uses: ./actions/deploy-static-assets
+      - name: 'Run unpack archive'
+        uses: ./actions/unpack-archive
         with:
           pattern: 'static-assets.tgz'
