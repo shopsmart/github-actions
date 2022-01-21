@@ -10,21 +10,6 @@ inputs:
 
       Otherwise, the path to the static assets.  If it is an archive, it will unpacked.
     required: true
-  file-type:
-    description: |
-      If the file extension of the file does not reflect the file type of the archive OR
-        the filename contains dots in it not to mark extensions, set this variable to the
-        file type identified by its file extension.
-
-      Available file-types:
-        - TAR (tar)
-        - Gzipped TAR (tar.gz, tgz)
-        - Zip (zip)
-
-      Example:
-        pattern: 'my-archive.custom-extension'
-        file-type: tgz
-    default: ''
 
   # GH release Options
   github-token:
