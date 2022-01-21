@@ -1,12 +1,11 @@
 ---
 
-name: 'Run npm-run action'
+name: 'Run setup-node action'
 
 on:
   pull_request:
     paths:
-      - actions/npm-setup/*
-      - actions/npm-run/*
+      - actions/setup-node/*
 
 defaults:
   run:
@@ -14,14 +13,11 @@ defaults:
 
 jobs:
   test-npm-run-action:
-    name: 'Uses the npm-run action'
+    name: 'Uses the setup-node action'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout actions'
         uses: actions/checkout@v2
-
-      - name: 'Use local actions'
-        uses: ./.github/actions/use-local-actions
 
       - name: 'Checkout hello world project'
         uses: actions/checkout@v2
@@ -29,9 +25,12 @@ jobs:
           repository: mike-carey/hello-world-nodejs
           path: ./hello-world
 
-      - name: 'Run npm tests'
-        uses: ./actions/npm-run
+      - name: 'Run npm setup'
+        uses: ./actions/setup-node
         with:
           node-version: '14'
           working-directory: ./hello-world
-          command: test
+
+      - name: 'Run npm tests'
+        working-directory: ./hello-world
+        run: npm run test
