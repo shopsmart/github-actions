@@ -81,7 +81,7 @@ runs:
 
     - name: 'Unpack release assets'
       id: unpack
-      uses: shopsmart/github-actions/actions/unpack-archive@feature/static-assets
+      uses: shopsmart/github-actions/actions/unpack-archive@v1
       with:
         filename: ${{ inputs.pattern }}
         destination: static-assets
