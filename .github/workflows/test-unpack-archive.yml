@@ -36,4 +36,4 @@ jobs:
       - name: 'Run unpack archive'
         uses: ./actions/unpack-archive
         with:
-          pattern: 'static-assets.tgz'
+          filename: 'static-assets.tgz'
