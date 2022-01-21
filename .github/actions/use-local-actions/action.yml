@@ -20,4 +20,6 @@ description: |
 runs:
   using: 'composite'
   steps:
-    - run: $GITHUB_ACTION_PATH/use-local-actions.sh
+    - name: 'Use local actions'
+      shell: bash
+      run: $GITHUB_ACTION_PATH/use-local-actions.sh
