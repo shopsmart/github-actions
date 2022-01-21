@@ -1,0 +1,28 @@
+---
+
+name: 'Unpack archive'
+description: 'Unpacks a zip archive to a path'
+
+inputs:
+  filename:
+    description: 'The file to unpack.  If a wildcard is provided, only 1 asterisk can be used'
+    required: true
+  destination:
+    description: 'The directory to dump the contents of the archive into'
+    default: unpacked
+
+outputs:
+  destination:
+    description: 'The directory that the contents of the archive were dumped into'
+    value: ${{ steps.unpack.outputs.destination }}
+  mime-type:
+    description: 'The mime type of the archive file'
+    value: ${{ steps.unpack.outputs.mime-type }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Unpack archive'
+      id: unpack
+      shell: bash
+      run: $GITHUB_ACTION_PATH/unpack-archive.sh "${{ inputs.filename }}" "${{ inputs.destination }}"

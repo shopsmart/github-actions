@@ -16,13 +16,12 @@ jobs:
     name: 'Pre-commit check'
     runs-on: ubuntu-latest
     steps:
-      -
-        name: 'Checkout'
+      - name: 'Checkout'
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      -
-        name: 'Run pre-commit'
+
+      - name: 'Run pre-commit'
         uses: pre-commit/action@v2.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -31,12 +30,11 @@ jobs:
     name: 'Run tests'
     runs-on: ubuntu-latest
     steps:
-      -
-        name: 'Checkout'
+      - name: 'Checkout'
         uses: actions/checkout@v2
-      -
-        name: 'Install bats'
+
+      - name: 'Install bats'
         run: brew install bats-core
-      -
-        name: 'Run action tests'
+
+      - name: 'Run action tests'
         run: bats -r actions/*/*.bats

@@ -1,0 +1,25 @@
+---
+
+name: 'Use local actions'
+description: |
+  Replaces `uses` within actions that use other actions within this repo.
+
+  If we do not replace with local actions, we will end up using whatever
+  version is tagged.  Currently, we are marking all internal actions with
+  whatever the current major version is.  Though we can technically use
+  multiple versions, we would like to avoid that.
+
+  Example replacement:
+
+  - uses: shopsmart/github-actions/actions/npm-setup@v1
+
+  Replaced with
+
+  - uses: ./actions/npm-setup
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Use local actions'
+      shell: bash
+      run: $GITHUB_ACTION_PATH/use-local-actions.sh

@@ -1,0 +1,117 @@
+---
+
+name: 'Deploy static assets'
+description: 'Deploys static assets to an s3 bucket (currently the only supported option)'
+
+inputs:
+  pattern:
+    description: |
+      If downloading release assets from github, the pattern for the assets file.
+
+      Otherwise, the path to the static assets.  If it is an archive, it will unpacked.
+    required: true
+
+  # GH release Options
+  github-token:
+    description: 'The github token to allow for searching for release assets'
+    type: string
+    default: ${{ github.token }}
+  tag:
+    description: 'The github release tag to pull that assets from'
+    default: ''
+
+  # AWS (S3) Options
+  aws-access-key-id:
+    description: 'The AWS access key id to log into ECR with'
+    default: ''
+  aws-secret-access-key:
+    description: 'The AWS secret access key to log into ECR with'
+    default: ''
+  aws-region:
+    description: 'The AWS region to log into if using ECR'
+    default: 'us-east-1'
+  role-to-assume:
+    description: 'Allows one to configure the assume role'
+    default: ''
+  role-duration-seconds:
+    description: 'Allows one to configure the duration of assume role'
+    default: 1200
+
+  s3-bucket:
+    description: 'The name of the s3 bucket to upload the assets to'
+    default: ''
+  s3-bucket-path:
+    description: 'The path within the s3 bucket to upload the assets to'
+    default: ''
+  s3-tags:
+    description: |
+      Key value pairs to attach to each s3 object.
+
+      Example:
+        s3-tags: |
+          version=v1
+          owner=carl
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Get info'
+      id: info
+      env:
+        TAG: ${{ inputs.tag }}
+        AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
+      shell: bash
+      run: ${{ github.action_path }}/static-assets-info.sh "${{ inputs.pattern }}"
+
+    - name: 'Install gh cli'
+      shell: bash
+      run: brew install gh
+      # Only if we are downloading assets from gh release
+      if: inputs.tag != ''
+
+    - name: 'Download static assets'
+      shell: bash
+      run: gh -R "${{ github.repository }}" release download -p "${{ inputs.pattern }}" "${{ inputs.tag }}"
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      # Only if we are downloading assets from gh release
+      if: inputs.tag != ''
+
+    - name: 'Unpack release assets'
+      id: unpack
+      uses: shopsmart/github-actions/actions/unpack-archive@v1
+      with:
+        filename: ${{ inputs.pattern }}
+        destination: static-assets
+
+    - name: 'Configure AWS credentials'
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ inputs.role-to-assume }}
+        role-duration-seconds: ${{ inputs.role-duration-seconds }}
+      # Only if we are using AWS S3
+      if: steps.info.outputs.configure-aws-credentials == 'true'
+
+    - name: 'Upload static assets'
+      shell: bash
+      run: $GITHUB_ACTION_PATH/upload-static-assets.sh "${{ steps.unpack.outputs.destination }}"
+      env:
+        S3_BUCKET: ${{ inputs.s3-bucket }}
+        S3_BUCKET_PATH: ${{ inputs.s3-bucket-path }}
+      # Only if we are using AWS S3
+      if: steps.info.outputs.configure-aws-credentials == 'true'
+
+    - name: 'Tag static assets'
+      shell: bash
+      run: $GITHUB_ACTION_PATH/tag-static-assets.sh "${{ steps.unpack.outputs.destination }}"
+      env:
+        S3_BUCKET: ${{ inputs.s3-bucket }}
+        S3_BUCKET_PATH: ${{ inputs.s3-bucket-path }}
+        S3_TAGS: ${{ inputs.s3-tags }}
+      # Only if we are using AWS S3
+      if: steps.info.outputs.configure-aws-credentials == 'true' && inputs.s3-tags != ''

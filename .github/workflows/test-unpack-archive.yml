@@ -1,0 +1,39 @@
+###
+# This test of the action is very limited.  If anything, this tests
+# that the action is not invalid; however, it does not test any of
+# the functionality of downloading release assets or uploading to s3
+# bucket without aws credentials.
+##
+---
+
+name: 'Run unpack-archive action'
+
+on:
+  pull_request:
+    paths:
+      - actions/unpack-archive/*
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-unpack-archive-action:
+    name: 'Uses the unpack-archive action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v2
+
+      - name: 'Create dummy files'
+        run: |
+          mkdir -p static-assets
+          echo "<html><head></head><body>Hello world</body></html>" > static-assets/index.html
+          echo "head p { color: black; }" > static-assets/style.css
+          tar -zcvf static-assets.tgz -C static-assets/ .
+          rm -rf static-assets/
+
+      - name: 'Run unpack archive'
+        uses: ./actions/unpack-archive
+        with:
+          filename: 'static-assets.tgz'
