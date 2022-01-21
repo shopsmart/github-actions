@@ -29,9 +29,6 @@ jobs:
       - name: 'Use local actions'
         uses: ./.github/actions/use-local-actions
 
-      - name: 'Debug'
-        run: cat actions/deploy-static-assets/action.yml
-
       - name: 'Create dummy files'
         run: |
           mkdir -p static-assets
