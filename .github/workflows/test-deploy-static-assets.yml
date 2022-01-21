@@ -26,6 +26,9 @@ jobs:
       - name: 'Checkout actions'
         uses: actions/checkout@v2
 
+      - name: 'Use local actions'
+        uses: ./.github/actions/use-local-actions
+
       - name: 'Create dummy files'
         run: |
           mkdir -p static-assets

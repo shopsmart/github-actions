@@ -20,6 +20,9 @@ jobs:
       - name: 'Checkout actions'
         uses: actions/checkout@v2
 
+      - name: 'Use local actions'
+        uses: ./.github/actions/use-local-actions
+
       - name: 'Checkout hello world project'
         uses: actions/checkout@v2
         with:
