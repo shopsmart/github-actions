@@ -1,7 +1,7 @@
 ---
 
-name: 'Deploy static assets'
-description: 'Deploys static assets to an s3 bucket (currently the only supported option)'
+name: 'Deploy to s3 bucket'
+description: 'Deploys static assets to an s3 bucket'
 
 inputs:
   pattern:
