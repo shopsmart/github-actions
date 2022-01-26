@@ -1,0 +1,31 @@
+---
+
+name: 'Package archive'
+description: 'Packages a directory into an archive file'
+
+inputs:
+  directory:
+    description: 'The directory where build assets will be output'
+    required: true
+  type:
+    description: 'The archive type to create.  Options are tar, tgz, or zip'
+    default: tgz
+  extension:
+    description: 'The extension to use for the file'
+    default: ''
+  name:
+    description: 'The name for the archive; if not provided, it will use the name of the directory'
+    default: ''
+
+outputs:
+  filename:
+    description: 'The packaged assets file that was uploaded to GH release'
+    value: ${{ steps.package.outputs.filename }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Package archive'
+      shell: bash
+      run: $GITHUB_ACTION_PATH/package-archive.sh "${{ inputs. }}"
+      working-directory: ${{ inputs.working-directory }}
