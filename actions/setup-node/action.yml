@@ -14,33 +14,30 @@ inputs:
 outputs:
   node-version:
     description: 'The determined node version'
-    value: ${{ steps.version.outputs.node_version }}
+    value: ${{ steps.version.outputs.version }}
 
 runs:
   using: 'composite'
   steps:
-    -
-      name: 'Determine node version'
+    - name: 'Determine node version'
       id: version
-      run: ${{ github.action_path }}/determine-node-version.sh
+      run: ${{ github.action_path }}/determine-version.sh node "${{ inputs.node-version }}"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      env:
-        NODE_VERSION: ${{ inputs.node-version }}
-    -
-      name: 'Setup node'
+
+    - name: 'Setup node'
       uses: actions/setup-node@v2
       with:
-        node-version: ${{ steps.version.outputs.node-version }}
-    -
-      name: 'Cache npm dependencies'
+        node-version: ${{ steps.version.outputs.version }}
+
+    - name: 'Cache npm dependencies'
       uses: actions/cache@v2
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: ${{ runner.os }}-node-
-    -
-      name: 'Install npm dependencies'
+
+    - name: 'Install npm dependencies'
       run: npm ci
       shell: bash
       working-directory: ${{ inputs.working-directory }}
