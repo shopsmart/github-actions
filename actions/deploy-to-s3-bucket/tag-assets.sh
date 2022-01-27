@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function tag-static-assets() {
+function tag-assets() {
   set -eo pipefail
 
   local path="${1:-}"
@@ -40,6 +40,6 @@ function tag-static-assets() {
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
   set -u
 
-  tag-static-assets "${@:-}"
+  tag-assets "${@:-}"
   exit $?
 fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load upload-static-assets.sh
+load upload-assets.sh
 
 function setup() {
   export AWS_CMD_FILE="$BATS_TEST_TMPDIR/aws.cmd"
@@ -19,7 +19,7 @@ function aws() {
 }
 
 @test "it should copy to s3 bucket without path" {
-  run upload-static-assets my-path
+  run upload-assets my-path
 
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]
@@ -29,7 +29,7 @@ function aws() {
 @test "it should copy to s3 bucket with path" {
   export S3_BUCKET_PATH=my-s3-path
 
-  run upload-static-assets my-path
+  run upload-assets my-path
 
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]

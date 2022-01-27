@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function upload-static-assets() {
+function upload-assets() {
   set -eo pipefail
 
   local path="$1"
@@ -15,6 +15,6 @@ function upload-static-assets() {
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
   set -u
 
-  upload-static-assets "${@:-}"
+  upload-assets "${@:-}"
   exit $?
 fi
