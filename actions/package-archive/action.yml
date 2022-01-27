@@ -27,5 +27,7 @@ runs:
   steps:
     - name: 'Package archive'
       shell: bash
-      run: $GITHUB_ACTION_PATH/package-archive.sh "${{ inputs. }}"
+      run: $GITHUB_ACTION_PATH/package-archive.sh "${{ inputs.directory }}" "${{ inputs.type }}" "${{ inputs.filename }}"
       working-directory: ${{ inputs.working-directory }}
+      env:
+        EXTENSION: ${{ inputs.extension }}
