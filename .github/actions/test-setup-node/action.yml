@@ -1,0 +1,33 @@
+---
+
+name: 'Test setup-node'
+description: 'Runs validation agains the setup-node action'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Checkout actions'
+      uses: actions/checkout@v2
+
+    - name: 'Checkout hello world project'
+      uses: actions/checkout@v2
+      with:
+        repository: mike-carey/hello-world-nodejs
+        path: ./hello-world
+
+    - name: 'Run setup-node action'
+      id: setup
+      uses: ./actions/setup-node
+      with:
+        node-version: '14'
+        working-directory: ./hello-world
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r $GITHUB_ACTION_PATH/setup-node.bats
+      env:
+        NODE_VERSION: ${{ steps.setup.outputs.node-version }}

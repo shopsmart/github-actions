@@ -1,0 +1,49 @@
+---
+
+name: 'Test deploy-to-s3-bucket action'
+description: 'Runs validation agains the deploy-to-s3-bucket action'
+
+inputs:
+  s3-bucket:
+    description: 'The s3 bucket to deploy to'
+    required: true
+  aws-acccount-id:
+    description: 'The AWS Account id'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Install BATS and jq'
+      shell: bash
+      run: brew install bats-core jq
+
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Get unique id'
+      id: id
+      shell: bash
+      run: echo "::set-output name=id::$(date '+%s')"
+
+    - name: 'Run deploy-to-s3-bucket action'
+      id: unpack
+      uses: ./actions/deploy-to-s3-bucket
+      with:
+        filename: 'archive.tgz'
+        s3-bucket: ${{ inputs.s3-bucket }}
+        s3-bucket-path: ${{ steps.id.outputs.id }}
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
+    - name: 'Configure AWS Credentials'
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        region: 'us-east-1'
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r $GITHUB_ACTION_PATH/deploy-to-s3-bucket.bats
+      env:
+        S3_BUCKET: ${{ inputs.s3-bucket }}
+        S3_BUCKET_PATH: ${{ steps.id.outputs.id }}

@@ -6,31 +6,19 @@ on:
   pull_request:
     paths:
       - actions/setup-node/*
+      - scripts/determine-version.*
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  test-npm-run-action:
+  test-setup-node-action:
     name: 'Uses the setup-node action'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout actions'
         uses: actions/checkout@v2
 
-      - name: 'Checkout hello world project'
-        uses: actions/checkout@v2
-        with:
-          repository: mike-carey/hello-world-nodejs
-          path: ./hello-world
-
-      - name: 'Run npm setup'
-        uses: ./actions/setup-node
-        with:
-          node-version: '14'
-          working-directory: ./hello-world
-
-      - name: 'Run npm tests'
-        working-directory: ./hello-world
-        run: npm run test
+      - name: 'Test setup-node action'
+        uses: ./.github/actions/test-setup-node
