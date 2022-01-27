@@ -9,7 +9,7 @@ on:
 
 permissions:
   id-token: write
-  content: read
+  contents: read
 
 defaults:
   run:
