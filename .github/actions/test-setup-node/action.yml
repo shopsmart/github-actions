@@ -30,4 +30,5 @@ runs:
       shell: bash
       run: bats -r $GITHUB_ACTION_PATH/setup-node.bats
       env:
+        DIRECTORY: ./hello-world
         NODE_VERSION: ${{ steps.setup.outputs.node-version }}
