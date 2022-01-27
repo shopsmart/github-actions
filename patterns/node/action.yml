@@ -1,0 +1,61 @@
+---
+
+name: 'NodeJS Pattern'
+description: 'Builds, tests, packages, releases, and/or publishes node applications'
+
+inputs:
+  build:
+    description: 'Indicates to run the build step'
+    default: 'false'
+  test:
+    description: 'Indicates to run the test step'
+    default: 'false'
+  release:
+    description: 'Indicates to upload the build content to a GH release.  Requires build and tag.'
+    default: 'false'
+  # publish:
+  #   description: 'Indicates to publish the package to NPM'
+  #   default: 'false'
+  build-directory:
+    description: 'The directory where build output will be output'
+    default: 'build'
+  tag:
+    description: 'The GH release tag to upload the build assets to'
+    default: ''
+
+outputs:
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup node'
+      uses: shopsmart/github-actions/actions/setup-node@v2
+      with:
+        working-directory: ${{ inputs.working-directory }}
+
+    - name: 'Build node application'
+      shell: bash
+      run: npm run build
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: 'Run tests'
+      shell: bash
+      run: npm test
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: 'Package build output'
+      id: package
+      uses: shopsmart/github-actions/actions/package-archive@v2
+      with:
+        directory: ${{ inputs.working-directory }}/${{ inputs.build-directory }}
+
+    - name: 'Upload release assets'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ inputs.tag }}
+        files: ${{ steps.package.outputs.filename }}
+
+    # - name: 'Publish to NPM'
+    #   uses: shopsmart/github-actions/actions/publish-to-npm@v2
+    #   with:
+    #     working-directory: ${{ inputs.working-directory }}
