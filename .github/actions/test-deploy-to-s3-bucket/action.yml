@@ -33,7 +33,7 @@ runs:
       id: unpack
       uses: ./actions/deploy-to-s3-bucket
       with:
-        filename: 'archive.tgz'
+        pattern: 'archive.tgz'
         s3-bucket: ${{ inputs.s3-bucket }}
         s3-bucket-path: ${{ steps.id.outputs.id }}
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
