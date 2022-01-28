@@ -14,6 +14,7 @@ runs:
       uses: actions/checkout@v2
 
     - name: 'Create archive file'
+      shell: bash
       run: tar -zxvf archive.tgz -C ${{ github.action_path }}/assets .
 
     - name: 'Run unpack-archive action'
