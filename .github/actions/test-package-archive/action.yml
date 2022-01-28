@@ -13,11 +13,16 @@ runs:
     - name: 'Checkout'
       uses: actions/checkout@v2
 
+    - name: 'Save off action path'
+      id: path
+      shell: bash
+      run: echo "::set-output name=path::$GITHUB_ACTION_PATH"
+
     - name: 'Run package-archive action'
       id: unpack
       uses: ./actions/package-archive
       with:
-        directory: $GITHUB_ACTION_PATH/assets
+        directory: ${{ steps.path.outputs.path }}/assets
 
     - name: 'Validate'
       shell: bash
