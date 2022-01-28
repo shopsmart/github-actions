@@ -7,7 +7,7 @@ inputs:
   s3-bucket:
     description: 'The s3 bucket to deploy to'
     required: true
-  aws-acccount-id:
+  aws-account-id:
     description: 'The AWS Account id'
     required: true
 
