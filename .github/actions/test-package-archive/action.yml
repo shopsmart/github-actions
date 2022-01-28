@@ -22,7 +22,7 @@ runs:
       id: unpack
       uses: ./actions/package-archive
       with:
-        directory: ${{ steps.path.outputs.path }}/assets
+        directory: ${{ github.action_path }}/assets
 
     - name: 'Validate'
       shell: bash
