@@ -14,7 +14,7 @@ function package-archive() {
   }
   [ -n "$filename" ] || {
     filename="$(basename "$directory")"
-    echo "[DEBUG] Defaulting the filename from directory to $directory" >&2
+    echo "[DEBUG] Defaulting the filename from directory to $filename" >&2
   }
 
   case "$type" in
