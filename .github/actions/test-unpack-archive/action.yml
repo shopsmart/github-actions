@@ -15,9 +15,7 @@ runs:
 
     - name: 'Create archive file'
       shell: bash
-      run: |
-        tar -zxvf archive.tgz -C ${{ github.action_path }}/assets .
-        ls -l
+      run: tar -zcvf archive.tgz -C ${{ github.action_path }}/assets .
 
     - name: 'Run unpack-archive action'
       id: unpack
