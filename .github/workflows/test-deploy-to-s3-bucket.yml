@@ -23,6 +23,9 @@ jobs:
       - name: 'Checkout actions'
         uses: actions/checkout@v2
 
+      - name: 'Use local actions'
+        uses: ./.github/actions/use-local-actions
+
       - name: 'Test deploy-to-s3-bucket action'
         uses: ./.github/actions/test-deploy-to-s3-bucket
         with:
