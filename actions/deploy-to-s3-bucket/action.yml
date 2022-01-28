@@ -87,14 +87,14 @@ runs:
 
     - name: 'Upload assets'
       shell: bash
-      run: $GITHUB_ACTION_PATH/upload-assets.sh "${{ steps.unpack.outputs.destination }}"
+      run: ${{ github.action_path }}/upload-assets.sh "${{ steps.unpack.outputs.destination }}"
       env:
         S3_BUCKET: ${{ inputs.s3-bucket }}
         S3_BUCKET_PATH: ${{ inputs.s3-bucket-path }}
 
     - name: 'Tag assets'
       shell: bash
-      run: $GITHUB_ACTION_PATH/tag-assets.sh "${{ steps.unpack.outputs.destination }}"
+      run: ${{ github.action_path }}/tag-assets.sh "${{ steps.unpack.outputs.destination }}"
       env:
         S3_BUCKET: ${{ inputs.s3-bucket }}
         S3_BUCKET_PATH: ${{ inputs.s3-bucket-path }}

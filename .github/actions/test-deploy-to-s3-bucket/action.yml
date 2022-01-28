@@ -43,7 +43,7 @@ runs:
 
     - name: 'Validate'
       shell: bash
-      run: bats -r $GITHUB_ACTION_PATH/deploy-to-s3-bucket.bats
+      run: bats -r ${{ github.action_path }}/deploy-to-s3-bucket.bats
       env:
         S3_BUCKET: ${{ inputs.s3-bucket }}
         S3_BUCKET_PATH: ${{ steps.id.outputs.id }}

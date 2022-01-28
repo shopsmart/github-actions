@@ -14,7 +14,7 @@ runs:
       uses: actions/checkout@v2
 
     - name: 'Create archive file'
-      run: tar -zxvf archive.tgz -C $GITHUB_ACTION_PATH/assets .
+      run: tar -zxvf archive.tgz -C ${{ github.action_path }}/assets .
 
     - name: 'Run unpack-archive action'
       id: unpack
@@ -24,7 +24,7 @@ runs:
 
     - name: 'Validate'
       shell: bash
-      run: bats -r $GITHUB_ACTION_PATH/unpack-archive.bats
+      run: bats -r ${{ github.action_path }}/unpack-archive.bats
       env:
         DESTINATION: ${{ steps.unpack.outputs.destination }}
         MIME_TYPE: ${{ steps.unpack.outputs.mime-type }}

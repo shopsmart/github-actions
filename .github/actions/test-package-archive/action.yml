@@ -16,7 +16,7 @@ runs:
     - name: 'Save off action path'
       id: path
       shell: bash
-      run: echo "::set-output name=path::$GITHUB_ACTION_PATH"
+      run: echo "::set-output name=path::${{ github.action_path }}"
 
     - name: 'Run package-archive action'
       id: unpack
@@ -26,6 +26,6 @@ runs:
 
     - name: 'Validate'
       shell: bash
-      run: bats -r $GITHUB_ACTION_PATH/package-archive.bats
+      run: bats -r ${{ github.action_path }}/package-archive.bats
       env:
         FILENAME: ${{ steps.unpack.outputs.filename }}
