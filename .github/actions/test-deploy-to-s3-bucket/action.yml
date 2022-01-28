@@ -21,6 +21,9 @@ runs:
     - name: 'Checkout'
       uses: actions/checkout@v2
 
+    - name: 'Use local actions'
+      uses: ./.github/actions/use-local-actions
+
     - name: 'Get unique id'
       id: id
       shell: bash
