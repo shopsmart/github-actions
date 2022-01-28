@@ -26,6 +26,7 @@ runs:
   using: 'composite'
   steps:
     - name: 'Package archive'
+      id: package
       shell: bash
       run: ${{ github.action_path }}/package-archive.sh "${{ inputs.directory }}" "${{ inputs.type }}" "${{ inputs.filename }}"
       env:
