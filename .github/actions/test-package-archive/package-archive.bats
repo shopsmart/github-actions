@@ -8,16 +8,16 @@ function teardown() {
   :
 }
 
-@test "it should package the archive file" {
-  [ -f "$DESTINATION/archive.tgz" ]
+@test "it should have passed on the filename" {
+  [ -n "$FILENAME" ]
+}
 
-  run tar -xf "$DESTINATION/archive.tgz" -C "$BATS_TEST_TMPDIR" .
+@test "it should package the archive file" {
+  [ -f "$FILENAME" ]
+
+  run tar -xf "$FILENAME" -C "$BATS_TEST_TMPDIR" .
 
   [ "$status" -eq 0 ]
   [ -f "$BATS_TEST_TMPDIR/index.html" ]
   [ -f "$BATS_TEST_TMPDIR/style.css" ]
-}
-
-@test "it should have passed on the filename" {
-  [ -n "$FILENAME" ]
 }
