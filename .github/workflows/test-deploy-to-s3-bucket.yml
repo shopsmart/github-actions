@@ -19,8 +19,6 @@ jobs:
   test-deploy-to-s3-bucket-action:
     name: 'Uses the deploy-to-s3-bucket action'
     runs-on: ubuntu-latest
-    environment:
-      name: development
     steps:
       - name: 'Checkout actions'
         uses: actions/checkout@v2
