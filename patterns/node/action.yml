@@ -23,8 +23,6 @@ inputs:
     description: 'The GH release tag to upload the build assets to'
     default: ''
 
-outputs:
-
 runs:
   using: 'composite'
   steps:
