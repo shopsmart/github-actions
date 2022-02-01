@@ -16,11 +16,25 @@ inputs:
   # publish:
   #   description: 'Indicates to publish the package to NPM'
   #   default: 'false'
+
+  name:
+    description: 'The name for the archive; if not provided, it will use the name of the directory'
+    default: ''
+  tag:
+    description: 'The GH release tag to upload the build assets to'
+    default: ''
+
   build-directory:
     description: 'The directory where build output will be output'
     default: 'build'
-  tag:
-    description: 'The GH release tag to upload the build assets to'
+  build-env-vars:
+    description: |
+      Environment variables to expose when building the node application.  Format is one line
+        per environment variable, $name=$value
+
+      build-env-vars: |
+        MY_FIRST_VAR=my-value
+        MY_SECOND_VAR=my-other-value
     default: ''
 
 runs:
@@ -33,8 +47,10 @@ runs:
 
     - name: 'Build node application'
       shell: bash
-      run: npm run build
+      run: ${{ github.action_path }}/with-env-vars.sh npm run build
       working-directory: ${{ inputs.working-directory }}
+      env:
+        ENV_VARS: ${{ inputs.build-env-vars }}
 
     - name: 'Run tests'
       shell: bash
