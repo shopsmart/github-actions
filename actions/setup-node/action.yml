@@ -9,7 +9,7 @@ inputs:
     default: ''
   working-directory:
     description: 'The directory to run the setup within'
-    default: ''
+    default: '.'
 
 outputs:
   node-version:

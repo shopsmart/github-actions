@@ -23,6 +23,9 @@ inputs:
   tag:
     description: 'The GH release tag to upload the build assets to'
     default: ''
+  working-directory:
+    description: 'The directory to run steps within'
+    default: '.'
 
   build-directory:
     description: 'The directory where build output will be output'
