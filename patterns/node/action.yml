@@ -40,10 +40,29 @@ inputs:
         MY_SECOND_VAR=my-other-value
     default: ''
 
+  test-env-vars:
+    description: |
+      Environment variables to expose when testing the node application.  Format is one line
+        per environment variable, $name=$value
+
+      test-env-vars: |
+        MY_FIRST_VAR=my-value
+        MY_SECOND_VAR=my-other-value
+    default: ''
+
+outputs:
+  node-version:
+    description: 'The determined node version'
+    value: ${{ steps.setup.outputs.version }}
+  filename:
+    description: 'The packaged assets file that was uploaded to GH release'
+    value: ${{ steps.package.outputs.filename }}
+
 runs:
   using: 'composite'
   steps:
     - name: 'Setup node'
+      id: setup
       uses: shopsmart/github-actions/actions/setup-node@v2
       with:
         working-directory: ${{ inputs.working-directory }}
@@ -57,8 +76,10 @@ runs:
 
     - name: 'Run tests'
       shell: bash
-      run: npm test
+      run: ${{ github.action_path }}/with-env-vars.sh npm test
       working-directory: ${{ inputs.working-directory }}
+      env:
+        ENV_VARS: ${{ inputs.build-env-vars }}
 
     - name: 'Package build output'
       id: package
