@@ -64,6 +64,7 @@ runs:
       id: package
       uses: shopsmart/github-actions/actions/package-archive@v2
       with:
+        name: ${{ inputs.name }}
         directory: ${{ inputs.working-directory }}/${{ inputs.build-directory }}
 
     - name: 'Upload release assets'
