@@ -28,6 +28,6 @@ runs:
     - name: 'Package archive'
       id: package
       shell: bash
-      run: ${{ github.action_path }}/package-archive.sh "${{ inputs.directory }}" "${{ inputs.type }}" "${{ inputs.filename }}"
+      run: ${{ github.action_path }}/package-archive.sh "${{ inputs.directory }}" "${{ inputs.type }}" "${{ inputs.name }}"
       env:
         EXTENSION: ${{ inputs.extension }}
