@@ -4,9 +4,6 @@ name: 'Test deploy-to-s3-bucket action'
 description: 'Runs validation agains the deploy-to-s3-bucket action'
 
 inputs:
-  s3-bucket:
-    description: 'The s3 bucket to deploy to'
-    required: true
   aws-account-id:
     description: 'The AWS Account id'
     required: true
@@ -38,7 +35,7 @@ runs:
       uses: ./actions/deploy-to-s3-bucket
       with:
         pattern: 'archive.tgz'
-        s3-bucket: ${{ inputs.s3-bucket }}
+        s3-bucket: github-actions-tests
         s3-bucket-path: ${{ steps.id.outputs.id }}
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
@@ -52,5 +49,5 @@ runs:
       shell: bash
       run: bats -r ${{ github.action_path }}/deploy-to-s3-bucket.bats
       env:
-        S3_BUCKET: ${{ inputs.s3-bucket }}
+        S3_BUCKET: github-actions-tests
         S3_BUCKET_PATH: ${{ steps.id.outputs.id }}

@@ -27,5 +27,4 @@ jobs:
       - name: 'Test deploy-to-s3-bucket action'
         uses: ./.github/actions/test-deploy-to-s3-bucket
         with:
-          s3-bucket: ${{ secrets.S3_BUCKET }}
           aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
