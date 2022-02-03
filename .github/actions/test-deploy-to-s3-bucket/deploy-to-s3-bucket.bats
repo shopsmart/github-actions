@@ -11,6 +11,8 @@ function teardown() {
 @test "it should have deployed the assets to the s3 bucket" {
   run aws s3 cp --recursive "s3://$S3_BUCKET/$S3_BUCKET_PATH" "$BATS_TEST_TMPDIR"
 
+  echo "$output"
+
   [ "$status" -eq 0 ]
   [ -f "$BATS_TEST_TMPDIR/index.html" ]
   [ -f "$BATS_TEST_TMPDIR/style.css" ]
