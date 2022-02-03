@@ -42,7 +42,7 @@ runs:
     - name: 'Configure AWS Credentials'
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        region: 'us-east-1'
+        aws-region: 'us-east-1'
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
     - name: 'Validate'
