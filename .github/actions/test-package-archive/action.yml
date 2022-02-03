@@ -1,0 +1,31 @@
+---
+
+name: 'Test package-archive action'
+description: 'Runs validation agains the package-archive action'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Save off action path'
+      id: path
+      shell: bash
+      run: echo "::set-output name=path::${{ github.action_path }}"
+
+    - name: 'Run package-archive action'
+      id: unpack
+      uses: ./actions/package-archive
+      with:
+        directory: ${{ github.action_path }}/assets
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r ${{ github.action_path }}/package-archive.bats
+      env:
+        FILENAME: ${{ steps.unpack.outputs.filename }}

@@ -22,4 +22,4 @@ runs:
   steps:
     - name: 'Use local actions'
       shell: bash
-      run: $GITHUB_ACTION_PATH/use-local-actions.sh
+      run: ${{ github.action_path }}/use-local-actions.sh

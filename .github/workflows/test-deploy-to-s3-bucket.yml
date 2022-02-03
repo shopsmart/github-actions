@@ -1,0 +1,30 @@
+---
+
+name: 'Run deploy-to-s3-bucket action'
+
+on:
+  pull_request:
+    paths:
+      - actions/deploy-to-s3-bucket/*
+      - actions/unpack-archive/*
+
+permissions:
+  id-token: write
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-deploy-to-s3-bucket-action:
+    name: 'Uses the deploy-to-s3-bucket action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v2
+
+      - name: 'Test deploy-to-s3-bucket action'
+        uses: ./.github/actions/test-deploy-to-s3-bucket
+        with:
+          aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}

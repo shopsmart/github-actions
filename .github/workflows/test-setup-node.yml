@@ -1,0 +1,24 @@
+---
+
+name: 'Run setup-node action'
+
+on:
+  pull_request:
+    paths:
+      - actions/setup-node/*
+      - scripts/determine-version.*
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-setup-node-action:
+    name: 'Uses the setup-node action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v2
+
+      - name: 'Test setup-node action'
+        uses: ./.github/actions/test-setup-node

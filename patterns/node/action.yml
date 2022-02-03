@@ -1,0 +1,100 @@
+---
+
+name: 'NodeJS Pattern'
+description: 'Builds, tests, packages, releases, and/or publishes node applications'
+
+inputs:
+  build:
+    description: 'Indicates to run the build step'
+    default: 'false'
+  test:
+    description: 'Indicates to run the test step'
+    default: 'false'
+  release:
+    description: 'Indicates to upload the build content to a GH release.  Requires build and tag.'
+    default: 'false'
+  # publish:
+  #   description: 'Indicates to publish the package to NPM'
+  #   default: 'false'
+
+  name:
+    description: 'The name for the archive; if not provided, it will use the name of the directory'
+    default: ''
+  tag:
+    description: 'The GH release tag to upload the build assets to'
+    default: ''
+  working-directory:
+    description: 'The directory to run steps within'
+    default: '.'
+
+  build-directory:
+    description: 'The directory where build output will be output'
+    default: 'build'
+  build-env-vars:
+    description: |
+      Environment variables to expose when building the node application.  Format is one line
+        per environment variable, $name=$value
+
+      build-env-vars: |
+        MY_FIRST_VAR=my-value
+        MY_SECOND_VAR=my-other-value
+    default: ''
+
+  test-env-vars:
+    description: |
+      Environment variables to expose when testing the node application.  Format is one line
+        per environment variable, $name=$value
+
+      test-env-vars: |
+        MY_FIRST_VAR=my-value
+        MY_SECOND_VAR=my-other-value
+    default: ''
+
+outputs:
+  node-version:
+    description: 'The determined node version'
+    value: ${{ steps.setup.outputs.version }}
+  filename:
+    description: 'The packaged assets file that was uploaded to GH release'
+    value: ${{ steps.package.outputs.filename }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup node'
+      id: setup
+      uses: shopsmart/github-actions/actions/setup-node@v2
+      with:
+        working-directory: ${{ inputs.working-directory }}
+
+    - name: 'Build node application'
+      shell: bash
+      run: ${{ github.action_path }}/with-env-vars.sh npm run build
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        ENV_VARS: ${{ inputs.build-env-vars }}
+
+    - name: 'Run tests'
+      shell: bash
+      run: ${{ github.action_path }}/with-env-vars.sh npm test
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        ENV_VARS: ${{ inputs.build-env-vars }}
+
+    - name: 'Package build output'
+      id: package
+      uses: shopsmart/github-actions/actions/package-archive@v2
+      with:
+        name: ${{ inputs.name }}-${{ inputs.tag }}
+        directory: ${{ inputs.working-directory }}/${{ inputs.build-directory }}
+
+    - name: 'Upload release assets'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ inputs.tag }}
+        files: ${{ steps.package.outputs.filename }}
+
+    # - name: 'Publish to NPM'
+    #   uses: shopsmart/github-actions/actions/publish-to-npm@v2
+    #   with:
+    #     working-directory: ${{ inputs.working-directory }}

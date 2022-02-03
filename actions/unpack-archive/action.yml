@@ -25,4 +25,4 @@ runs:
     - name: 'Unpack archive'
       id: unpack
       shell: bash
-      run: $GITHUB_ACTION_PATH/unpack-archive.sh "${{ inputs.filename }}" "${{ inputs.destination }}"
+      run: ${{ github.action_path }}/unpack-archive.sh "${{ inputs.filename }}" "${{ inputs.destination }}"

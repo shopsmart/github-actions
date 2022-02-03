@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-load tag-static-assets.sh
+load tag-assets.sh
 
 function setup() {
   export AWS_CMD_FILE="$BATS_TEST_TMPDIR/aws.cmd"
@@ -31,13 +31,13 @@ function aws() {
 }
 
 @test "it should error out if no path is provided" {
-  run tag-static-assets
+  run tag-assets
 
   [ "$status" -ne 0 ]
 }
 
 @test "it should tag all assets within path" {
-  run tag-static-assets "$ASSETS_PATH"
+  run tag-assets "$ASSETS_PATH"
 
   tagset="TagSet=[{Key='Foo',Value='bar'},{Key='team',Value='my-team'},{Key='owner',Value='anonymous'}]"
 
@@ -52,7 +52,7 @@ function aws() {
 @test "it should tag all assets within path without S3_BUCKET_PATH" {
   unset S3_BUCKET_PATH
 
-  run tag-static-assets "$ASSETS_PATH"
+  run tag-assets "$ASSETS_PATH"
 
   tagset="TagSet=[{Key='Foo',Value='bar'},{Key='team',Value='my-team'},{Key='owner',Value='anonymous'}]"
 
@@ -67,7 +67,7 @@ function aws() {
 @test "it should do nothing with no tags" {
   export S3_TAGS=''
 
-  run tag-static-assets "$ASSETS_PATH"
+  run tag-assets "$ASSETS_PATH"
 
   [ "$status" -eq 0 ]
   ! [ -f "$AWS_CMD_FILE" ]
