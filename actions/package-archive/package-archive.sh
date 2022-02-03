@@ -38,9 +38,6 @@ function package-archive() {
 
       # Enter the build directory and then zip .
       pushd "$directory" >/dev/null || return 3
-
-        ls -al
-
         echo "[INFO ] Zipping up $directory to $filename.$extension" >&2
         zip -r "$working_directory/$filename.$extension" .
 
