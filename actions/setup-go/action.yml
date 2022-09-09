@@ -1,0 +1,41 @@
+---
+
+name: 'Setup go project'
+description: 'Sets up a go project by installing go and gomod independencies'
+
+inputs:
+  go-version:
+    description: 'The go version to use, defaults to the version specified in .go-version'
+    default: ''
+  working-directory:
+    description: 'The directory to run the setup within'
+    default: '.'
+  cache:
+    description: 'If true, caches dependencies'
+    type: bool
+    default: true
+
+outputs:
+  go-version:
+    description: 'The determined node version'
+    value: ${{ steps.version.outputs.version }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Determine go version'
+      id: version
+      run: ${{ github.action_path }}/determine-version.sh go "${{ inputs.go-version }}"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: 'Setup node'
+      uses: actions/setup-go@v2
+      with:
+        node-version: ${{ steps.version.outputs.version }}
+        cache: ${{ inputs.cache }}
+
+    - name: 'Install gomod dependencies'
+      run: go mod download
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}

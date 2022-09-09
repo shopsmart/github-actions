@@ -1,0 +1,34 @@
+---
+
+name: 'Test setup-go'
+description: 'Runs validation against the setup-go action'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Checkout actions'
+      uses: actions/checkout@v2
+
+    - name: 'Checkout hello world project'
+      uses: actions/checkout@v2
+      with:
+        repository: mike-carey/hello-world-golang
+        path: ./hello-world
+
+    - name: 'Run setup-go action'
+      id: setup
+      uses: ./actions/setup-go
+      with:
+        go-version: '1.19'
+        working-directory: ./hello-world
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r ${{ github.action_path }}/setup-go.bats
+      env:
+        DIRECTORY: ./hello-world
+        GO_VERSION: ${{ steps.setup.outputs.go-version }}

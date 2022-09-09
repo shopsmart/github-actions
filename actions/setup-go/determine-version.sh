@@ -1,0 +1,1 @@
+../../scripts/determine-version.sh
