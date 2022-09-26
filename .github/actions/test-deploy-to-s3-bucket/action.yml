@@ -13,7 +13,13 @@ runs:
   steps:
     - name: 'Install BATS and jq'
       shell: bash
-      run: brew install bats-core jq
+      run: |
+        # Add brews to the path
+        echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+        # Setup brew environment
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        # Install bats
+        brew install bats-core jq
 
     - name: 'Checkout'
       uses: actions/checkout@v2
