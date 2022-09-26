@@ -1,0 +1,28 @@
+---
+
+name: 'Test setup-brew'
+description: 'Runs validation against the setup-brew action'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup BATS
+      uses: mig4/setup-bats@v1
+
+    - name: 'Checkout actions'
+      uses: actions/checkout@v2
+
+    - name: 'Create a Brewfile'
+      shell: bash
+      run: |
+        {
+          echo "brew 'go'"
+          echo "brew 'the_silver_searcher'"
+        } > Brewfile
+
+    - name: 'Run setup-brew action'
+      uses: ./actions/setup-brew
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r ${{ github.action_path }}/setup-brew.bats

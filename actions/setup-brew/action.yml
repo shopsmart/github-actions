@@ -1,0 +1,52 @@
+---
+
+name: 'Setup brew'
+description: 'Sets up brew and installs dependencies from a brewfile'
+
+inputs:
+  install:
+    description: 'Setting to false will not install the brew dependencies from the Brewfile.  If the brewfile cannot be found, this boolean is disregarded in the first place.'
+    type: boolean
+    default: true
+  brewfile:
+    description: 'The Brewfile to install dependencies from.'
+    type: string
+    default: 'Brewfile'
+  cache:
+    description: 'Indicates whether to setup caching for  brew dependencies'
+    type: boolean
+    default: true
+  working-directory:
+    description: 'The directory to run the setup within'
+    default: '.'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Configure Homebrew cache'
+      if: inputs.cache == 'true'
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/Library/Caches/Homebrew/*
+          ~/Library/Caches/Homebrew/downloads/*
+        key: brew-${{ hashFiles('Brewfile') }}
+        restore-keys: brew-
+
+    - name: 'Add brew path'
+      shell: bash
+      run: echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+
+    - name: 'Check if we should install from brewfile'
+      id: should_install
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: ${{ github.action_path }}/should-install.sh ${{ inputs.brewfile }} ${{ inputs.install }}
+
+    - name: 'Install from brewfile'
+      if: steps.should_install.outputs.answer == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        brew bundle install --file=${{ inputs }}

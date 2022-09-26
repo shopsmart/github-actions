@@ -1,0 +1,23 @@
+---
+
+name: 'Run setup-brew action'
+
+on:
+  pull_request:
+    paths:
+      - actions/setup-brew/*
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-setup-brew-action:
+    name: 'Uses the setup-brew action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v2
+
+      - name: 'Test setup-brew action'
+        uses: ./.github/actions/test-setup-brew
