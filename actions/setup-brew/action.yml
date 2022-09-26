@@ -49,4 +49,4 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       run: |
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        brew bundle install --file=${{ inputs }}
+        brew bundle install --file=${{ inputs.brewfile }}
