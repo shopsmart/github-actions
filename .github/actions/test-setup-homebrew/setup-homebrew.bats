@@ -6,8 +6,8 @@
   [ "$status" -eq 0 ]
 }
 
-@test "it should have installed go" {
-  run go version
+@test "it should have installed tflint" {
+  run tflint --version
 
   [ "$status" -eq 0 ]
 }

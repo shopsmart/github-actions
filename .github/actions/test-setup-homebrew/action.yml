@@ -25,7 +25,7 @@ runs:
       shell: bash
       run: |
         {
-          echo "brew 'go'"
+          echo "brew 'tflint'"
           echo "brew 'the_silver_searcher'"
         } > Brewfile
 
