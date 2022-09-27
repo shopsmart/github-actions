@@ -1,7 +1,7 @@
 ---
 
-name: 'Setup brew'
-description: 'Sets up brew and installs dependencies from a brewfile'
+name: 'Setup Homebrew'
+description: 'Sets up Homebrew and installs dependencies from a Brewfile'
 
 inputs:
   install:

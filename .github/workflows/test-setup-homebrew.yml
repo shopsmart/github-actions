@@ -1,19 +1,19 @@
 ---
 
-name: 'Run setup-brew action'
+name: 'Run setup-homebrew action'
 
 on:
   pull_request:
     paths:
-      - actions/setup-brew/*
+      - actions/setup-homebrew/*
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  test-setup-brew-action:
-    name: 'Uses the setup-brew action'
+  test-setup-homebrew-action:
+    name: 'Uses the setup-homebrew action'
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
@@ -23,4 +23,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: 'Test setup-brew action'
-        uses: ./.github/actions/test-setup-brew
+        uses: ./.github/actions/test-setup-homebrew

@@ -30,8 +30,8 @@ runs:
         } > Brewfile
 
     - name: 'Run setup-brew action'
-      uses: ./actions/setup-brew
+      uses: ./actions/setup-homebrew
 
     - name: 'Validate'
       shell: bash
-      run: bats -r ${{ github.action_path }}/setup-brew.bats
+      run: bats -r ${{ github.action_path }}/setup-homebrew.bats
