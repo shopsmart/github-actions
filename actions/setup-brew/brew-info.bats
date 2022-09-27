@@ -35,7 +35,7 @@ function teardown() {
   [[ "$output" =~ .*"::set-output name=should-install::true".* ]]
 }
 
-@test "it should output the cache paths for homebrew" {
+@test "it should output the cache path for homebrew" {
   # Dynamically pull the cache path because it will run on multiple OS
   local cache_path=''
   cache_path="$(brew --cache)"
@@ -43,7 +43,7 @@ function teardown() {
   run brew-info Brewfile true
 
   [ "$status" -eq 0 ]
-  [[ "$output" =~ .*"::set-output name=cache-paths::${cache_path}/*--*\\n${cache_path}/downloads/*".* ]]
+  [[ "$output" =~ .*"::set-output name=cache-path::${cache_path}".* ]]
 }
 
 @test "it should output the prefix path for homebrew" {

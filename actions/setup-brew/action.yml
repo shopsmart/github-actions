@@ -33,7 +33,9 @@ runs:
       if: inputs.cache == 'true'
       uses: actions/cache@v2
       with:
-        path: ${{ steps.info.outputs.cache-paths }}
+        path: |
+          ${{ steps.info.outputs.cache-path }}/*--*
+          ${{ steps.info.outputs.cache-path }}/downloads/*
         key: brew-${{ hashFiles('Brewfile') }}
         restore-keys: brew-
 
@@ -45,6 +47,10 @@ runs:
       if: steps.info.outputs.should-install == 'true'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
+      env:
+        PREFIX_PATH: ${{ steps.info.outputs.prefix_path }}
       run: |
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        if [ "$RUNNER_OS" = Linux ]; then
+          eval "$($PREFIX_PATH/bin/brew shellenv)"
+        fi
         brew bundle install --file=${{ inputs.brewfile }}

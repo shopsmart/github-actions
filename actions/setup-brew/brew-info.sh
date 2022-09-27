@@ -14,10 +14,7 @@ function brew-info() {
 
   local cache_path=''
   cache_path="$(brew --cache)"
-  # shellcheck disable=SC2028
-  # https://www.shellcheck.net/wiki/SC2028
-  # We want the new lines to be escaped for github actions
-  echo "::set-output name=cache-paths::${cache_path}/*--*\\n${cache_path}/downloads/*"
+  echo "::set-output name=cache-path::${cache_path}"
 
   local prefix_path=''
   prefix_path="$(brew --prefix)"
