@@ -23,28 +23,26 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: 'Determine Homebrew paths and conditionals'
+      id: info
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: ${{ github.action_path }}/brew-info.sh ${{ inputs.brewfile }} ${{ inputs.install }}
+
     - name: 'Configure Homebrew cache'
       if: inputs.cache == 'true'
       uses: actions/cache@v2
       with:
-        path: |
-          ~/Library/Caches/Homebrew/*
-          ~/Library/Caches/Homebrew/downloads/*
+        path: ${{ steps.info.outputs.cache-paths }}
         key: brew-${{ hashFiles('Brewfile') }}
         restore-keys: brew-
 
     - name: 'Add brew path'
       shell: bash
-      run: echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
-
-    - name: 'Check if we should install from brewfile'
-      id: should_install
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      run: ${{ github.action_path }}/should-install.sh ${{ inputs.brewfile }} ${{ inputs.install }}
+      run: echo "${{ steps.info.outputs.bin-paths }}" >> $GITHUB_PATH
 
     - name: 'Install from brewfile'
-      if: steps.should_install.outputs.answer == 'true'
+      if: steps.info.outputs.should-install == 'true'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: |

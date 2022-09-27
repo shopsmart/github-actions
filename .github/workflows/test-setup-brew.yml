@@ -14,7 +14,9 @@ defaults:
 jobs:
   test-setup-brew-action:
     name: 'Uses the setup-brew action'
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: 'Checkout actions'
         uses: actions/checkout@v2
