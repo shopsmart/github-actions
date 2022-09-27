@@ -1,7 +1,7 @@
 ---
 
-name: 'Test setup-brew'
-description: 'Runs validation against the setup-brew action'
+name: 'Test setup-homebrew'
+description: 'Runs validation against the setup-homebrew action'
 
 runs:
   using: 'composite'
