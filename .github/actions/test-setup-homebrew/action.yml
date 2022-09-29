@@ -1,0 +1,37 @@
+---
+
+name: 'Test setup-homebrew'
+description: 'Runs validation against the setup-homebrew action'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Install BATS'
+      shell: bash
+      run: |
+        if [ "$RUNNER_OS" == Linux ]; then
+          # Add brews to the path
+          echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+          # Setup brew environment
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        fi
+        # Install bats
+        brew install bats-core
+
+    - name: 'Checkout actions'
+      uses: actions/checkout@v2
+
+    - name: 'Create a Brewfile'
+      shell: bash
+      run: |
+        {
+          echo "brew 'tflint'"
+          echo "brew 'the_silver_searcher'"
+        } > Brewfile
+
+    - name: 'Run setup-brew action'
+      uses: ./actions/setup-homebrew
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r ${{ github.action_path }}/setup-homebrew.bats
