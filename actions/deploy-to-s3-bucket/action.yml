@@ -57,7 +57,10 @@ runs:
   steps:
     - name: 'Install gh cli'
       shell: bash
-      run: brew install gh
+      run: |
+          echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install gh
       # Only if we are downloading assets from gh release
       if: inputs.tag != ''
 
