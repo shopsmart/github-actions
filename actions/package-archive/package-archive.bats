@@ -3,6 +3,7 @@
 load package-archive.sh
 
 function setup() {
+  export GITHUB_OUTPUT="$BATS_TEST_TMPDIR/output"
   export BUILD_DIRECTORY="$BATS_TEST_TMPDIR/build"
 
   mkdir -p "$BUILD_DIRECTORY"
@@ -32,7 +33,7 @@ function teardown() {
 
   [ "$status" -eq 0 ]
   [ -f "$BATS_TEST_TMPDIR/build.tgz" ]
-  [[ "$output" =~ .*"::set-output name=filename::build.tgz".* ]]
+  grep -q 'filename=build.tgz' "$GITHUB_OUTPUT"
 }
 
 @test "it should use the EXTENSION environment variable for extension" {
@@ -42,7 +43,7 @@ function teardown() {
 
   [ "$status" -eq 0 ]
   [ -f "$BATS_TEST_TMPDIR/build.tar.gz" ]
-  [[ "$output" =~ .*"::set-output name=filename::build.tar.gz".* ]]
+  grep -q 'filename=build.tar.gz' "$GITHUB_OUTPUT"
 }
 
 @test "it should package build directory into gzipped tarball" {
@@ -50,7 +51,7 @@ function teardown() {
 
   [ "$status" -eq 0 ]
   [ -f "$BATS_TEST_TMPDIR/assets.tgz" ]
-  [[ "$output" =~ .*"::set-output name=filename::assets.tgz".* ]]
+  grep -q 'filename=assets.tgz' "$GITHUB_OUTPUT"
 
   mkdir -p "$BATS_TEST_TMPDIR/unpackaged"
   tar -zxf "$BATS_TEST_TMPDIR/assets.tgz" -C "$BATS_TEST_TMPDIR/unpackaged"
@@ -63,7 +64,7 @@ function teardown() {
 
   [ "$status" -eq 0 ]
   [ -f "$BATS_TEST_TMPDIR/assets.tar" ]
-  [[ "$output" =~ .*"::set-output name=filename::assets.tar".* ]]
+  grep -q 'filename=assets.tar' "$GITHUB_OUTPUT"
 
   mkdir -p "$BATS_TEST_TMPDIR/unpackaged"
   tar -xf "$BATS_TEST_TMPDIR/assets.tar" -C "$BATS_TEST_TMPDIR/unpackaged"
@@ -77,7 +78,7 @@ function teardown() {
 
   [ "$status" -eq 0 ]
   [ -f "$BATS_TEST_TMPDIR/assets.zip" ]
-  [[ "$output" =~ .*"::set-output name=filename::assets.zip".* ]]
+  grep -q 'filename=assets.zip' "$GITHUB_OUTPUT"
 
   mkdir -p "$BATS_TEST_TMPDIR/unpackaged"
   unzip "$BATS_TEST_TMPDIR/assets.zip" -d "$BATS_TEST_TMPDIR/unpackaged"

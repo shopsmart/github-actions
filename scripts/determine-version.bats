@@ -3,6 +3,7 @@
 load determine-version.sh
 
 function setup() {
+  export GITHUB_OUTPUT="$BATS_TEST_TMPDIR/output"
   pushd "$BATS_TEST_TMPDIR" >/dev/null
 }
 
@@ -14,7 +15,7 @@ function teardown() {
   run determine-version - 1.1.1
 
   [ $status -eq 0 ]
-  [[ "$output" =~ .*::set-output\ name=version::1\.1\.1.* ]]
+  grep -q 'version=1.1.1' "$GITHUB_OUTPUT"
 }
 
 @test "it should determine version from version file" {
@@ -23,7 +24,7 @@ function teardown() {
   run determine-version node
 
   [ $status -eq 0 ]
-  [[ "$output" =~ .*::set-output\ name=version::1\.1\.1.* ]]
+  grep -q 'version=1.1.1' "$GITHUB_OUTPUT"
 }
 
 @test "it should determine node version from nvmrc file" {
@@ -32,5 +33,5 @@ function teardown() {
   run determine-version node
 
   [ $status -eq 0 ]
-  [[ "$output" =~ .*::set-output\ name=version::1\.1\.1.* ]]
+  grep -q 'version=1.1.1' "$GITHUB_OUTPUT"
 }

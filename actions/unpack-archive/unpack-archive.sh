@@ -55,8 +55,8 @@ function unpack-archive() {
       ;;
   esac
 
-  echo "::set-output name=destination::$destination"
-  echo "::set-output name=mime-type::$mime"
+  echo "destination=$destination" >> "$GITHUB_OUTPUT"
+  echo "mime-type=$mime" >> "$GITHUB_OUTPUT"
 }
 
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
