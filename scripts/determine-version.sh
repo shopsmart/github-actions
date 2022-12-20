@@ -32,7 +32,7 @@ function determine-version() {
     return 1
   }
 
-  echo "::set-output name=version::$version"
+  echo "version=$version" >> "$GITHUB_OUTPUT"
 }
 
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then

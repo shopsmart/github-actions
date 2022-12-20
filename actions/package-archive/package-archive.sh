@@ -49,7 +49,7 @@ function package-archive() {
       ;;
   esac
 
-  echo "::set-output name=filename::$filename.$extension"
+  echo "filename=$filename.$extension" >> "$GITHUB_OUTPUT"
 }
 
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then

@@ -3,6 +3,7 @@
 load brew-info.sh
 
 function setup() {
+  export GITHUB_OUTPUT="$BATS_TEST_TMPDIR/output"
   pushd "$BATS_TEST_TMPDIR" >/dev/null
 }
 
@@ -16,14 +17,14 @@ function teardown() {
   run brew-info Brewfile false
 
   [ "$status" -eq 0 ]
-  [[ "$output" =~ .*"::set-output name=should-install::false".* ]]
+  grep -q 'should-install=false' "$GITHUB_OUTPUT"
 }
 
 @test "it should not indicate to install if the file does not exist" {
   run brew-info Brewfile true
 
   [ "$status" -eq 0 ]
-  [[ "$output" =~ .*"::set-output name=should-install::false".* ]]
+  grep -q 'should-install=false' "$GITHUB_OUTPUT"
 }
 
 @test "it should indicate to install if the file does exist and the install variable is true" {
@@ -32,7 +33,7 @@ function teardown() {
   run brew-info Brewfile true
 
   [ "$status" -eq 0 ]
-  [[ "$output" =~ .*"::set-output name=should-install::true".* ]]
+  grep -q 'should-install=true' "$GITHUB_OUTPUT"
 }
 
 @test "it should output the cache path for homebrew" {
@@ -43,7 +44,7 @@ function teardown() {
   run brew-info Brewfile true
 
   [ "$status" -eq 0 ]
-  [[ "$output" =~ .*"::set-output name=cache-path::${cache_path}".* ]]
+  grep -q "cache-path=$cache_path" "$GITHUB_OUTPUT"
 }
 
 @test "it should output the prefix path for homebrew" {
@@ -54,7 +55,7 @@ function teardown() {
   run brew-info Brewfile true
 
   [ "$status" -eq 0 ]
-  [[ "$output" =~ .*"::set-output name=prefix-path::${prefix_path}".* ]]
+  grep -q "prefix-path=$prefix_path" "$GITHUB_OUTPUT"
 }
 
 @test "it should output the bin paths for homebrew" {
@@ -65,5 +66,5 @@ function teardown() {
   run brew-info Brewfile true
 
   [ "$status" -eq 0 ]
-  [[ "$output" =~ .*"::set-output name=bin-paths::${prefix_path}/bin:${prefix_path}/sbin".* ]]
+  grep -q "bin-paths=$prefix_path/bin:$prefix_path/sbin" "$GITHUB_OUTPUT"
 }

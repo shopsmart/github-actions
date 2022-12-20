@@ -3,6 +3,8 @@
 load unpack-archive.sh
 
 function setup() {
+  export GITHUB_OUTPUT="$BATS_TEST_TMPDIR/output"
+
   create_archives
 
   export TAR_FILE="$BATS_TEST_TMPDIR/archive.tar"

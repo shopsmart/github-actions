@@ -10,16 +10,16 @@ function brew-info() {
   if [ "$install" = true ] && [ -f "$brewfile" ]; then
     should_install=true
   fi
-  echo "::set-output name=should-install::${should_install}"
+  echo "should-install=${should_install}" >> "$GITHUB_OUTPUT"
 
   local cache_path=''
   cache_path="$(brew --cache)"
-  echo "::set-output name=cache-path::${cache_path}"
+  echo "cache-path=${cache_path}" >> "$GITHUB_OUTPUT"
 
   local prefix_path=''
   prefix_path="$(brew --prefix)"
-  echo "::set-output name=prefix-path::${prefix_path}"
-  echo "::set-output name=bin-paths::${prefix_path}/bin:${prefix_path}/sbin"
+  echo "prefix-path=${prefix_path}" >> "$GITHUB_OUTPUT"
+  echo "bin-paths=${prefix_path}/bin:${prefix_path}/sbin" >> "$GITHUB_OUTPUT"
 }
 
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
