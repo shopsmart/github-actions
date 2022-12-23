@@ -1,0 +1,50 @@
+---
+
+name: 'Test deploy-to-lambda-function action'
+description: 'Runs validation against the deploy-to-lambda-function action'
+
+inputs:
+  aws-account-id:
+    description: 'The AWS Account id'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup BATS
+      uses: mig4/setup-bats@v1
+
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+
+    - name: 'Use local actions'
+      uses: ./.github/actions/use-local-actions
+
+    - name: 'Create archive file'
+      shell: bash
+      run: |
+        sed -i "s/const VERSION = 'dev'/const VERSION = '${{ github.sha }}'" index.js
+        tar -czvf archive.tgz ./index.js
+
+    - name: 'Run deploy-lambda-function action'
+      id: unpack
+      uses: ./actions/deploy-lambda-function
+      with:
+        pattern: 'archive.tgz'
+        function-name: shopsmart-github-actions-tests
+        function-tags: version=${{ github.sha }}
+
+    # TODO: Is this needed?
+    # - name: 'Configure AWS Credentials'
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   with:
+    #     aws-region: 'us-east-1'
+    #     role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests-lambda
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r ${{ github.action_path }}/deploy-lambda-function.bats
+      env:
+        FUNCTION_ARN: arn:aws:
+        FUNCTION_NAME: shopsmart-github-actions-tests
+        FUNCTION_TAGS: version=${{ github.sha }}

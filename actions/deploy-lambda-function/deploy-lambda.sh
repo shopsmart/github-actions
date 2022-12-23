@@ -6,6 +6,7 @@ function deploy-lambda() {
   local function_name="$1"
   local zip_file="$2"
 
+  # validate
   [ -n "$function_name" ] || {
     echo "[ERROR] A function name must be provided" >&2
     return 1
@@ -14,6 +15,7 @@ function deploy-lambda() {
     echo "[ERROR] A zip file must be provided" >&2
     return 2
   }
+  # resolve zip file if wildcard
   [ "$zip_file" = "${zip_file#*\*}" ] || {
     echo "[DEBUG] Found a wildcard file" >&2
     local pre_wildcard="${zip_file%\**}"
@@ -26,6 +28,7 @@ function deploy-lambda() {
     return 3
   }
 
+  # deploy
   echo "[DEBUG] Uploading $zip_file to $function_name function" >&2
   aws lambda update-function-code \
     --function-name "$function_name" \

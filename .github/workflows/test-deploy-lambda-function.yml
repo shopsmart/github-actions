@@ -1,0 +1,30 @@
+---
+
+name: 'Run deploy-lambda-function action'
+
+on:
+  pull_request:
+    paths:
+      - actions/deploy-lambda-function/*
+      - .github/actions/test-deploy-lambda-function/*
+
+permissions:
+  id-token: write
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-deploy-lambda-function-action:
+    name: 'Uses the deploy-lambda-function action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v2
+
+      - name: 'Test deploy-lambda-function action'
+        uses: ./.github/actions/test-deploy-lambda-function
+        with:
+          aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
