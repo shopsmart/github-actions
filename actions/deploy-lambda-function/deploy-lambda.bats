@@ -65,5 +65,5 @@ function aws() {
 
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]
-  [[ "$(< "$AWS_CMD_FILE")" =~ "lambda update-function-code --function-name $LAMBDA_FUNCTION --zip-file $zip_file" ]]
+  [[ "$(< "$AWS_CMD_FILE")" =~ "lambda update-function-code --function-name $LAMBDA_FUNCTION --zip-file fileb://$zip_file" ]]
 }
