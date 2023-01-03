@@ -26,6 +26,7 @@ runs:
 
     - name: 'Create archive file'
       shell: bash
+      working-directory: ${{ github.action_path }}
       run: |
         sed -i "s/const VERSION = 'dev'/const VERSION = '${{ github.sha }}'/" index.js
         tar -czvf archive.tgz ./index.js
@@ -34,7 +35,7 @@ runs:
       id: unpack
       uses: ./actions/deploy-lambda-function
       with:
-        pattern: 'archive.tgz'
+        pattern: ${{ github.action_path }}/archive.tgz
         function-name: shopsmart-github-actions-tests
         function-tags: version=${{ github.sha }}
 
