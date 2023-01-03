@@ -40,12 +40,11 @@ runs:
         function-tags: version=${{ github.sha }}
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
-    # TODO: Is this needed?
-    # - name: 'Configure AWS Credentials'
-    #   uses: aws-actions/configure-aws-credentials@v1
-    #   with:
-    #     aws-region: 'us-east-1'
-    #     role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests-lambda
+    - name: 'Configure AWS Credentials'
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: 'us-east-1'
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
     - name: 'Validate'
       shell: bash
