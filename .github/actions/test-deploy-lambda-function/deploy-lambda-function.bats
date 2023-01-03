@@ -17,8 +17,9 @@ function teardown() {
 
 @test "it should have tagged the lambda version" {
   run aws lambda list-tags --no-cli-pager \
-    --resource "${FUNCTION_ARN}" \
+    --resource "$FUNCTION_ARN" \
     --query 'Tags.version'
 
   [ "$status" -eq 0 ]
+  [ "$output" = "$VERSION_TAG" ]
 }
