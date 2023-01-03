@@ -11,8 +11,12 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Setup BATS
-      uses: mig4/setup-bats@v1
+    - name: 'Setup brew'
+      uses: Homebrew/actions@master
+
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
 
     - name: 'Checkout'
       uses: actions/checkout@v3
