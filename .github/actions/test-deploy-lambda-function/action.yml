@@ -38,7 +38,7 @@ runs:
         pattern: ${{ github.action_path }}/archive.tgz
         function-name: shopsmart-github-actions-tests
         function-tags: version=${{ github.sha }}
-        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests-lambda
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
     # TODO: Is this needed?
     # - name: 'Configure AWS Credentials'
