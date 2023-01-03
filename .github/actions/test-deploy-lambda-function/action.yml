@@ -27,7 +27,7 @@ runs:
     - name: 'Create archive file'
       shell: bash
       run: |
-        sed -i "s/const VERSION = 'dev'/const VERSION = '${{ github.sha }}'" index.js
+        sed -i "s/const VERSION = 'dev'/const VERSION = '${{ github.sha }}'/" index.js
         tar -czvf archive.tgz ./index.js
 
     - name: 'Run deploy-lambda-function action'
