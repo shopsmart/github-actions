@@ -33,7 +33,7 @@ function deploy-lambda() {
   set -x
   aws lambda update-function-code \
     --function-name "$function_name" \
-    --zip-file "fileb://$zip_file"
+    --zip-file "fileb:/$zip_file"
 }
 
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then

@@ -29,13 +29,13 @@ runs:
       working-directory: ${{ github.action_path }}
       run: |
         sed -i "s/const VERSION = 'dev'/const VERSION = '${{ github.sha }}'/" index.js
-        tar -czvf archive.tgz ./index.js
+        zip archive.zip ./index.js
 
     - name: 'Run deploy-lambda-function action'
       id: unpack
       uses: ./actions/deploy-lambda-function
       with:
-        pattern: ${{ github.action_path }}/archive.tgz
+        pattern: ${{ github.action_path }}/archive.zip
         function-name: shopsmart-github-actions-tests
         function-tags: version=${{ github.sha }}
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
