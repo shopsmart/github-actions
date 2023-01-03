@@ -9,7 +9,7 @@ function tag-lambda() {
     return 1
   }
 
-  [ -n "$LAMBDA_TAGS" ] || {
+  [ -n "$FUNCTION_TAGS" ] || {
     echo "[DEBUG] No tags provided" >&2
     return 0
   }
