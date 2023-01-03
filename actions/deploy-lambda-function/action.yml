@@ -80,5 +80,5 @@ runs:
       shell: bash
       run: ${{ github.action_path }}/tag-lambda.sh "${{ inputs.function-name }}"
       env:
-        FUNCTION_TAGS: ${{ inputs.function-tags }}
+        LAMBDA_TAGS: ${{ inputs.function-tags }}
       if: inputs.function-tags != ''
