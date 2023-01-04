@@ -51,5 +51,4 @@ runs:
       run: bats -r ${{ github.action_path }}/deploy-lambda-function.bats
       env:
         FUNCTION_ARN: arn:aws:lambda:us-east-1:${{ inputs.aws-account-id }}:function:shopsmart-github-actions-tests
-        # FUNCTION_NAME: shopsmart-github-actions-tests
         VERSION_TAG: ${{ github.sha }}
