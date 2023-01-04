@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
 function setup() {
-  :
+  export FUNCTION_NAME="${FUNCTION_ARN##*/}"
 }
 
 function teardown() {
@@ -9,10 +9,17 @@ function teardown() {
 }
 
 @test "it should have deployed the code to lambda" {
-  # TODO: How do we test this?
-  run :
+  local outfile="$BATS_TEST_TMPDIR/out.json"
+  run aws lambda invoke --no-cli-pager \
+    --function-name "$FUNCTION_NAME" \
+    --output text \
+    "$outfile"
+
+  # example payload
+  # {"statusCode":200,"body":"{\"version\":\"14460a97b6767f6009d732af022b21698a41342a\"}","headers":{"Content-Type":"application/json"}}
 
   [ "$status" -eq 0 ]
+  [[ "$(< "$outfile")" =~ .*'\"version\":\"'"$VERSION_TAG"'\"'.* ]]
 }
 
 @test "it should have tagged the lambda version" {
