@@ -5,7 +5,7 @@
 // Replace this
 const VERSION = 'dev'
 
-export async function handler() {
+exports.handler = async function handler() {
   response = {version: VERSION}
   headers = {"Content-Type": "application/json"}
 
