@@ -1,0 +1,46 @@
+---
+
+name: 'Test is-gh-release action'
+description: 'Runs validation against the is-gh-release action'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Install BATS and jq'
+      shell: bash
+      run: |
+        # Add brews to the path
+        echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+        # Setup brew environment
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        # Install bats
+        brew install bats-core jq
+
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Use local actions'
+      uses: ./.github/actions/use-local-actions
+
+    # Empty string
+    - name: 'Empty string: Is GH release?'
+      id: empty_string
+      uses: ./actions/is-gh-release
+
+    # nothere
+    - name: 'nothere: Is GH release?'
+      id: nothere
+      uses: ./actions/is-gh-release
+
+    # v2.0.2
+    - name: 'v2.0.2: Is GH release?'
+      id: v2_0_2
+      uses: ./actions/is-gh-release
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r ${{ github.action_path }}/deploy-to-s3-bucket.bats
+      env:
+        EMPTY_STRING_IS_RELEASE: ${{ steps.empty_string.outputs.is-release }}
+        NOTHERE_IS_RELEASE: ${{ steps.nothere.outputs.is-release }}
+        V2_0_2_IS_RELEASE: ${{ steps.v2_0_2.outputs.is-release }}

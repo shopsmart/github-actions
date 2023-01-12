@@ -1,0 +1,23 @@
+---
+
+name: 'Run is-gh-release action'
+
+on:
+  pull_request:
+    paths:
+      - actions/is-gh-release/*
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-is-gh-release-action:
+    name: 'Uses the is-gh-release action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v2
+
+      - name: 'Test setup-brew action'
+        uses: ./.github/actions/test-is-gh-release

@@ -1,0 +1,24 @@
+---
+
+name: 'Is Github release?'
+description: 'Determines if a version string provided from user input is a github release or not'
+
+inputs:
+  ref:
+    description: 'The ref to check whether or not it is a release'
+    required: true
+    type: string
+    default: ''
+
+outputs:
+  is-release:
+    description: 'Returns true if the ref provided is a github release and false otherwise'
+    value: ${{ steps.is_gh_release.outputs.is-release }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Is Github release?'
+      id: is_gh_release
+      shell: bash
+      run: ${{ github.action_path }}/is-gh-release.sh "${{ inputs.ref }}"
