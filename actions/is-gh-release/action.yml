@@ -22,3 +22,5 @@ runs:
       id: is_gh_release
       shell: bash
       run: ${{ github.action_path }}/is-gh-release.sh "${{ inputs.ref }}"
+      env:
+        GH_TOKEN: ${{ github.token }}
