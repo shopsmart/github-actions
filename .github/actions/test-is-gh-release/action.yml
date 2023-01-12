@@ -31,11 +31,15 @@ runs:
     - name: 'nothere: Is GH release?'
       id: nothere
       uses: ./actions/is-gh-release
+      with:
+        ref: nothere
 
     # v2.0.2
     - name: 'v2.0.2: Is GH release?'
       id: v2_0_2
       uses: ./actions/is-gh-release
+      with:
+        ref: v2.0.2
 
     - name: 'Validate'
       shell: bash
