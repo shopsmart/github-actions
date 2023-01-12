@@ -6,7 +6,7 @@ description: 'Runs validation against the is-gh-release action'
 runs:
   using: 'composite'
   steps:
-    - name: 'Install BATS and jq'
+    - name: 'Install BATS'
       shell: bash
       run: |
         # Add brews to the path
@@ -14,7 +14,7 @@ runs:
         # Setup brew environment
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         # Install bats
-        brew install bats-core jq
+        brew install bats-core
 
     - name: 'Checkout'
       uses: actions/checkout@v2
