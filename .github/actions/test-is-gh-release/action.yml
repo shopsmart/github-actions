@@ -39,7 +39,7 @@ runs:
 
     - name: 'Validate'
       shell: bash
-      run: bats -r ${{ github.action_path }}/deploy-to-s3-bucket.bats
+      run: bats -r ${{ github.action_path }}/is-gh-release.bats
       env:
         EMPTY_STRING_IS_RELEASE: ${{ steps.empty_string.outputs.is-release }}
         NOTHERE_IS_RELEASE: ${{ steps.nothere.outputs.is-release }}
