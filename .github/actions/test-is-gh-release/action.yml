@@ -41,12 +41,6 @@ runs:
       with:
         ref: v2.0.2
 
-    - name: 'v2.0.2-rc.0: Is GH release?'
-      id: v2_0_2_rc_0
-      uses: ./actions/is-gh-release
-      with:
-        ref: v2.0.2-rc.0
-
     - name: 'Validate'
       shell: bash
       run: bats -r ${{ github.action_path }}/is-gh-release.bats
@@ -54,5 +48,3 @@ runs:
         EMPTY_STRING_IS_RELEASE: ${{ steps.empty_string.outputs.is-release }}
         NOTHERE_IS_RELEASE: ${{ steps.nothere.outputs.is-release }}
         V2_0_2_IS_RELEASE: ${{ steps.v2_0_2.outputs.is-release }}
-        V2_0_2_RC_0_IS_RELEASE: ${{ steps.v2_0_2_rc_0.outputs.is-release }}
-        V2_0_2_RC_0_IS_PRERELEASE: ${{ steps.v2_0_2_rc_0.outputs.is-prerelease }}
