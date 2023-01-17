@@ -14,6 +14,9 @@ outputs:
   is-release:
     description: 'Returns true if the ref provided is a github release and false otherwise'
     value: ${{ steps.is_gh_release.outputs.is-release }}
+  is-prerelease:
+    description: 'Returns true if the ref provided is a github prerelease and false otherwise'
+    value: ${{ steps.is_gh_release.outputs.is-prerelease }}
 
 runs:
   using: 'composite'
