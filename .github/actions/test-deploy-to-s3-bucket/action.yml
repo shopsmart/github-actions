@@ -30,7 +30,7 @@ runs:
     - name: 'Get unique id'
       id: id
       shell: bash
-      run: echo "::set-output name=id::$(date '+%s')"
+      run: echo "id=$(date '+%s')" >> $GITHUB_OUTPUT
 
     - name: 'Create archive file'
       shell: bash
