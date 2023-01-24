@@ -22,7 +22,7 @@ runs:
     - name: 'Save off action path'
       id: path
       shell: bash
-      run: echo "::set-output name=path::${{ github.action_path }}"
+      run: echo "path=${{ github.action_path }}" >> $GITHUB_OUTPUT
 
     - name: 'Run package-archive action'
       id: unpack
