@@ -262,7 +262,7 @@ jobs:
 
       - name: 'If ssh private key provided, pass the default ssh agent'
         id: ssh
-        run:
+        run: |
           ssh=''
           if [ -n "${{ secrets.ssh-private-key }}" ]; then
             ssh=default
