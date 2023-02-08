@@ -134,7 +134,7 @@ on:
       push:
         description: "Push is a shorthand for --output=type=registry"
         required: false
-        default: 'false'
+        default: 'true' # BD default
       sbom:
         description: "Generate SBOM attestation for the build (shorthand for --attest=type=sbom)"
         required: false
