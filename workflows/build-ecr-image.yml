@@ -212,7 +212,7 @@ on:
 
       ssh-private-key:
         description: 'If using private repositories for dependencies, the ssh key to add to the agent and pass along to the docker build'
-        default: ''
+        required: false
 
 permissions:
   contents: read  # default
