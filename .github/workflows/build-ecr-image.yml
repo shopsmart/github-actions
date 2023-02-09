@@ -32,7 +32,6 @@ on:
         type: string
       driver:
         description: 'Sets the builder driver to be used'
-        default: 'docker-container'
         required: false
         type: string
       driver-opts:
@@ -41,17 +40,14 @@ on:
         type: string
       buildkitd-flags:
         description: 'Flags for buildkitd daemon'
-        default: '--allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host'
         required: false
         type: string
       install:
         description: 'Sets up docker build command as an alias to docker buildx build'
-        default: 'false'
         required: false
         type: string
       use:
         description: 'Switch to this builder instance'
-        default: 'true'
         required: false
         type: string
       endpoint:
@@ -129,7 +125,6 @@ on:
       load:
         description: "Load is a shorthand for --output=type=docker"
         required: false
-        default: 'false'
         type: string
       network:
         description: "Set the networking mode for the RUN instructions during build"
@@ -138,7 +133,6 @@ on:
       no-cache:
         description: "Do not use cache when building the image"
         required: false
-        default: 'false'
         type: string
       no-cache-filters:
         description: "Do not cache specified stages"
@@ -159,7 +153,6 @@ on:
       pull:
         description: "Always attempt to pull all referenced images"
         required: false
-        default: 'false'
         type: string
       push:
         description: "Push is a shorthand for --output=type=registry"
@@ -200,7 +193,6 @@ on:
         type: string
       github-token:
         description: "GitHub Token used to authenticate against a repository for Git context"
-        default: ${{ github.token }}
         required: false
         type: string
       # end docker/build-push-action inputs
