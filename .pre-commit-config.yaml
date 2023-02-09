@@ -22,11 +22,3 @@ repos:
       - id: pretty-format-json
         args: [--autofix, --no-sort-keys, --indent=4]
       - id: trailing-whitespace
-
-  - repo: local
-    hooks:
-      - id: copy-reusable-workflows
-        name: 'Copy reusable workflows to .github/workflows'
-        files: ^workflows/.*\.yml$
-        language: script
-        entry: bin/copy-workflow.sh
