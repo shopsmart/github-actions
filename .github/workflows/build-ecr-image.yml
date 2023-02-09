@@ -331,7 +331,7 @@ jobs:
             ${{ inputs.tags }}
           target: ${{ inputs.target }}
           ulimit: ${{ inputs.ulimit }}
-          github-token: ${{ inputs.github-token }}
+          github-token: ${{ secrets.github-token }}
 
       - name: 'Pull and package docker image'
         if: steps.is-gh-release.outputs.is-release == 'true'
