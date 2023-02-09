@@ -194,11 +194,6 @@ on:
         description: "Ulimit options (e.g., nofile=1024:1024)"
         required: false
         type: string
-      github-token:
-        description: "GitHub Token used to authenticate against a repository for Git context"
-        default: ${{ github.token }}
-        required: false
-        type: string
       # end docker/build-push-action inputs
 
     secrets:
@@ -212,6 +207,10 @@ on:
 
       secrets:
         description: "List of secrets to expose to the build (e.g., key=string, GIT_AUTH_TOKEN=mytoken)"
+        required: false
+
+      github-token:
+        description: "GitHub Token used to authenticate against a repository for Git context"
         required: false
 
 env:
@@ -319,7 +318,7 @@ jobs:
           push: ${{ inputs.push }}
           sbom: ${{ inputs.sbom }}
           secrets: |
-            GIT_AUTH_TOKEN=${{ inputs.github-token }}
+            GIT_AUTH_TOKEN=${{ secrets.github-token || github.token }}
             ${{ secrets.secrets }}
           secret-files: ${{ inputs.secret-files }}
           shm-size: ${{ inputs.shm-size }}
