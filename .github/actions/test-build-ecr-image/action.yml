@@ -1,0 +1,41 @@
+---
+
+name: 'Test build-ecr-image workflow'
+description: 'Runs validation against the build-ecr-image workflow'
+
+inputs:
+  aws-account-id:
+    description: 'The AWS Account id'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup brew'
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Set up Docker Buildx'
+      uses: docker/setup-buildx-action@v2
+
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+
+    - name: 'Configure AWS Credentials'
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        aws-region: 'us-east-1'
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
+    - name: 'Log into AWS ECR'
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r ${{ github.action_path }}/build-ecr-image.bats
+      env:
+        ECR_REPOSITORY: ${{ secrets.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests
+        VERSION_TAG: ${{ github.sha }}
