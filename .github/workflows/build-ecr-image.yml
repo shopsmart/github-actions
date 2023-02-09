@@ -349,5 +349,5 @@ jobs:
         if: steps.is-gh-release.outputs.is-release == 'true'
         uses: softprops/action-gh-release@v1
         with:
-          tag: ${{ inputs.ref }}
+          tag_name: ${{ inputs.ref }}
           files: docker-image-*.tgz
