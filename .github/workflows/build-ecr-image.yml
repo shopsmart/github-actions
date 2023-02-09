@@ -318,7 +318,9 @@ jobs:
           pull: ${{ inputs.pull }}
           push: ${{ inputs.push }}
           sbom: ${{ inputs.sbom }}
-          secrets: ${{ secrets.secrets }}
+          secrets: |
+            GIT_AUTH_TOKEN=${{ inputs.github-token }}
+            ${{ secrets.secrets }}
           secret-files: ${{ inputs.secret-files }}
           shm-size: ${{ inputs.shm-size }}
           ssh: |
