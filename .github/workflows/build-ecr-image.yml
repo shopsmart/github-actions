@@ -250,7 +250,7 @@ jobs:
 
       # for private dependencies
       - name: 'Install SSH Key'
-        # if: secrets.ssh-private-key != ''
+        if: secrets.ssh-private-key != ''
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.ssh-private-key }}
