@@ -248,13 +248,6 @@ jobs:
           fi
           echo "tag=$additional_tag" >> $GITHUB_OUTPUT
 
-      # for private dependencies
-      - name: 'Install SSH Key'
-        if: secrets.ssh-private-key != ''
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.ssh-private-key }}
-
       - name: 'If ssh private key provided, pass the default ssh agent'
         id: ssh
         run: |
@@ -263,6 +256,13 @@ jobs:
             ssh=default
           fi
           echo "ssh=$ssh" >> $GITHUB_OUTPUT
+
+      # for private dependencies
+      - name: 'Install SSH Key'
+        if: steps.ssh.outputs.ssh != ''
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.ssh-private-key }}
 
       - name: 'Configure AWS credentials'
         uses: aws-actions/configure-aws-credentials@v1-node16
