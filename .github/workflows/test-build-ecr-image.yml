@@ -22,6 +22,9 @@ jobs:
     uses: ./.github/workflows/build-ecr-image.yml
     with:
       file: .github/actions/test-build-ecr-image/Dockerfile
+      repository-name: github-actions-tests
+    secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 
   test-build-ecr-image-workflow:
     name: 'Uses the build-ecr-image workflow'
@@ -43,6 +46,9 @@ jobs:
     with:
       ref: v2.2.0-rc.0
       file: .github/actions/test-build-ecr-image/Dockerfile
+      repository-name: github-actions-tests
+    secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 
   test-build-ecr-image-workflow-tag:
     name: 'Uses the build-ecr-image workflow'
@@ -56,4 +62,4 @@ jobs:
         uses: ./.github/actions/test-build-ecr-image
         with:
           aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
-          ref: ${{ github.sha }}
+          ref: v2.2.0-rc.0

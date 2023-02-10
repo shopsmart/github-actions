@@ -7,6 +7,9 @@ inputs:
   aws-account-id:
     description: 'The AWS Account id'
     required: true
+  ref:
+    description: 'The github ref to expect'
+    required: false
 
 runs:
   using: 'composite'
@@ -38,4 +41,4 @@ runs:
       run: bats -r ${{ github.action_path }}/build-ecr-image.bats
       env:
         ECR_REPOSITORY: ${{ secrets.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests
-        VERSION_TAG: ${{ github.sha }}
+        VERSION_TAG: ${{ inputs.ref || github.sha }}
