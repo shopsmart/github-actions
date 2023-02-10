@@ -40,5 +40,5 @@ runs:
       shell: bash
       run: bats -r ${{ github.action_path }}/build-ecr-image.bats
       env:
-        ECR_REPOSITORY: ${{ secrets.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests
+        ECR_REPOSITORY: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests
         VERSION_TAG: ${{ inputs.ref || github.sha }}
