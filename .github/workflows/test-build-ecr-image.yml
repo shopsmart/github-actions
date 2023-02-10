@@ -23,6 +23,7 @@ jobs:
     with:
       file: .github/actions/test-build-ecr-image/Dockerfile
       repository-name: github-actions-tests
+      role-name: github-actions-tests
     secrets:
       aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 
@@ -47,6 +48,7 @@ jobs:
       ref: v2.2.0-rc.0
       file: .github/actions/test-build-ecr-image/Dockerfile
       repository-name: github-actions-tests
+      role-name: github-actions-tests
     secrets:
       aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 

@@ -23,7 +23,7 @@ on:
       role-name:
         description: 'The name of the IAM role allowed to upload the ECR repository'
         type: string
-        default: ${{ inputs.repository-name }}-deploy
+        required: true
 
       # begin docker/setup-buildx-action inputs
       buildx-version:
@@ -120,7 +120,6 @@ on:
       file:
         description: "Path to the Dockerfile"
         required: false
-        default: docker/Dockerfile # BD default
         type: string
       labels:
         description: "List of metadata for an image"
