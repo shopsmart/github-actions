@@ -1,0 +1,69 @@
+---
+
+name: 'Run build-ecr-image workflow'
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/build-ecr-image.yml
+      - .github/actions/test-build-ecr-image/*
+
+permissions:
+  id-token: write # aws auth
+  contents: write # publish release assets
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # Build for Branch
+  run-build-ecr-image-workflow:
+    uses: ./.github/workflows/build-ecr-image.yml
+    with:
+      file: .github/actions/test-build-ecr-image/Dockerfile
+      repository-name: github-actions-tests
+      role-name: github-actions-tests
+      build-args: VERSION=${{ github.sha }}
+    secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  test-build-ecr-image-workflow:
+    name: 'Uses the build-ecr-image workflow'
+    runs-on: ubuntu-latest
+    needs: run-build-ecr-image-workflow
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v2
+
+      - name: 'Test build-ecr-image workflow'
+        uses: ./.github/actions/test-build-ecr-image
+        with:
+          aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+          ref: ${{ github.sha }}
+
+  # Build for Tag
+  run-build-ecr-image-workflow-tag:
+    uses: ./.github/workflows/build-ecr-image.yml
+    with:
+      ref: v2.2.0-rc.0
+      file: .github/actions/test-build-ecr-image/Dockerfile
+      repository-name: github-actions-tests
+      role-name: github-actions-tests
+      build-args: VERSION=v2.2.0-rc.0
+    secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  test-build-ecr-image-workflow-tag:
+    name: 'Uses the build-ecr-image workflow'
+    runs-on: ubuntu-latest
+    needs: run-build-ecr-image-workflow-tag
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v2
+
+      - name: 'Test build-ecr-image workflow'
+        uses: ./.github/actions/test-build-ecr-image
+        with:
+          aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+          ref: v2.2.0-rc.0
