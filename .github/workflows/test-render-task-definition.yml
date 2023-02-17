@@ -40,5 +40,4 @@ jobs:
       - name: 'Test render-task-definition workflow'
         uses: ./.github/actions/test-render-task-definition
         with:
-          aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
           ref: ${{ github.sha }}
