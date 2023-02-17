@@ -32,7 +32,9 @@ runs:
 
     - name: 'Rewrite task definition file'
       shell: bash
-      run: sed -i.bak 's/{{ tag }}/${{ github.sha }}/g' '${{ github.action_path }}/task-definition.yml'
+      run: |
+        sed -i.bak 's/{{ tag }}/${{ github.sha }}/g' '${{ github.action_path }}/task-definition.yml'
+        sed -i.bak 's/{{ account_id }}/${{ inputs.aws-account-id }}/g' '${{ github.action_path }}/task-definition.yml'
 
     - name: 'Publish a new revision of the task definition'
       id: new-revision

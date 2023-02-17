@@ -1,8 +1,8 @@
 ---
 
 family: github-actions-tests
-taskRoleArn: arn:aws:iam::1111111111:role/github-actions-tests-task
-executionRoleArn: arn:aws:iam::1111111111:role/github-actions-tests-execution
+taskRoleArn: arn:aws:iam::{{ account_id }}:role/github-actions-tests-task
+executionRoleArn: arn:aws:iam::{{ account_id }}:role/github-actions-tests-execution
 networkMode: awsvpc
 cpu: '256'
 memory: '1024'
