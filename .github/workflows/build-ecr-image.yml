@@ -216,10 +216,6 @@ env:
   DOCKER_IMAGE: ${{ secrets.aws-account-id }}.dkr.ecr.${{ inputs.aws-region }}.amazonaws.com/${{ inputs.repository-name }}
   DEPLOY_IAM_ROLE: arn:aws:iam::${{ secrets.aws-account-id }}:role/${{ inputs.role-name }}
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   build-docker-image:
     name: 'Build docker image'
