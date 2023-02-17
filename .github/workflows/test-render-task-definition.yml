@@ -26,7 +26,7 @@ jobs:
       customize: .github/actions/test-render-task-definition/customize.py
       environment: TAG=${{ github.sha }}
     secrets:
-      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+      aws-account-id: '1111111111'
 
   test-render-task-definition-workflow:
     name: 'Uses the render-task-definition workflow'

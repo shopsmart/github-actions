@@ -1,8 +1,8 @@
 ---
 
 family: test-render-task-definition
-taskRoleArn: arn:aws:iam::{{ account_id }}:role/test-render-task-definition-task
-executionRoleArn: arn:aws:iam::{{ account_id }}:role/test-render-task-definition-execution
+taskRoleArn: arn:aws:iam::1111111111:role/test-render-task-definition-task
+executionRoleArn: arn:aws:iam::1111111111:role/test-render-task-definition-execution
 networkMode: awsvpc
 cpu: '256'
 memory: '1024'
