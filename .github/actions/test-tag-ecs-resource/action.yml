@@ -31,6 +31,7 @@ runs:
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
     - name: 'Rewrite task definition file'
+      shell: bash
       run: sed -i.bak 's/{{ tag }}/${{ github.sha }}/g' '${{ github.action_path }}/task-definition.yml'
 
     - name: 'Publish a new revision of the task definition'
