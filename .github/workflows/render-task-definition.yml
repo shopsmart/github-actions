@@ -68,10 +68,10 @@ on:
         default: 'task-definition.yml' # Changed default
       # end shopsmart/render-j2-action inputs
 
-      secrets:
-        aws-account-id:
-          description: 'The AWS account id that the ecr repository lives under'
-          required: true
+    secrets:
+      aws-account-id:
+        description: 'The AWS account id that the ecr repository lives under'
+        required: true
 
 defaults:
   run:
