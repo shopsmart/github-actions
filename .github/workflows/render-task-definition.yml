@@ -94,7 +94,7 @@ jobs:
           format: ${{ inputs.format }}
           env_vars: |
             TAG=${{ inputs.ref }}
-            AWS_ACCOUNT_ID=${{ secrets.aws-account }}
+            AWS_ACCOUNT_ID=${{ secrets.aws-account-id }}
             AWS_REGION=${{ inputs.aws-region }}
             ${{ inputs.environment }}
           filters: ${{ inputs.filters }}
