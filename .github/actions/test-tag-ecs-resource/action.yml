@@ -14,9 +14,9 @@ runs:
     - name: 'Setup brew'
       uses: Homebrew/actions/setup-homebrew@master
 
-    - name: 'Install BATS and jq'
+    - name: 'Install BATS'
       shell: bash
-      run: brew install bats-core jq
+      run: brew install bats-core
 
     - name: 'Checkout'
       uses: actions/checkout@v2
