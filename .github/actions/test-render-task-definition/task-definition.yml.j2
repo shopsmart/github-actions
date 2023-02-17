@@ -25,10 +25,10 @@ containerDefinitions:
     - name: APPLICATION
       value: {{ application }}
     - name: APP_VERSION
-      value: {{ tag }}
+      value: '{{ tag }}'
   dockerLabels:
     application: {{ application }}
-    version: {{ tag }}
+    version: '{{ tag }}'
     default: {{ default }}
 requiresCompatibilities:
   - EC2
