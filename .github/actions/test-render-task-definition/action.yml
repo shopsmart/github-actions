@@ -21,6 +21,11 @@ runs:
     - name: 'Checkout'
       uses: actions/checkout@v3
 
+    - name: 'Download task-definition'
+      uses: actions/download-artifact@v2
+      with:
+        name: task-definition
+
     - name: 'Validate'
       shell: bash
       run: bats --verbose-run -r ${{ github.action_path }}/render-task-definition.bats
