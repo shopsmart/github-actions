@@ -30,13 +30,13 @@ function aws() {
 @test "it should tag the resource" {
   run tag-resource "$RESOURCE_ARN"
 
-  tagset="[{key='Foo',value='bar'},{key='team',value='my-team'},{key='owner',value='anonymous'}]"
-
   cat "$AWS_CMD_FILE"
 
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]
-  [ "$(< "$AWS_CMD_FILE")" = "ecs tag-resource --resource my-resource-arn --tags $tagset" ]
+  [[ "$(< "$AWS_CMD_FILE")" =~ "ecs tag-resource --resource my-resource-arn --tags key=Foo,value=bar".* ]]
+  [[ "$(< "$AWS_CMD_FILE")" =~ .*"ecs tag-resource --resource my-resource-arn --tags key=team,value=my-team".* ]]
+  [[ "$(< "$AWS_CMD_FILE")" =~ .*"ecs tag-resource --resource my-resource-arn --tags key=owner,value=anonymous" ]]
 }
 
 @test "it should do nothing with no tags" {

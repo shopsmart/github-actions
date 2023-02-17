@@ -17,7 +17,7 @@ function tag-resource() {
   # Split up tags in put them in the format desired
   #   Input:  key=value
   #   Output: key=$key,value=$value
-  local tags=''
+  local tags=()
   while IFS= read -r tag_var; do
     # Remove blank space around the string
     tag_var="$(echo "${tag_var?}" | xargs)"
@@ -26,13 +26,14 @@ function tag-resource() {
 
     [ -n "${tag_var?}" ] || continue
 
-    tags+="{key='""$key""',value='""$val""'},"
+    tags+=("key=$key,value=$val")
   done <<<"$TAGS"
-  tags="[${tags::-1}]" # pop off the last comma
 
-  aws ecs tag-resource \
-    --resource "$resource_arn" \
-    --tags "$tags"
+  for tag in "${tags[@]}"; do
+    aws ecs tag-resource \
+      --resource "$resource_arn" \
+      --tags "$tag"
+  done
 }
 
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
