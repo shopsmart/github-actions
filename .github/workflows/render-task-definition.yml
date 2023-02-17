@@ -80,6 +80,7 @@ defaults:
 jobs:
   render-task-definition:
     name: 'Render task definition'
+    runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
