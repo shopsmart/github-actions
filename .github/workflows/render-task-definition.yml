@@ -18,13 +18,16 @@ on:
       # begin shopsmart/render-j2-action inputs
       template:
         description: 'The path to the template file to render'
+        type: string
         required: true
       data:
         description: 'The path to the file with data to pass to the render'
+        type: string
         required: false
         default: ''
       format:
         description: 'The format the data file will be in'
+        type: string
         required: false
         default: ''
       environment:
@@ -35,26 +38,32 @@ on:
             environment: |
               FOO=bar
               BAR=baz
+        type: string
         required: false
         default: ''
       filters:
         description: 'Load custom Jinja2 filters from a Python file: all top-level functions are imported.'
+        type: string
         required: false
         default: ''
       tests:
         description: 'Load custom Jinja2 tests from a Python file.'
+        type: string
         required: false
         default: ''
       customize:
         description: 'A Python file that implements hooks to fine-tune the j2cli behavior'
+        type: string
         required: false
         default: ''
       undefined:
         description: 'If true, undefined variables will be used in templates (no error will be raised)'
+        type: string
         required: false
         default: 'false'
       output:
         description: 'The name of the output file to write rendered contents to'
+        type: string
         required: false
         default: 'task-definition.yml' # Changed default
       # end shopsmart/render-j2-action inputs
