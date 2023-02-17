@@ -52,7 +52,7 @@ runs:
 
     - name: 'Validate'
       shell: bash
-      run: bats -r ${{ github.action_path }}/tag-ecs-resource.bats
+      run: bats --verbose-run -r ${{ github.action_path }}/tag-ecs-resource.bats
       env:
         VERSION: ${{ github.sha }}
         RESOURCE_ARN:  ${{ steps.new-revision.outputs.task-definition-arn }}
