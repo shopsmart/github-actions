@@ -12,7 +12,7 @@ runs:
   using: 'composite'
   steps:
     - name: 'Setup brew'
-      uses: Homebrew/actions/setup-brew@v2
+      uses: Homebrew/actions/setup-brew@master
 
     - name: 'Install BATS and jq'
       shell: bash
