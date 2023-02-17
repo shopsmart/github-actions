@@ -1,0 +1,55 @@
+---
+
+name: 'Test tag-ecs-resource action'
+description: 'Runs validation against the tag-ecs-resource action'
+
+inputs:
+  aws-account-id:
+    description: 'The AWS Account id'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup brew'
+      uses: Homebrew/actions/setup-brew@v2
+
+    - name: 'Install BATS and jq'
+      shell: bash
+      run: brew install bats-core jq
+
+    - name: 'Checkout'
+      uses: actions/checkout@v2
+
+    - name: 'Use local actions'
+      uses: ./.github/actions/use-local-actions
+
+    - name: 'Configure AWS Credentials'
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        aws-region: 'us-east-1'
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
+    - name: 'Rewrite task definition file'
+      run: sed -i.bak 's/{{ tag }}/${{ github.sha }}/g' '${{ github.action_path }}/task-definition.yml'
+
+    - name: 'Publish a new revision of the task definition'
+      id: new-revision
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ github.action_path }}/task-definition.yml
+
+    - name: 'Run tag-ecs-resource action'
+      uses: ./actions/tag-ecs-resource
+      with:
+        resource-arn: ${{ steps.new-revision.outputs.task-definition-arn }}
+        tags: |
+          version=${{ github.sha }}
+          test=yes
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r ${{ github.action_path }}/tag-ecs-resource.bats
+      env:
+        VERSION: ${{ github.sha }}
+        RESOURCE_ARN:  ${{ steps.new-revision.outputs.task-definition-arn }}

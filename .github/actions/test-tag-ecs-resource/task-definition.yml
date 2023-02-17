@@ -1,0 +1,30 @@
+---
+
+family: github-actions-tests
+taskRoleArn: arn:aws:iam::1111111111:role/github-actions-tests-task
+executionRoleArn: arn:aws:iam::1111111111:role/github-actions-tests-execution
+networkMode: awsvpc
+cpu: '256'
+memory: '1024'
+containerDefinitions:
+- name: github-actions-tests
+  image: alpine:latest
+  command: [tail, -f, /dev/null]
+  essential: true
+  logConfiguration:
+    logDriver: awslogs
+    options:
+      awslogs-group: github-actions-tests
+      awslogs-region: us-east-1
+      awslogs-stream-prefix: github-actions-tests
+  environment:
+    - name: APPLICATION
+      value: github-actions-tests
+    - name: APP_VERSION
+      value: '{{ tag }}'
+  dockerLabels:
+    application: github-actions-tests
+    version: '{{ tag }}'
+requiresCompatibilities:
+  - EC2
+  - FARGATE

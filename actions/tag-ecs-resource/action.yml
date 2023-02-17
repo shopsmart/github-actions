@@ -1,0 +1,28 @@
+---
+
+name: 'Tag ECS resource'
+description: 'Tags an ECS resource'
+
+inputs:
+  resource-arn:
+    description: 'The ARN of the resource to tag'
+    required: true
+
+  tags:
+    description: |
+      Key value pairs to attach to the resource.
+
+      Example:
+        tags: |
+          version=v1
+          owner=carl
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Tag resource'
+      run: ${{ github.action_path }}/tag-resource.sh "${{ inputs.resource-arn }}"
+      shell: bash
+      env:
+        TAGS: ${{ inputs.tags }}
