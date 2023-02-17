@@ -1,0 +1,101 @@
+---
+
+name: 'Render task definition'
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: 'The branch/sha/tag to render the task definition from'
+        type: string
+        default: ''
+
+      aws-region:
+        description: 'The aws region where resources live'
+        type: string
+        default: us-east-1
+
+      # begin shopsmart/render-j2-action inputs
+      template:
+        description: 'The path to the template file to render'
+        required: true
+      data:
+        description: 'The path to the file with data to pass to the render'
+        required: false
+        default: ''
+      format:
+        description: 'The format the data file will be in'
+        required: false
+        default: ''
+      environment:
+        description: |
+          The environment variables to pass to the render.  Each environment
+          variable should be in format VAR=VAL with one on each line.
+          Example:
+            environment: |
+              FOO=bar
+              BAR=baz
+        required: false
+        default: ''
+      filters:
+        description: 'Load custom Jinja2 filters from a Python file: all top-level functions are imported.'
+        required: false
+        default: ''
+      tests:
+        description: 'Load custom Jinja2 tests from a Python file.'
+        required: false
+        default: ''
+      customize:
+        description: 'A Python file that implements hooks to fine-tune the j2cli behavior'
+        required: false
+        default: ''
+      undefined:
+        description: 'If true, undefined variables will be used in templates (no error will be raised)'
+        required: false
+        default: 'false'
+      output:
+        description: 'The name of the output file to write rendered contents to'
+        required: false
+        default: 'task-definition.yml' # Changed default
+      # end shopsmart/render-j2-action inputs
+
+      secrets:
+        aws-account-id:
+          description: 'The AWS account id that the ecr repository lives under'
+          required: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  render-task-definition:
+    name: 'Render task definition'
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: 'Render task definition'
+        uses: shopsmart/render-j2-action@v1
+        with:
+          template: ${{ inputs.template }}
+          data: ${{ inputs.data }}
+          format: ${{ inputs.format }}
+          env_vars: |
+            TAG=${{ inputs.ref }}
+            AWS_ACCOUNT_ID=${{ secrets.aws-account }}
+            AWS_REGION=${{ inputs.aws-region }}
+            ${{ inputs.environment }}
+          filters: ${{ inputs.filters }}
+          tests: ${{ inputs.tests }}
+          customize: ${{ inputs.customize }}
+          undefined: ${{ inputs.undefined }}
+          output: ${{ inputs.output }}
+
+      - name: 'Upload task definition'
+        uses: actions/upload-artifact@v2
+        with:
+          name: task-definition
+          path: ${{ inputs.output }}

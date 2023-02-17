@@ -1,0 +1,28 @@
+---
+
+name: 'Test build-ecr-image workflow'
+description: 'Runs validation against the build-ecr-image workflow'
+
+inputs:
+  ref:
+    description: 'The github ref to expect'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup brew'
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+
+    - name: 'Validate'
+      shell: bash
+      run: bats --verbose-run -r ${{ github.action_path }}/render-task-definition.bats
+      env:
+        VERSION_TAG: ${{ inputs.ref || github.sha }}
