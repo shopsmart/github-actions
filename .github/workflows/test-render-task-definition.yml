@@ -25,7 +25,6 @@ jobs:
       data: .github/actions/test-render-task-definition/data.yml
       customize: .github/actions/test-render-task-definition/customize.py
       environment: TAG=${{ github.sha }}
-      role-name: github-actions-tests
     secrets:
       aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 
