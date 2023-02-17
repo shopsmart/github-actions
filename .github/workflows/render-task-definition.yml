@@ -105,7 +105,7 @@ jobs:
           output: ${{ inputs.output }}
 
       - name: 'Upload task definition'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: task-definition
           path: ${{ inputs.output }}
