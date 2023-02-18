@@ -1,0 +1,131 @@
+---
+
+name: 'Register task definition'
+
+on:
+  workflow_call:
+    inputs:
+      aws-region:
+        description: 'The aws region where resources live'
+        type: string
+        default: us-east-1
+
+      role-name:
+        description: 'The name of the IAM role allowed to upload the task definition'
+        type: string
+        required: true
+
+      # begin aws-actions/amazon-ecs-deploy-task-definition
+      task-definition:
+        description: 'The path to the ECS task definition file to register'
+        type: string
+        required: false
+        default: task-definition.yml
+      service:
+        description: 'The name of the ECS service to deploy to. The action will only register the task definition if no service is given.'
+        type: string
+        required: false
+      cluster:
+        description: "The name of the ECS service's cluster.  Will default to the 'default' cluster"
+        type: string
+        required: false
+      wait-for-service-stability:
+        description: 'Whether to wait for the ECS service to reach stable state after deploying the new task definition. Valid value is "true". Will default to not waiting.'
+        type: boolean
+        required: false
+      wait-for-minutes:
+        description: 'How long to wait for the ECS service to reach stable state, in minutes (default: 30 minutes, max: 6 hours). For CodeDeploy deployments, any wait time configured in the CodeDeploy deployment group will be added to this value.'
+        type: number
+        required: false
+      codedeploy-appspec:
+        description: "The path to the AWS CodeDeploy AppSpec file, if the ECS service uses the CODE_DEPLOY deployment controller. Will default to 'appspec.yaml'."
+        type: string
+        required: false
+      codedeploy-application:
+        description: "The name of the AWS CodeDeploy application, if the ECS service uses the CODE_DEPLOY deployment controller. Will default to 'AppECS-{cluster}-{service}'."
+        type: string
+        required: false
+      codedeploy-deployment-group:
+        description: "The name of the AWS CodeDeploy deployment group, if the ECS service uses the CODE_DEPLOY deployment controller. Will default to 'DgpECS-{cluster}-{service}'."
+        type: string
+        required: false
+      codedeploy-deployment-description:
+        description: "A description of the deployment, if the ECS service uses the CODE_DEPLOY deployment controller."
+        type: string
+        required: false
+      force-new-deployment:
+        description: 'Whether to force a new deployment of the service. Valid value is "true". Will default to not force a new deployment.'
+        type: boolean
+        required: false
+      # end aws-actions/amazon-ecs-deploy-task-definition
+
+      task-definition-tags:
+        type: string
+        required: false
+      service-tags:
+        description: ''
+        type: string
+        required: false
+
+    secrets:
+      aws-account-id:
+        description: 'The AWS account id that the ecr repository lives under'
+        required: true
+
+permissions:
+  contents: read  # default
+  id-token: write # aws auth
+
+env:
+  DEPLOY_IAM_ROLE: arn:aws:iam::${{ secrets.aws-account-id }}:role/${{ inputs.role-name }}
+  ECS_SERVICE_ARN: arn:aws:ecs:${{ inputs.aws-region }}:${{ secrets.aws-account-id }}:service/${{ inputs.service }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  register-task-definition:
+    name: 'Register task definition'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Download task-definition'
+        uses: actions/download-artifact@v3
+        with:
+          name: task-definition
+
+      - name: 'Configure AWS Credentials'
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ inputs.aws-region }}
+          role-to-assume: ${{ env.DEPLOY_IAM_ROLE }}
+
+      - name: 'Register task definition'
+        id: register
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ inputs.task-definition }}
+          service: ${{ inputs.service }}
+          cluster: ${{ inputs.cluster }}
+          wait-for-service-stability: ${{ inputs.wait-for-service-stability }}
+          wait-for-minutes: ${{ inputs.wait-for-minutes }}
+          codedeploy-appspec: ${{ inputs.codedeploy-appspec }}
+          codedeploy-application: ${{ inputs.codedeploy-application }}
+          codedeploy-deployment-group: ${{ inputs.codedeploy-deployment-group }}
+          codedeploy-deployment-description: ${{ inputs.codedeploy-deployment-description }}
+          force-new-deployment: ${{ inputs.force-new-deployment }}
+
+      - name: 'Tag the task definition'
+        # TODO: Tag this!!
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@feature/tag-ecs-resource
+        with:
+          resource-arn: ${{ steps.register.outputs.task-definition-arn }}
+          tags: ${{ inputs.task-definition-tags }}
+
+      - name: 'Tag the ECS Service'
+        if: inputs.service != ''
+        # TODO: Tag this!!
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@feature/tag-ecs-resource
+        with:
+          resource-arn: ${{ env.ECS_SERVICE_ARN }}
+          tags: ${{ inputs.service-tags }}
