@@ -27,7 +27,7 @@ function tag-resource() {
 
     tag="key=$key,value=$val"
 
-    echo "[INFO ] Setting the $key tag on resource: $resource_arn" >&2
+    echo "[INFO ] Setting the $key tag" >&2
     aws ecs tag-resource \
       --resource "$resource_arn" \
       --tags "$tag"
