@@ -13,7 +13,8 @@ function teardown() {
     --task-definition "$RESOURCE_ARN" \
     --no-cli-pager \
     --output text \
-    --query 'tags.version'
+    --include TAGS \
+    --query 'tags[?key==`version`].value'
 
   [ "$status" -eq 0 ]
   [ "$output" = "$VERSION" ]
