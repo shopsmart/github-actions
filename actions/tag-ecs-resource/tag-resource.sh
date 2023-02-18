@@ -17,7 +17,6 @@ function tag-resource() {
   # Split up tags in put them in the format desired
   #   Input:  key=value
   #   Output: key=$key,value=$value
-  local tags=()
   while IFS= read -r tag_var; do
     # Remove blank space around the string
     tag_var="$(echo "${tag_var?}" | xargs)"
@@ -26,14 +25,13 @@ function tag-resource() {
 
     [ -n "${tag_var?}" ] || continue
 
-    tags+=("key=$key,value=$val")
-  done <<<"$TAGS"
+    tag="key=$key,value=$val"
 
-  for tag in "${tags[@]}"; do
+    echo "[INFO ] Setting the $key tag on resource: $resource_arn" >&2
     aws ecs tag-resource \
       --resource "$resource_arn" \
       --tags "$tag"
-  done
+  done <<<"$TAGS"
 }
 
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
