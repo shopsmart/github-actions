@@ -1,9 +1,12 @@
 ---
 
-name: 'Test tag-ecs-resource action'
-description: 'Runs validation against the tag-ecs-resource action'
+name: 'Test register-task-definition action'
+description: 'Runs validation against the register-task-definition action'
 
 inputs:
+  task-definition-arn:
+    description: 'The ARN of the task definition to test against'
+    required: true
   aws-account-id:
     description: 'The AWS Account id'
     required: true
@@ -30,29 +33,9 @@ runs:
         aws-region: 'us-east-1'
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
-    - name: 'Rewrite task definition file'
-      shell: bash
-      run: |
-        sed -i.bak 's/{{ tag }}/${{ github.sha }}/g' '${{ github.action_path }}/task-definition.yml'
-        sed -i.bak 's/{{ account_id }}/${{ inputs.aws-account-id }}/g' '${{ github.action_path }}/task-definition.yml'
-
-    - name: 'Publish a new revision of the task definition'
-      id: new-revision
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ github.action_path }}/task-definition.yml
-
-    - name: 'Run tag-ecs-resource action'
-      uses: ./actions/tag-ecs-resource
-      with:
-        resource-arn: ${{ steps.new-revision.outputs.task-definition-arn }}
-        tags: |
-          version=${{ github.sha }}
-          test=yes
-
     - name: 'Validate'
       shell: bash
-      run: bats --verbose-run -r ${{ github.action_path }}/tag-ecs-resource.bats
+      run: bats --verbose-run -r ${{ github.action_path }}/register-task-definition.bats
       env:
         VERSION: ${{ github.sha }}
-        RESOURCE_ARN:  ${{ steps.new-revision.outputs.task-definition-arn }}
+        TASK_DEFINITION_ARN:  ${{ inputs.task-definition-arn }}

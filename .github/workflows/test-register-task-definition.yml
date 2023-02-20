@@ -58,5 +58,5 @@ jobs:
       - name: 'Test register-task-definition workflow'
         uses: ./.github/actions/test-register-task-definition
         with:
+          task-definition-arn: ${{ needs.run-register-task-definition-workflow.outputs.task-definition-arn }}
           aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
-          ref: ${{ github.sha }}
