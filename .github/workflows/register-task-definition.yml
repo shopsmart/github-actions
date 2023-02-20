@@ -139,6 +139,6 @@ jobs:
 
       - name: 'Get revision number'
         id: revision
-        run: echo "revision=${TASK_DEFINITION_ARN##*:}" >> $GITHUB_OUTPUT
+        run: echo "revision-number=${TASK_DEFINITION_ARN##*:}" >> $GITHUB_OUTPUT
         env:
           TASK_DEFINITION_ARN: ${{ steps.register.outputs.task-definition-arn }}
