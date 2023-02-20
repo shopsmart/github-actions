@@ -20,6 +20,8 @@ jobs:
   upload-task-definition:
     name: 'Upload task definition'
     runs-on: ubuntu-latest
+    env:
+      ACTION_PATH: .github/actions/test-register-task-definition
     steps:
       - name: 'Checkout'
         uses: actions/checkout@v3
@@ -27,14 +29,14 @@ jobs:
       - name: 'Rewrite task definition file'
         shell: bash
         run: |
-          sed -i.bak 's/{{ tag }}/${{ github.sha }}/g' '${{ github.action_path }}/task-definition.yml'
-          sed -i.bak 's/{{ account_id }}/${{ inputs.aws-account-id }}/g' '${{ github.action_path }}/task-definition.yml'
+          sed -i.bak 's/{{ tag }}/${{ github.sha }}/g' '${{ env.ACTION_PATH }}/task-definition.yml'
+          sed -i.bak 's/{{ account_id }}/${{ inputs.aws-account-id }}/g' '${{ env.ACTION_PATH }}/task-definition.yml'
 
       - name: 'Upload task definition file'
         uses: actions/upload-artifact@v2
         with:
           name: task-definition
-          path: ${{ github.action_path }}/task-definition.yml
+          path: ${{ env.ACTION_PATH }}/task-definition.yml
 
   run-register-task-definition-workflow:
     uses: ./.github/workflows/register-task-definition.yml
