@@ -38,4 +38,4 @@ runs:
       run: bats --verbose-run -r ${{ github.action_path }}/register-task-definition.bats
       env:
         VERSION: ${{ github.sha }}
-        TASK_DEFINITION_ARN:  ${{ inputs.task-definition-arn }}
+        TASK_DEFINITION_ARN: ${{ inputs.task-definition-arn }}

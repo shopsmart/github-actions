@@ -72,6 +72,11 @@ on:
         description: 'The AWS account id that the ecr repository lives under'
         required: true
 
+    outputs:
+      task-definition-arn:
+        description: 'The ARN of the task definition just published'
+        value: ${{ steps.register.outputs.task-definition-arn }}
+
 permissions:
   contents: read  # default
   id-token: write # aws auth
