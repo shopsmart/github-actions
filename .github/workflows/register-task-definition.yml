@@ -75,7 +75,7 @@ on:
     outputs:
       task-definition-arn:
         description: 'The ARN of the task definition just published'
-        value: ${{ steps.register.outputs.task-definition-arn }}
+        value: ${{ jobs.register-task-definition.outputs.task-definition-arn }}
 
 permissions:
   contents: read  # default
@@ -93,6 +93,8 @@ jobs:
   register-task-definition:
     name: 'Register task definition'
     runs-on: ubuntu-latest
+    outputs:
+      task-definition-arn: ${{ steps.register.outputs.task-definition-arn }}
     steps:
       - name: 'Download task-definition'
         uses: actions/download-artifact@v3
