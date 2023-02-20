@@ -117,7 +117,7 @@ jobs:
 
       - name: 'Tag the task definition'
         # TODO: Tag this!!
-        uses: shopsmart/github-actions/actions/tag-ecs-resource@feature/tag-ecs-resource
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@feature/tag-ecs-resource-rebased
         with:
           resource-arn: ${{ steps.register.outputs.task-definition-arn }}
           tags: ${{ inputs.task-definition-tags }}
@@ -125,7 +125,7 @@ jobs:
       - name: 'Tag the ECS Service'
         if: inputs.service != ''
         # TODO: Tag this!!
-        uses: shopsmart/github-actions/actions/tag-ecs-resource@feature/tag-ecs-resource
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@feature/tag-ecs-resource-rebased
         with:
           resource-arn: ${{ env.ECS_SERVICE_ARN }}
           tags: ${{ inputs.service-tags }}
