@@ -16,9 +16,6 @@ defaults:
   run:
     shell: bash
 
-env:
-  AWS_REGION: us-east-1
-
 jobs:
   upload-task-definition:
     name: 'Upload task definition'
@@ -46,7 +43,7 @@ jobs:
     needs: upload-task-definition
     with:
       role-name: github-actions-tests
-      aws-region: ${{ env.AWS_REGION }}
+      aws-region: 'us-east-1'
     secrets:
       aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 
@@ -55,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: run-register-task-definition-workflow
     env:
-      TASK_DEFINITION_ARN: arn:aws:ecs:${{ env.AWS_REGION }}:${{ secrets.AWS_ACCOUNT_ID }}:task-definition/github-actions-tests:${{ needs.run-register-task-definition-workflow.outputs.revision-number }}
+      TASK_DEFINITION_ARN: arn:aws:ecs:us-east-1:${{ secrets.AWS_ACCOUNT_ID }}:task-definition/github-actions-tests:${{ needs.run-register-task-definition-workflow.outputs.revision-number }}
     steps:
       - name: 'Checkout actions'
         uses: actions/checkout@v2
