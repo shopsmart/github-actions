@@ -44,6 +44,7 @@ jobs:
     with:
       role-name: github-actions-tests
       aws-region: 'us-east-1'
+      task-definition-tags: version=${{ github.sha }}
     secrets:
       aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 
