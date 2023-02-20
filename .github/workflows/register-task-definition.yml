@@ -102,7 +102,7 @@ jobs:
 
       - name: 'Register task definition'
         id: register
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ inputs.task-definition }}
           service: ${{ inputs.service }}
