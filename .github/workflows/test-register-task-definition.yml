@@ -24,19 +24,17 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v3
 
-      # TODO - How do we do this without the task definition file
-      # being exposed with an account id in it?
-      # - name: 'Create task definition file'
-      # Normally we would render the task definition with the account id
+      - name: 'Rewrite task definition file'
+        shell: bash
+        run: |
+          sed -i.bak 's/{{ tag }}/${{ github.sha }}/g' '${{ github.action_path }}/task-definition.yml'
+          sed -i.bak 's/{{ account_id }}/${{ inputs.aws-account-id }}/g' '${{ github.action_path }}/task-definition.yml'
 
       - name: 'Upload task definition file'
         uses: actions/upload-artifact@v2
         with:
           name: task-definition
-          path: .github/actions/test-register-task-definition/task-definition.yml
-
-      - name: 'Error out'
-        run: exit 1
+          path: ${{ github.action_path }}/task-definition.yml
 
   run-register-task-definition-workflow:
     uses: ./.github/workflows/register-task-definition.yml
