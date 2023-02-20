@@ -35,6 +35,9 @@ jobs:
           name: task-definition
           paths: .github/actions/test-register-task-definition/task-definition.yml
 
+      - name: 'Error out'
+        run: exit 1
+
   run-register-task-definition-workflow:
     uses: ./.github/workflows/register-task-definition.yml
     with:
