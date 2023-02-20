@@ -73,9 +73,9 @@ on:
         required: true
 
     outputs:
-      task-definition-arn:
-        description: 'The ARN of the task definition just published'
-        value: ${{ jobs.register-task-definition.outputs.task-definition-arn }}
+      revision-number:
+        description: 'The revision number of the task definition just published'
+        value: ${{ jobs.register-task-definition.outputs.revision-number }}
 
 permissions:
   contents: read  # default
@@ -94,7 +94,7 @@ jobs:
     name: 'Register task definition'
     runs-on: ubuntu-latest
     outputs:
-      task-definition-arn: ${{ steps.register.outputs.task-definition-arn }}
+      revision-number: ${{ steps.revision.outputs.revision-number }}
     steps:
       - name: 'Download task-definition'
         uses: actions/download-artifact@v3
@@ -136,3 +136,9 @@ jobs:
         with:
           resource-arn: ${{ env.ECS_SERVICE_ARN }}
           tags: ${{ inputs.service-tags }}
+
+      - name: 'Get revision number'
+        id: revision
+        run: echo "revision=${TASK_DEFINITION_ARN##*:}" >> $GITHUB_OUTPUT
+        env:
+          TASK_DEFINITION_ARN: ${{ steps.register.outputs.task-definition-arn }}
