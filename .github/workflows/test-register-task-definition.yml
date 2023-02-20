@@ -30,7 +30,7 @@ jobs:
         shell: bash
         run: |
           sed -i.bak 's/{{ tag }}/${{ github.sha }}/g' '${{ env.ACTION_PATH }}/task-definition.yml'
-          sed -i.bak 's/{{ account_id }}/${{ inputs.aws-account-id }}/g' '${{ env.ACTION_PATH }}/task-definition.yml'
+          sed -i.bak 's/{{ account_id }}/${{ secrets.AWS_ACCOUNT_ID }}/g' '${{ env.ACTION_PATH }}/task-definition.yml'
 
       - name: 'Upload task definition file'
         uses: actions/upload-artifact@v2
