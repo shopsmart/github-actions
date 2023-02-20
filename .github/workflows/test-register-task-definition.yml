@@ -33,7 +33,7 @@ jobs:
           sed -i.bak 's/{{ account_id }}/${{ secrets.AWS_ACCOUNT_ID }}/g' '${{ env.ACTION_PATH }}/task-definition.yml'
 
       - name: 'Upload task definition file'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: task-definition
           path: ${{ env.ACTION_PATH }}/task-definition.yml
