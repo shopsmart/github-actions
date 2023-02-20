@@ -95,7 +95,7 @@ jobs:
           name: task-definition
 
       - name: 'Configure AWS Credentials'
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           aws-region: ${{ inputs.aws-region }}
           role-to-assume: ${{ env.DEPLOY_IAM_ROLE }}
