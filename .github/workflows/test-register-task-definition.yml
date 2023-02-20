@@ -33,7 +33,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: task-definition
-          paths: .github/actions/test-register-task-definition/task-definition.yml
+          path: .github/actions/test-register-task-definition/task-definition.yml
 
       - name: 'Error out'
         run: exit 1
