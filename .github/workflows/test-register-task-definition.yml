@@ -40,6 +40,7 @@ jobs:
 
   run-register-task-definition-workflow:
     uses: ./.github/workflows/register-task-definition.yml
+    needs: upload-task-definition
     with:
       role-name: github-actions-tests
       aws-region: 'us-east-1'
