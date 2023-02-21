@@ -1,0 +1,42 @@
+---
+
+name: 'Run render-task-definition workflow'
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/render-task-definition.yml
+      - .github/actions/test-render-task-definition/*
+
+permissions:
+  id-token: write # aws auth
+  contents: write # publish release assets
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # Build for Branch
+  run-render-task-definition-workflow:
+    uses: ./.github/workflows/render-task-definition.yml
+    with:
+      template: .github/actions/test-render-task-definition/task-definition.yml.j2
+      data: .github/actions/test-render-task-definition/data.yml
+      customize: .github/actions/test-render-task-definition/customize.py
+      environment: TAG=${{ github.sha }}
+    secrets:
+      aws-account-id: '1111111111'
+
+  test-render-task-definition-workflow:
+    name: 'Uses the render-task-definition workflow'
+    runs-on: ubuntu-latest
+    needs: run-render-task-definition-workflow
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v2
+
+      - name: 'Test render-task-definition workflow'
+        uses: ./.github/actions/test-render-task-definition
+        with:
+          ref: ${{ github.sha }}

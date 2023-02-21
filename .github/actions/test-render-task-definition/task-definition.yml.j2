@@ -1,0 +1,35 @@
+{%- set tag=env('TAG', default='latest') -%}
+{%- set account_id=env('AWS_ACCOUNT_ID', default=account_id) -%}
+{%- set region=env('AWS_REGION', default='') -%}
+{%- set region=region if region != '' else 'us-east-1' -%}
+---
+
+family: {{ application }}
+taskRoleArn: arn:aws:iam::{{ account_id }}:role/{{ application }}-task
+executionRoleArn: arn:aws:iam::{{ account_id }}:role/{{ application }}-execution
+networkMode: awsvpc
+cpu: '256'
+memory: '1024'
+containerDefinitions:
+- name: {{ application }}
+  image: alpine:latest
+  command: [tail, -f, /dev/null]
+  essential: true
+  logConfiguration:
+    logDriver: awslogs
+    options:
+      awslogs-group: {{ application }}
+      awslogs-region: {{ region }}
+      awslogs-stream-prefix: {{ application }}
+  environment:
+    - name: APPLICATION
+      value: {{ application }}
+    - name: APP_VERSION
+      value: '{{ tag }}'
+  dockerLabels:
+    application: {{ application }}
+    version: '{{ tag }}'
+    default: {{ default }}
+requiresCompatibilities:
+  - EC2
+  - FARGATE
