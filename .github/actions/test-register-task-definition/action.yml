@@ -1,0 +1,41 @@
+---
+
+name: 'Test register-task-definition action'
+description: 'Runs validation against the register-task-definition action'
+
+inputs:
+  task-definition-arn:
+    description: 'The ARN of the task definition to test against'
+    required: true
+  aws-account-id:
+    description: 'The AWS Account id'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup brew'
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+
+    - name: 'Use local actions'
+      uses: ./.github/actions/use-local-actions
+
+    - name: 'Configure AWS Credentials'
+      uses: aws-actions/configure-aws-credentials@v1-node16
+      with:
+        aws-region: 'us-east-1'
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
+    - name: 'Validate'
+      shell: bash
+      run: bats --verbose-run -r ${{ github.action_path }}/register-task-definition.bats
+      env:
+        VERSION: ${{ github.sha }}
+        TASK_DEFINITION_ARN: ${{ inputs.task-definition-arn }}
