@@ -123,16 +123,14 @@ jobs:
           force-new-deployment: ${{ inputs.force-new-deployment }}
 
       - name: 'Tag the task definition'
-        # TODO: Tag this!!
-        uses: shopsmart/github-actions/actions/tag-ecs-resource@feature/tag-ecs-resource-rebased
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@v2
         with:
           resource-arn: ${{ steps.register.outputs.task-definition-arn }}
           tags: ${{ inputs.task-definition-tags }}
 
       - name: 'Tag the ECS Service'
         if: inputs.service != ''
-        # TODO: Tag this!!
-        uses: shopsmart/github-actions/actions/tag-ecs-resource@feature/tag-ecs-resource-rebased
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@v2
         with:
           resource-arn: ${{ env.ECS_SERVICE_ARN }}
           tags: ${{ inputs.service-tags }}
