@@ -83,7 +83,7 @@ permissions:
 
 env:
   DEPLOY_IAM_ROLE: arn:aws:iam::${{ secrets.aws-account-id }}:role/${{ inputs.role-name }}
-  ECS_SERVICE_ARN: arn:aws:ecs:${{ inputs.aws-region }}:${{ secrets.aws-account-id }}:service/${{ inputs.service }}
+  ECS_SERVICE_ARN: arn:aws:ecs:${{ inputs.aws-region }}:${{ secrets.aws-account-id }}:service/${{ inputs.cluster && format('{0}/', inputs.cluster) }}${{ inputs.service }}
 
 defaults:
   run:
