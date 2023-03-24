@@ -5,6 +5,11 @@ name: 'Register task definition'
 on:
   workflow_call:
     inputs:
+      environment:
+        description: 'If provided, the environment to deploy to.  This will use github environments for the job.'
+        type: string
+        required: false
+
       aws-region:
         description: 'The aws region where resources live'
         type: string
@@ -93,6 +98,7 @@ jobs:
   register-task-definition:
     name: 'Register task definition'
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     outputs:
       revision-number: ${{ steps.revision.outputs.revision-number }}
     steps:
