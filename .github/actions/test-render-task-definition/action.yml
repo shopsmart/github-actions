@@ -1,7 +1,7 @@
 ---
 
-name: 'Test build-ecr-image workflow'
-description: 'Runs validation against the build-ecr-image workflow'
+name: 'Test render-task-definition workflow'
+description: 'Runs validation against the render-task-definition workflow'
 
 inputs:
   ref:
@@ -24,7 +24,7 @@ runs:
     - name: 'Download task-definition'
       uses: actions/download-artifact@v2
       with:
-        name: task-definition
+        name: task-definition-renamed
 
     - name: 'Validate'
       shell: bash

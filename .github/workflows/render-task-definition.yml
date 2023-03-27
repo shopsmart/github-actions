@@ -68,6 +68,11 @@ on:
         default: 'task-definition.yml' # Changed default
       # end shopsmart/render-j2-action inputs
 
+      artifact-name:
+        description: 'The name of the artifact to upload'
+        type: string
+        default: task-definition
+
     secrets:
       aws-account-id:
         description: 'The AWS account id that the ecr repository lives under'
@@ -107,5 +112,5 @@ jobs:
       - name: 'Upload task definition'
         uses: actions/upload-artifact@v3
         with:
-          name: task-definition
+          name: ${{ inputs.artifact-name }}
           path: ${{ inputs.output }}
