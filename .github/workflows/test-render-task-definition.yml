@@ -21,6 +21,7 @@ jobs:
   run-render-task-definition-workflow:
     uses: ./.github/workflows/render-task-definition.yml
     with:
+      artifact-name: task-definition-renamed
       template: .github/actions/test-render-task-definition/task-definition.yml.j2
       data: .github/actions/test-render-task-definition/data.yml
       customize: .github/actions/test-render-task-definition/customize.py

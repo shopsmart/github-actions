@@ -35,13 +35,14 @@ jobs:
       - name: 'Upload task definition file'
         uses: actions/upload-artifact@v3
         with:
-          name: task-definition
+          name: task-definition-renamed
           path: ${{ env.ACTION_PATH }}/task-definition.yml
 
   run-register-task-definition-workflow:
     uses: ./.github/workflows/register-task-definition.yml
     needs: upload-task-definition
     with:
+      artifact-name: task-definition-renamed
       role-name: github-actions-tests
       aws-region: 'us-east-1'
       task-definition-tags: version=${{ github.sha }}

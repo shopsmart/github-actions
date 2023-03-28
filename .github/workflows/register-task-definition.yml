@@ -65,12 +65,18 @@ on:
       # end aws-actions/amazon-ecs-deploy-task-definition
 
       task-definition-tags:
+        description: 'Tags to add to the task definition. Format is key=value separated by new lines'
         type: string
         required: false
       service-tags:
-        description: ''
+        description: 'Tags to add to the ECS service. Format is key=value separated by new lines'
         type: string
         required: false
+
+      artifact-name:
+        description: 'The name of the artifact to download'
+        type: string
+        default: task-definition
 
     secrets:
       aws-account-id:
@@ -105,7 +111,7 @@ jobs:
       - name: 'Download task-definition'
         uses: actions/download-artifact@v3
         with:
-          name: task-definition
+          name: ${{ inputs.artifact-name }}
 
       - name: 'Configure AWS Credentials'
         uses: aws-actions/configure-aws-credentials@v1-node16
