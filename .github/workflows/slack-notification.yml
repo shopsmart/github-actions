@@ -1,0 +1,54 @@
+---
+
+name: 'Slack notification'
+
+on:
+  workflow_call:
+    inputs:
+      application:
+        description: 'The friendly name for the application'
+        type: string
+        required: true
+      environment:
+        description: 'The environment that is being targeted for this deployment'
+        type: string
+        required: true
+      version:
+        description: 'The version that is being deployed'
+        type: string
+        default: ${{ github.ref }}
+      type:
+        description: 'The type of action that is being performed such as build or deployment'
+        type: string
+        required: true
+      status:
+        description: 'The status of the deployment.  Options are started, success, and failure'
+        type: string
+        required: true
+
+permissions:
+  contents: read # default
+  id-token: write # for aws auth
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  notify:
+    name: 'Notify'
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+
+      - name: 'Test publish slack notification workflow'
+        uses: ./.github/actions/notify
+        with:
+          application: ${{ vars.APPLICATION }}
+          environment: ${{ inputs.environment }}
+          status: started
+          type: deployment
+          version: ${{ inputs.version }}
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}

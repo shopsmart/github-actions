@@ -1,0 +1,77 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "emoji": true,
+        "text": ":{{ emoji }}: {{ type | title }} {{ status }} for {{ application }}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "{{ message }}"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Repository*"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Github Ref*"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<https://github.com/{{ repository }}|{{ repository }}>"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<https://github.com/{{ repository }}/tree/{{ ref }}|{{ ref }}>"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Environment*"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Actor*"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<{{ link }}|{{ environment }}>"
+        },
+        {
+          "type": "plain_text",
+          "text": "{{ actor }}"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "<https://github.com/{{ repository }}/actions/runs/{{ run_id }}|Run {{ run_id }}>"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<!date^{{ timestamp }}^{date_short_pretty} at {time}|February 18th, 2014 at 6:39 AM PST>"
+        }
+      ]
+    }
+  ]
+}
