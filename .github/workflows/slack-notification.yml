@@ -28,6 +28,7 @@ on:
       slack_webhook_url:
         description: "The slack webhook URL to post updates to"
         required: false
+        type: string
 
 permissions:
   contents: read # default
