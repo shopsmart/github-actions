@@ -26,7 +26,7 @@ on:
         description: 'The status of the deployment.  Options are started, success, and failure'
         type: string
         required: true
-      webhook:
+      slack_webhook_url:
         description: "The slack webhook URL to post updates to"
         required: false
 
@@ -55,4 +55,4 @@ jobs:
           status: ${{ inputs.status }}
           type: ${{ inputs.type }}
           version: ${{ inputs.version }}
-          webhook: ${{ inputs.webhook }}
+          webhook: ${{ inputs.slack_webhook_url }}
