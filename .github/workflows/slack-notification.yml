@@ -18,8 +18,7 @@ on:
         type: string
         default: ${{ github.ref }}
       type:
-        description: 'The
-        type of action that is being performed such as build or deployment'
+        description: 'The type of action that is being performed such as build or deployment'
         type: string
         required: true
       status:
