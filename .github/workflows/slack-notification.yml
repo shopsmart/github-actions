@@ -18,13 +18,17 @@ on:
         type: string
         default: ${{ github.ref }}
       type:
-        description: 'The type of action that is being performed such as build or deployment'
+        description: 'The
+        type of action that is being performed such as build or deployment'
         type: string
         required: true
       status:
         description: 'The status of the deployment.  Options are started, success, and failure'
         type: string
         required: true
+      webhook:
+        description: "The slack webhook URL to post updates to"
+        required: false
 
 permissions:
   contents: read # default
@@ -44,11 +48,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: 'Test publish slack notification workflow'
-        uses: ./.github/actions/notify
+        uses: ./.github/actions/test-slack-notification
         with:
-          application: ${{ vars.APPLICATION }}
+          application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
-          status: started
-          type: deployment
+          status: ${{ inputs.status }}
+          type: ${{ inputs.type }}
           version: ${{ inputs.version }}
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook: ${{ inputs.webhook }}

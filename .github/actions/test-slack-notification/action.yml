@@ -33,42 +33,42 @@ runs:
   using: "composite"
   steps:
     - name: 'Create data file'
-  id: data
-  env:
-    APPLICATION: ${{ inputs.application }}
-    ENVIRONMENT: ${{ inputs.environment }}
-    VERSION: ${{ inputs.version }}
-    TYPE: ${{ inputs.type }}
-    STATUS: ${{ inputs.status }}
-    ACTOR: ${{ github.actor }}
-    RUN_ID: ${{ github.run_id }}
-    REPOSITORY: ${{ github.repository }}
-    REF: ${{ github.ref_name }}
-    LINK: ${{ env.LINK }}
-    EMOJI: ${{ env.EMOJI }}
-    MESSAGE: ${{ env.MESSAGE }}
-  run: |
-    set -eo pipefail
-    TIMESTAMP="$(date +%s)"
-    {
-      echo '{'
-      echo '  "application": "'"$APPLICATION"'",'
-      echo '  "environment": "'"$ENVIRONMENT"'",'
-      echo '  "version": "'"$VERSION"'",'
-      echo '  "type": "'"$TYPE"'",'
-      echo '  "status": "'"$STATUS"'",'
-      echo '  "repository": "'"$REPOSITORY"'",'
-      echo '  "ref": "'"$REF"'",'
-      echo '  "timestamp": "'"$TIMESTAMP"'",'
-      echo '  "actor": "'"$ACTOR"'",'
-      echo '  "run_id": "'"$RUN_ID"'",'
-      echo '  "link": "'"$LINK"'",'
-      echo '  "message": "'"$MESSAGE"'",'
-      echo '  "emoji": "'"$EMOJI"'"'
-      echo '}'
-    } > data.json
-    echo "file=$PWD/data.json" >> $GITHUB_OUTPUT
-  shell: bash
+      id: data
+      env:
+        APPLICATION: ${{ inputs.application }}
+        ENVIRONMENT: ${{ inputs.environment }}
+        VERSION: ${{ inputs.version }}
+        TYPE: ${{ inputs.type }}
+        STATUS: ${{ inputs.status }}
+        ACTOR: ${{ github.actor }}
+        RUN_ID: ${{ github.run_id }}
+        REPOSITORY: ${{ github.repository }}
+        REF: ${{ github.ref_name }}
+        LINK: ${{ env.LINK }}
+        EMOJI: ${{ env.EMOJI }}
+        MESSAGE: ${{ env.MESSAGE }}
+      run: |
+        set -eo pipefail
+        TIMESTAMP="$(date +%s)"
+        {
+          echo '{'
+          echo '  "application": "'"$APPLICATION"'",'
+          echo '  "environment": "'"$ENVIRONMENT"'",'
+          echo '  "version": "'"$VERSION"'",'
+          echo '  "type": "'"$TYPE"'",'
+          echo '  "status": "'"$STATUS"'",'
+          echo '  "repository": "'"$REPOSITORY"'",'
+          echo '  "ref": "'"$REF"'",'
+          echo '  "timestamp": "'"$TIMESTAMP"'",'
+          echo '  "actor": "'"$ACTOR"'",'
+          echo '  "run_id": "'"$RUN_ID"'",'
+          echo '  "link": "'"$LINK"'",'
+          echo '  "message": "'"$MESSAGE"'",'
+          echo '  "emoji": "'"$EMOJI"'"'
+          echo '}'
+        } > data.json
+        echo "file=$PWD/data.json" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: 'Render payload'
       id: render
