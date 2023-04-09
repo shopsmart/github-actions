@@ -4,6 +4,10 @@ name: 'Notify slack'
 
 on:
   push:
+  workflow_call:
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
     # inputs:
     #   application:
     #     description: 'The friendly name for the application'
@@ -31,4 +35,5 @@ jobs:
       status: success
       type: deployment
       version: v1.0.56
+    secrets:
       webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
