@@ -30,11 +30,6 @@ on:
         type: string
         required: true
 
-      slack_webhook_url:
-        description: 'The slack webhook url to post the message to'
-        type: string
-        required: false
-
 permissions:
   contents: write # default
   id-token: write # for aws auth
@@ -60,4 +55,4 @@ jobs:
           status: ${{ inputs.status }}
           type: ${{ inputs.type }}
           version: ${{ inputs.version }}
-          slack_webhook_url: ${{ inputs.slack_webhook_url }}
+          webhook: ${{ inputs.webhook }}
