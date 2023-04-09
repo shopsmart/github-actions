@@ -75,7 +75,8 @@ runs:
       id: render
       uses: shopsmart/render-j2-action@v1
       with:
-        template: ${{ github.action_path }}/message.json.j2
+        template: shopsmart/github-actions/.github/actions/test-notify-slack/message.json.j2@feature/slack-notify
+        #${{ github.action_path }}/message.json.j2
         data: ${{ steps.data.outputs.file }}
         format: ${{ inputs.format }}
 
