@@ -33,7 +33,7 @@ on:
       webhook:
         description: 'The slack webhook url to post the message to'
         type: string
-        required: false
+        required: true
 
 permissions:
   contents: write # default
