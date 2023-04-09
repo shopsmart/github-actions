@@ -31,3 +31,4 @@ jobs:
       status: build
       type: success
       version: v1.0.56
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
