@@ -25,6 +25,10 @@ inputs:
     description: 'The type of action that is being performed such as build or deployment'
     type: string
     required: true
+  template:
+    description: 'The path to the template file to render'
+    type: string
+    required: true
   status:
     description: 'The status of the deployment.  Options are started, success, and failure'
     type: string
@@ -47,6 +51,7 @@ runs:
         ACTOR: ${{ github.actor }}
         RUN_ID: ${{ github.run_id }}
         REPOSITORY: ${{ github.repository }}
+        TEMPLATE: ${{ inputs.template }}
         REF: ${{ github.ref_name }}
       run: |
         set -eo pipefail
@@ -82,7 +87,8 @@ runs:
 
       uses: shopsmart/render-j2-action@v1
       with:
-        template: /home/runner/work/github-actions/github-actions/.github/actions/test-notify-slack/message.json.j2
+        template: ${{ inputs.template }}
+        #./.github/actions/test-notify-slack/message.json.j2
         #${{ github.action_path }}/message.json.j2
         data: ${{ steps.data.outputs.file }}
         format: json

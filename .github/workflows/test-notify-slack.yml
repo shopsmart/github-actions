@@ -35,5 +35,6 @@ jobs:
       status: success
       type: deployment
       version: v1.0.56
+      template: ./.github/actions/test-notify-slack/message.json.j2
     secrets:
       slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
