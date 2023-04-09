@@ -6,7 +6,7 @@ on:
   push:
   workflow_call:
     secrets:
-      SLACK_WEBHOOK_URL:
+      slack_webhook_url:
         required: true
     # inputs:
     #   application:
@@ -36,4 +36,4 @@ jobs:
       type: deployment
       version: v1.0.56
     secrets:
-      webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
