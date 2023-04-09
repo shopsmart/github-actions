@@ -25,6 +25,7 @@ defaults:
 jobs:
   test-notify-slack:
     uses: ./.github/workflows/notify-slack.yml
+    environment: ${{ inputs.environment }}
     with:
       application: engagement
       environment: staging
