@@ -22,24 +22,6 @@ on:
         required: false
         default: ''
 
-      filters:
-        description: 'Load custom Jinja2 filters from a Python file: all top-level functions are imported.'
-        type: string
-        required: false
-        default: ''
-
-      tests:
-        description: 'Load custom Jinja2 tests from a Python file.'
-        type: string
-        required: false
-        default: ''
-
-      customize:
-        description: 'A Python file that implements hooks to fine-tune the j2cli behavior'
-        type: string
-        required: false
-        default: ''
-
       undefined:
         description: 'If true, undefined variables will be used in templates (no error will be raised)'
         type: string
