@@ -24,9 +24,10 @@ inputs:
     description: 'The status of the deployment.  Options are started, success, and failure'
     type: string
     required: true
+
+secrets:
   webhook:
     description: 'The slack webhook url to post the message to'
-    type: string
     required: true
 
 runs:
@@ -120,5 +121,5 @@ runs:
       with:
         payload: ${{ steps.render.outputs.content }}
       env:
-        SLACK_WEBHOOK_URL: ${{ inputs.webhook }}
+        SLACK_WEBHOOK_URL: ${{ secrets.webhook }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

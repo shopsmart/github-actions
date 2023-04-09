@@ -31,4 +31,5 @@ jobs:
       status: deployment
       type: success
       version: v1.0.56
-      webhook: ${{ inputs.slack_webhook_url }}
+    secrets:
+      webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
