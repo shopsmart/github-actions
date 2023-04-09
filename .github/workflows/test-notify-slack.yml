@@ -25,11 +25,9 @@ defaults:
 jobs:
   test-notify-slack:
     uses: ./.github/workflows/notify-slack.yml
-    environment: ${{ inputs.environment }}
     with:
       application: engagement
       environment: staging
       status: build
       type: success
       version: v1.0.56
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
