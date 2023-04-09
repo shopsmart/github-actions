@@ -32,6 +32,7 @@ on:
 
       slack_webhook_url:
         description: 'The slack webhook url to post the message to'
+        type: string
         required: true
 
 permissions:
