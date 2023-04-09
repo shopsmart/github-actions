@@ -103,6 +103,9 @@ runs:
         echo "file=$PWD/data.json" >> $GITHUB_OUTPUT
       shell: bash
 
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+
     - name: 'Render payload'
       id: render
       uses: shopsmart/render-j2-action@v1
