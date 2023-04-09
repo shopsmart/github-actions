@@ -67,8 +67,8 @@ runs:
         echo ' "message": "'"$MESSAGE"'",'
         echo ' "emoji": "'"$EMOJI"'"'
         echo '}'
-        } ] data.json
-        echo "file=$PWD/data.json" ]] $GITHUB_OUTPUT
+        } > data.json
+        echo "file=$PWD/data.json" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: 'Render payload'
