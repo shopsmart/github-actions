@@ -103,9 +103,6 @@ runs:
         echo "file=$PWD/data.json" >> $GITHUB_OUTPUT
       shell: bash
 
-    - name: 'Checkout'
-      uses: actions/checkout@v3
-
     - name: 'Render payload'
       id: render
       uses: shopsmart/render-j2-action@v1
@@ -113,6 +110,9 @@ runs:
         template: ${{ github.action_path }}/message.json.j2
         data: ${{ steps.data.outputs.file }}
         format: json
+
+    - name: 'Checkout'
+      uses: actions/checkout@v3
 
     - name: 'Post message to slack'
       id: slack
