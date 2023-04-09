@@ -31,4 +31,5 @@ jobs:
       status: build
       type: success
       version: v1.0.56
+    env:
       webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
