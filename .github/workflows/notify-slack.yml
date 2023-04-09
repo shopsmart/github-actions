@@ -1,6 +1,7 @@
 ---
 
-name: 'Slack notification'
+name: 'Notify'
+description: 'Posts a slack message with the status of the pipeline'
 
 on:
   workflow_call:
@@ -9,26 +10,31 @@ on:
         description: 'The friendly name for the application'
         type: string
         required: true
+
       environment:
         description: 'The environment that is being targeted for this deployment'
         type: string
         required: true
+
       version:
         description: 'The version that is being deployed'
         type: string
         default: ${{ github.ref }}
+
       type:
         description: 'The type of action that is being performed such as build or deployment'
         type: string
         required: true
+
       status:
         description: 'The status of the deployment.  Options are started, success, and failure'
         type: string
         required: true
-      slack_webhook_url:
-        description: "The slack webhook URL to post updates to"
-        required: false
+
+      webhook:
+        description: 'The slack webhook url to post the message to'
         type: string
+        required: true
 
 permissions:
   contents: read # default
@@ -44,11 +50,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v3
-
       - name: 'Test publish slack notification workflow'
-        uses: ./.github/actions/test-slack-notification
+        uses: ./.github/actions/test-notify-slack
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}

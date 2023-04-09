@@ -62,7 +62,40 @@ runs:
           echo '  "timestamp": "'"$TIMESTAMP"'",'
           echo '  "actor": "'"$ACTOR"'",'
           echo '  "run_id": "'"$RUN_ID"'",'
+
+          LINK=''
+          case "${{ env.ENVIRONMENT }}" in
+            production )
+              LINK='https://engagement.bradsdeals.com/healthcheck'
+              ;;
+            staging )
+              LINK="https://engagement-${{ env.ENVIRONMENT }}.bradsdeals.com/healthcheck"
+              ;;
+            * )
+              LINK="https://engagement-${{ env.ENVIRONMENT }}.bradsdeals.com/healthcheck"
+              ;;
+          esac
+
           echo '  "link": "'"$LINK"'",'
+
+          EMOJI=''
+          MESSAGE="A $TYPE for $APPLICATION:$VERSION to $ENVIRONMENT resulted in $STATUS"
+          case "$STATUS" in
+            success )
+              EMOJI=large_green_circle
+              ;;
+            failure )
+              EMOJI=red_circle
+              ;;
+            started )
+              EMOJI=large_blue_circle
+              MESSAGE="A $TYPE has been started for $APPLICATION:$VERSION to $ENVIRONMENT"
+              ;;
+            * )
+              EMOJI=white_circle
+              ;;
+          esac
+
           echo '  "message": "'"$MESSAGE"'",'
           echo '  "emoji": "'"$EMOJI"'"'
           echo '}'
