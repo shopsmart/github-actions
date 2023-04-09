@@ -28,7 +28,7 @@ jobs:
     with:
       application: engagement
       environment: staging
-      status: build
+      status: deployment
       type: success
       version: v1.0.56
       webhook: ${{ inputs.slack_webhook_url }}
