@@ -30,7 +30,6 @@ on:
         type: string
         required: true
 
-    secrets:
       slack_webhook_url:
         description: 'The slack webhook url to post the message to'
         required: true
@@ -57,5 +56,4 @@ jobs:
           status: ${{ inputs.status }}
           type: ${{ inputs.type }}
           version: ${{ inputs.version }}
-        secrets:
-          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack_webhook_url: ${{ inputs.slack_webhook_url }}
