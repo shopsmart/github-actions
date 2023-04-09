@@ -54,18 +54,11 @@ defaults:
 
 jobs:
   notify:
-    name: 'Notify'
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v3
-
-      - name: 'Test publish slack notification workflow'
-        uses: shopsmart/github-actions/.github/actions/test-notify-slack@feature/slack-notify
-        #./.github/actions/test-notify-slack
-        with:
-          application: ${{ inputs.application }}
-          environment: ${{ inputs.environment }}
-          status: ${{ inputs.status }}
-          type: ${{ inputs.type }}
+  - name: 'Test publish slack notification workflow'
+    uses: shopsmart/github-actions/.github/actions/test-notify-slack@feature/slack-notify
+    #./.github/actions/test-notify-slack
+    with:
+      application: ${{ inputs.application }}
+      environment: ${{ inputs.environment }}
+      status: ${{ inputs.status }}
+      type: ${{ inputs.type }}
