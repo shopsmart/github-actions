@@ -76,6 +76,8 @@ runs:
       run: |
         pwd
         ls -al
+        cd .github/actions
+        ls -al
       shell: bash
 
       # uses: shopsmart/render-j2-action@v1
