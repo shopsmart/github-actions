@@ -31,4 +31,4 @@ jobs:
       status: success
       type: deployment
       version: v1.0.56
-      webhook: ${{ inputs.SLACK_WEBHOOK_URL }}
+      webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
