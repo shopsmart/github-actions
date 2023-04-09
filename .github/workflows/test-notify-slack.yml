@@ -13,10 +13,6 @@ on:
         description: 'The environment that is being targeted for this deployment'
         type: string
         required: true
-      version:
-        description: 'The version that is being deployed'
-        type: string
-        default: ${{ github.ref }}
 
 jobs:
   test-notify-slack:
