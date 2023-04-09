@@ -36,7 +36,7 @@ on:
 
 jobs:
   test-notify-slack:
-        uses: ./.github/workflows/notify-slack
+        uses: ./.github/workflows/notify-slack.yml
         with:
           application: engagement
           environment: staging
