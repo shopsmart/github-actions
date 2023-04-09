@@ -62,7 +62,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: 'Test publish slack notification workflow'
-        uses: ./.github/actions/test-notify-slack
+        uses: shopsmart/github-actions/.github/actions/test-notify-slack@feature/slack-notify
+        #./.github/actions/test-notify-slack
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
