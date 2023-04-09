@@ -30,9 +30,9 @@ on:
         type: string
         required: true
 
-      # slack_webhook_url:
-      #   description: 'The slack webhook url to post the message to'
-      #   required: true
+      slack_webhook_url:
+        description: 'The slack webhook url to post the message to'
+        required: true
 
 permissions:
   contents: write # default
