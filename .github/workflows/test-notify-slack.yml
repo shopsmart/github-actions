@@ -1,46 +1,34 @@
 ---
 
-# name: 'Notify slack'
-
-# on:
-#   pull_request:
-#     inputs:
-#       application:
-#         description: 'The friendly name for the application'
-#         type: string
-#         required: true
-#       environment:
-#         description: 'The environment that is being targeted for this deployment'
-#         type: string
-#         required: true
-#       version:
-#         description: 'The version that is being deployed'
-#         type: string
-#         default: ${{ github.ref }}
-
-# jobs:
-#   test-notify-slack:
-#     uses: ./.github/workflows/notify-slack.yml
-#     with:
-#       application: engagement
-#       environment: staging
-#       status: build
-#       type: success
-#       version: v1.0.56
-#       webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-
 name: 'Notify slack'
+
+on:
+  pull_request:
+    inputs:
+      application:
+        description: 'The friendly name for the application'
+        type: string
+        required: true
+      environment:
+        description: 'The environment that is being targeted for this deployment'
+        type: string
+        required: true
+      version:
+        description: 'The version that is being deployed'
+        type: string
+        default: ${{ github.ref }}
 
 on:
   pull_request:
 
 jobs:
   test-notify-slack:
-        uses: ./.github/workflows/notify-slack.yml
-        with:
-          application: engagement
-          environment: staging
-          status: build
-          type: success
-          version: v1.0.56
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      application: engagement
+      environment: staging
+      status: build
+      type: success
+      version: v1.0.56
+    secrets:
+      webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
