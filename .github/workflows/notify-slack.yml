@@ -60,4 +60,5 @@ jobs:
           status: ${{ inputs.status }}
           type: ${{ inputs.type }}
           version: ${{ inputs.version }}
-          webhook: ${{ inputs.webhook }}
+        env:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
