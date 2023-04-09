@@ -121,5 +121,5 @@ runs:
       with:
         payload: ${{ steps.render.outputs.content }}
       env:
-        SLACK_WEBHOOK_URL: ${{ secrets.webhook }}
+        SLACK_WEBHOOK_URL: ${{ inputs.webhook }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

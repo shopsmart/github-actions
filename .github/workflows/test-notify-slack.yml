@@ -28,8 +28,7 @@ jobs:
     with:
       application: engagement
       environment: staging
-      status: deployment
+      status: build
       type: success
       version: v1.0.56
-    secrets:
-      webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+      webhook: ${{ inputs.webhook }}
