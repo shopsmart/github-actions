@@ -30,6 +30,11 @@ on:
         type: string
         required: true
 
+      webhook:
+        description: 'The slack webhook url to post the message to'
+        type: string
+        required: true
+
 permissions:
   contents: write # default
   id-token: write # for aws auth
