@@ -15,7 +15,7 @@ on:
         required: true
 
 permissions:
-  id-token: read # aws auth
+  id-token: write # aws auth
   contents: write # publish release assets
 
 defaults:
@@ -24,12 +24,18 @@ defaults:
 
 jobs:
   test-notify-slack:
-    uses: ./.github/workflows/notify-slack.yml
-    with:
-      application: engagement
-      environment: staging
-      status: build
-      type: success
-      version: v1.0.56
-    secrets:
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+    runs-on: ubuntu-latest
+      steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v3
+
+      - name: 'Test notify slack'
+        uses: ./.github/workflows/notify-slack.yml
+        with:
+          application: engagement
+          environment: staging
+          status: build
+          type: success
+          version: v1.0.56
+        secrets:
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

@@ -36,7 +36,7 @@ on:
         required: true
 
 permissions:
-  contents: read # default
+  contents: write # default
   id-token: write # for aws auth
 
 defaults:
