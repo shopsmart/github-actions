@@ -11,9 +11,40 @@ on:
         required: true
 
       environment:
-        description: 'The environment that is being targeted for this deployment'
+        description: |
+          The environment variables to pass to the render.  Each environment
+          variable should be in format VAR=VAL with one on each line.
+          Example:
+            environment: |
+              FOO=bar
+              BAR=baz
         type: string
-        required: true
+        required: false
+        default: ''
+
+      filters:
+        description: 'Load custom Jinja2 filters from a Python file: all top-level functions are imported.'
+        type: string
+        required: false
+        default: ''
+
+      tests:
+        description: 'Load custom Jinja2 tests from a Python file.'
+        type: string
+        required: false
+        default: ''
+
+      customize:
+        description: 'A Python file that implements hooks to fine-tune the j2cli behavior'
+        type: string
+        required: false
+        default: ''
+
+      undefined:
+        description: 'If true, undefined variables will be used in templates (no error will be raised)'
+        type: string
+        required: false
+        default: 'false'
 
       version:
         description: 'The version that is being deployed'
@@ -31,13 +62,9 @@ on:
         required: true
 
     secrets:
-      webhook:
+      slack_webhook_url:
         description: 'The slack webhook url to post the message to'
         required: true
-
-permissions:
-  contents: write # default
-  id-token: write # for aws auth
 
 defaults:
   run:
@@ -59,5 +86,3 @@ jobs:
           environment: ${{ inputs.environment }}
           status: ${{ inputs.status }}
           type: ${{ inputs.type }}
-          version: ${{ inputs.version }}
-          webhook: ${{ inputs.webhook }}

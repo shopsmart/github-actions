@@ -12,6 +12,11 @@ inputs:
     description: 'The environment that is being targeted for this deployment'
     type: string
     required: true
+  format:
+    description: 'The format the data file will be in'
+    type: string
+    required: false
+    default: ''
   version:
     description: 'The version that is being deployed'
     type: string
@@ -24,9 +29,9 @@ inputs:
     description: 'The status of the deployment.  Options are started, success, and failure'
     type: string
     required: true
-  webhook:
+  slack_webhook_url:
     description: 'The slack webhook url to post the message to'
-    required: false
+    required: true
 
 runs:
   using: "composite"
@@ -43,63 +48,27 @@ runs:
         RUN_ID: ${{ github.run_id }}
         REPOSITORY: ${{ github.repository }}
         REF: ${{ github.ref_name }}
-        LINK: ${{ env.LINK }}
-        EMOJI: ${{ env.EMOJI }}
-        MESSAGE: ${{ env.MESSAGE }}
       run: |
         set -eo pipefail
         TIMESTAMP="$(date +%s)"
         {
-          echo '{'
-          echo '  "application": "'"$APPLICATION"'",'
-          echo '  "environment": "'"$ENVIRONMENT"'",'
-          echo '  "version": "'"$VERSION"'",'
-          echo '  "type": "'"$TYPE"'",'
-          echo '  "status": "'"$STATUS"'",'
-          echo '  "repository": "'"$REPOSITORY"'",'
-          echo '  "ref": "'"$REF"'",'
-          echo '  "timestamp": "'"$TIMESTAMP"'",'
-          echo '  "actor": "'"$ACTOR"'",'
-          echo '  "run_id": "'"$RUN_ID"'",'
-
-          LINK=''
-          case "${{ env.ENVIRONMENT }}" in
-            production )
-              LINK='https://engagement.bradsdeals.com/healthcheck'
-              ;;
-            staging )
-              LINK="https://engagement-${{ env.ENVIRONMENT }}.bradsdeals.com/healthcheck"
-              ;;
-            * )
-              LINK="https://engagement-${{ env.ENVIRONMENT }}.bradsdeals.com/healthcheck"
-              ;;
-          esac
-
-          echo '  "link": "'"$LINK"'",'
-
-          EMOJI=''
-          MESSAGE="A $TYPE for $APPLICATION:$VERSION to $ENVIRONMENT resulted in $STATUS"
-          case "$STATUS" in
-            success )
-              EMOJI=large_green_circle
-              ;;
-            failure )
-              EMOJI=red_circle
-              ;;
-            started )
-              EMOJI=large_blue_circle
-              MESSAGE="A $TYPE has been started for $APPLICATION:$VERSION to $ENVIRONMENT"
-              ;;
-            * )
-              EMOJI=white_circle
-              ;;
-          esac
-
-          echo '  "message": "'"$MESSAGE"'",'
-          echo '  "emoji": "'"$EMOJI"'"'
-          echo '}'
-        } > data.json
-        echo "file=$PWD/data.json" >> $GITHUB_OUTPUT
+        echo '{'
+        echo ' "application": "'"$APPLICATION"'",'
+        echo ' "environment": "'"$ENVIRONMENT"'",'
+        echo ' "version": "'"$VERSION"'",'
+        echo ' "type": "'"$TYPE"'",'
+        echo ' "status": "'"$STATUS"'",'
+        echo ' "repository": "'"$REPOSITORY"'",'
+        echo ' "ref": "'"$REF"'",'
+        echo ' "timestamp": "'"$TIMESTAMP"'",'
+        echo ' "actor": "'"$ACTOR"'",'
+        echo ' "run_id": "'"$RUN_ID"'",'
+        echo ' "link": "'"$LINK"'",'
+        echo ' "message": "'"$MESSAGE"'",'
+        echo ' "emoji": "'"$EMOJI"'"'
+        echo '}'
+        } ] data.json
+        echo "file=$PWD/data.json" ]] $GITHUB_OUTPUT
       shell: bash
 
     - name: 'Render payload'
@@ -108,10 +77,7 @@ runs:
       with:
         template: ${{ github.action_path }}/message.json.j2
         data: ${{ steps.data.outputs.file }}
-        format: json
-
-    # - name: 'Checkout'
-    #   uses: actions/checkout@v3
+        format: ${{ inputs.format }}
 
     - name: 'Post message to slack'
       id: slack
@@ -119,5 +85,5 @@ runs:
       with:
         payload: ${{ steps.render.outputs.content }}
       env:
-        SLACK_WEBHOOK_URL: ${{ inputs.webhook }}
+        SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
