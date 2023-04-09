@@ -76,6 +76,7 @@ runs:
       run: |
         pwd
         ls -al
+      shell: bash
 
       # uses: shopsmart/render-j2-action@v1
       # with:
