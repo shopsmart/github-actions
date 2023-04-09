@@ -1,7 +1,6 @@
 ---
 
-name: 'Notify'
-description: 'Posts a slack message with the status of the pipeline'
+name: 'Notify slack'
 
 on:
   workflow_call:
