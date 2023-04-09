@@ -110,8 +110,8 @@ runs:
         data: ${{ steps.data.outputs.file }}
         format: json
 
-    - name: 'Checkout'
-      uses: actions/checkout@v3
+    # - name: 'Checkout'
+    #   uses: actions/checkout@v3
 
     - name: 'Post message to slack'
       id: slack
