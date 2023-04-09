@@ -73,17 +73,17 @@ runs:
 
     - name: 'Render payload'
       id: render
-      run: |
-        pwd
-        ls -al
-      shell: bash
+      # run: |
+      #   pwd
+      #   ls -al
+      # shell: bash
 
-      # uses: shopsmart/render-j2-action@v1
-      # with:
-      #   template: shopsmart/github-actions/.github/actions/test-notify-slack/message.json.j2
-      #   #${{ github.action_path }}/message.json.j2
-      #   data: ${{ steps.data.outputs.file }}
-      #   format: ${{ inputs.format }}
+      uses: shopsmart/render-j2-action@v1
+      with:
+        template: actions/test-notify-slack/message.json.j2
+        #${{ github.action_path }}/message.json.j2
+        data: ${{ steps.data.outputs.file }}
+        format: ${{ inputs.format }}
 
     - name: 'Post message to slack'
       id: slack
