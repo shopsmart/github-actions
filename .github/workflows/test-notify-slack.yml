@@ -26,7 +26,7 @@ jobs:
           status: ${{ needs.jobs.outputs.status }}
           type: deployment
           version: v1.0.56
-          template: ${{ inputs.template }}
+          template: ./github-actions/actions/notify-slack/message.json.j2
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: 'Checkout actions'
