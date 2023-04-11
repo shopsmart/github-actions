@@ -51,40 +51,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: 'Create data file'
-      id: data
-      env:
-        APPLICATION: ${{ inputs.application }}
-        ENVIRONMENT: ${{ inputs.environment }}
-        VERSION: ${{ inputs.version }}
-        TYPE: ${{ inputs.type }}
-        STATUS: ${{ inputs.status }}
-        ACTOR: ${{ github.actor }}
-        RUN_ID: ${{ github.run_id }}
-        REPOSITORY: ${{ github.repository }}
-        TEMPLATE: ${{ inputs.template }}
-        REF: ${{ github.ref_name }}
+    - name: 'Run timestamp'
+      id: timestamp
       run: |
-        set -eo pipefail
         TIMESTAMP="$(date +%s)"
-        {
-        echo '{'
-        echo ' "application": "'"$APPLICATION"'",'
-        echo ' "environment": "'"$ENVIRONMENT"'",'
-        echo ' "version": "'"$VERSION"'",'
-        echo ' "type": "'"$TYPE"'",'
-        echo ' "status": "'"$STATUS"'",'
-        echo ' "repository": "'"$REPOSITORY"'",'
-        echo ' "ref": "'"$REF"'",'
-        echo ' "timestamp": "'"$TIMESTAMP"'",'
-        echo ' "actor": "'"$ACTOR"'",'
-        echo ' "run_id": "'"$RUN_ID"'",'
-        echo ' "link": "'"$LINK"'",'
-        echo ' "message": "'"$MESSAGE"'",'
-        echo ' "emoji": "'"$EMOJI"'"'
-        echo '}'
-        } > data.json
-        echo "file=$PWD/data.json" >> ${{ env.GITHUB_OUTPUT }}
+        echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: 'Render payload'
@@ -92,8 +63,19 @@ runs:
       uses: shopsmart/render-j2-action@v1
       with:
         template: ${{ github.action_path }}/message.json.j2
-        data: ${{ steps.data.outputs.file }}
         format: json
+        env_vars: |
+          APPLICATION=${{ inputs.application }}
+          ENVIRONMENT=${{ inputs.environment }}
+          VERSION=${{ inputs.version }}
+          TYPE=${{ inputs.type }}
+          STATUS=${{ inputs.status }}
+          ACTOR=${{ github.actor }}
+          RUN_ID=${{ github.run_id }}
+          REPOSITORY=${{ github.repository }}
+          TEMPLATE=${{ inputs.template }}
+          REF=${{ github.ref_name }}
+          TIMESTAMP=${{ steps.timestamp.outputs.timestamp }}
 
     - name: 'Post message to slack'
       id: slack
