@@ -14,23 +14,13 @@ defaults:
 
 jobs:
   run-notify-slack-workflow:
-    name: 'Uses the notfy-slack workflow'
-    runs-on: ubuntu-latest
     uses: shopsmart/github-actions/.github/workflows/notify-slack.yml@feature/slack-notify
-    if: always()
-    steps:
-    - name: 'Check workflow status'
-      id: check
-      uses: martialonline/workflow-status@v3
-
-    - name: 'Test notify-slack workflow'
-      uses: shopsmart/github-actions/.github/workflows/notify-slack.yml@feature/slack-notify
-      with:
-        application: github-actions
-        environment: staging
-        status: ${{ steps.check.outputs.status }}
-        type: deployment
-        version: v1.0.56
-        template: ${{ inputs.template }}
-      secrets:
-        slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+    with:
+      application: github-actions
+      environment: staging
+      status: ${{ inputs.status}}
+      type: deployment
+      version: v1.0.56
+      template: ${{ inputs.template }}
+    secrets:
+      slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}

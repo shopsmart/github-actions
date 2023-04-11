@@ -14,16 +14,12 @@ defaults:
 jobs:
   test-notify-slack-action:
     name: 'Uses the notify-slack action'
-    uses: ./.github/actions/test-notify-slack@feature/slack-notify
     runs-on: ubuntu-latest
     if: always()
     steps:
       - name: 'Check workflow status'
         id: check
         uses: martialonline/workflow-status@v3
-
-      - name: 'Checkout actions'
-        uses: actions/checkout@v3
 
       - name: 'Test notify-slack action'
         uses: ./.github/actions/test-notify-slack
@@ -34,3 +30,4 @@ jobs:
           type: deployment
           version: v1.0.56
           template: ${{ inputs.template }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
