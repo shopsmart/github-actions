@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: 'Test notify-slack action'
         id: notify
-        uses: ./.github/actions/test-notify-slack
+        uses: .github/actions/test-notify-slack
         with:
           application: github-actions
           environment: staging
