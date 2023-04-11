@@ -12,8 +12,7 @@ on:
 
       environment:
         description: |
-          The environment variables to pass to the render.  Each environment
-          variable should be in format VAR=VAL with one on each line.
+          The environment variables to pass to the render.  Each environment variable should be in format VAR=VAL with one on each line.
           Example:
             environment: |
               FOO=bar
@@ -21,12 +20,6 @@ on:
         type: string
         required: false
         default: ''
-
-      undefined:
-        description: 'If true, undefined variables will be used in templates (no error will be raised)'
-        type: string
-        required: false
-        default: 'false'
 
       template:
         description: 'The path to the template file to render'
@@ -49,7 +42,7 @@ on:
         required: true
 
     secrets:
-      slack_webhook_url:
+      slack-webhook-url:
         description: 'The slack webhook url to post the message to'
         required: true
 
@@ -58,20 +51,13 @@ defaults:
     shell: bash
 
 jobs:
-  notify:
-    name: 'Notify'
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v3
-
-      - name: 'Test publish slack notification workflow'
-        uses: shopsmart/github-actions/.github/actions/test-notify-slack@feature/slack-notify
-        #./.github/actions/test-notify-slack
-        with:
-          application: ${{ inputs.application }}
-          environment: ${{ inputs.environment }}
-          status: ${{ inputs.status }}
-          type: ${{ inputs.type }}
-          template: ${{ inputs.template }}
+  notify-slack:
+    name: 'Publish slack notification'
+    uses: shopsmart/github-actions/actions/notify-slack@feature/slack-notify
+    with:
+      application: ${{ inputs.application }}
+      environment: ${{ inputs.environment }}
+      status: ${{ inputs.status }}
+      type: ${{ inputs.type }}
+      template: ${{ inputs.template }}
+      version: ${{ inputs.version }}

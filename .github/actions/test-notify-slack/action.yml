@@ -1,7 +1,7 @@
 ---
 
-name: 'Publish slack notification workflow'
-description: 'Posts a slack message with the status of the pipeline'
+name: 'Test notify slack action'
+description: 'Runs validation against the notify-slack action'
 
 inputs:
   application:
@@ -9,9 +9,15 @@ inputs:
     type: string
     required: true
   environment:
-    description: 'The environment that is being targeted for this deployment'
+    description: |
+      The environment variables to pass to the render. Each environment variable should be in format VAR=VAL with one on each line.
+      Example:
+        environment: |
+          FOO=bar
+          BAR=baz
     type: string
-    required: true
+    required: false
+    default: ''
   format:
     description: 'The format the data file will be in'
     type: string
@@ -33,71 +39,31 @@ inputs:
     description: 'The status of the deployment.  Options are started, success, and failure'
     type: string
     required: true
-  slack_webhook_url:
+  slack-webhook-url:
     description: 'The slack webhook url to post the message to'
     required: true
 
 runs:
   using: "composite"
   steps:
-    - name: 'Create data file'
-      id: data
-      env:
-        APPLICATION: ${{ inputs.application }}
-        ENVIRONMENT: ${{ inputs.environment }}
-        VERSION: ${{ inputs.version }}
-        TYPE: ${{ inputs.type }}
-        STATUS: ${{ inputs.status }}
-        ACTOR: ${{ github.actor }}
-        RUN_ID: ${{ github.run_id }}
-        REPOSITORY: ${{ github.repository }}
-        TEMPLATE: ${{ inputs.template }}
-        REF: ${{ github.ref_name }}
-      run: |
-        set -eo pipefail
-        TIMESTAMP="$(date +%s)"
-        {
-        echo '{'
-        echo ' "application": "'"$APPLICATION"'",'
-        echo ' "environment": "'"$ENVIRONMENT"'",'
-        echo ' "version": "'"$VERSION"'",'
-        echo ' "type": "'"$TYPE"'",'
-        echo ' "status": "'"$STATUS"'",'
-        echo ' "repository": "'"$REPOSITORY"'",'
-        echo ' "ref": "'"$REF"'",'
-        echo ' "timestamp": "'"$TIMESTAMP"'",'
-        echo ' "actor": "'"$ACTOR"'",'
-        echo ' "run_id": "'"$RUN_ID"'",'
-        echo ' "link": "'"$LINK"'",'
-        echo ' "message": "'"$MESSAGE"'",'
-        echo ' "emoji": "'"$EMOJI"'"'
-        echo '}'
-        } > data.json
-        echo "file=$PWD/data.json" >> $GITHUB_OUTPUT
-      shell: bash
+    - name: 'Checkout'
+      uses: actions/checkout@v3
 
     - name: 'Render payload'
-      id: render
-      # run: |
-      #   pwd
-      #   ls -al
-      #   cd .github/actions
-      #   ls -al
-      # shell: bash
-
       uses: shopsmart/render-j2-action@v1
       with:
-        template: ${{ inputs.template }}
-        #./.github/actions/test-notify-slack/message.json.j2
-        #${{ github.action_path }}/message.json.j2
+        template: ${{ github.action_path }}/message.json.j2
         data: ${{ steps.data.outputs.file }}
         format: json
 
     - name: 'Post message to slack'
       id: slack
-      uses: slackapi/slack-github-action@v1
+      uses: ./actions/notify-slack
       with:
-        payload: ${{ steps.render.outputs.content }}
-      env:
-        SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }}
-        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        application: ${{ inputs.application }}
+        environment: ${{ inputs.environment }}
+        status: ${{ inputs.status }}
+        type: ${{ inputs.deployment }}
+        version: ${{ inputs.version }}
+        template: ${{ inputs.template }}
+        slack-webhook-url: ${{ inputs.slack-webhook-url }}

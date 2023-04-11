@@ -1,40 +1,32 @@
 ---
 
-name: 'Notify slack'
+name: 'Run notify-slack action'
 
 on:
-  push:
-  workflow_call:
-    secrets:
-      slack_webhook_url:
-        required: true
-    # inputs:
-    #   application:
-    #     description: 'The friendly name for the application'
-    #     type: string
-    #     required: true
-    #   environment:
-    #     description: 'The environment that is being targeted for this deployment'
-    #     type: string
-    #     required: true
-
-permissions:
-  id-token: write # aws auth
-  contents: write # publish release assets
+  pull_request:
+    paths:
+      - actions/notify-slack/*
 
 defaults:
   run:
     shell: bash
 
 jobs:
-  test-notify-slack:
-    uses: ./.github/workflows/notify-slack.yml
-    with:
-      application: engagement
-      environment: staging
-      status: success
-      type: deployment
-      version: v1.0.56
-      template: ./.github/actions/test-notify-slack/message.json.j2
-    secrets:
-      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+  test-notify-slack-action:
+    name: 'Uses the notify-slack action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v3
+
+      - name: 'Test notify-slack action'
+        uses: ./.github/actions/test-notify-slack
+        with:
+          application: github-actions
+          environment: staging
+          status: success
+          type: deployment
+          version: v1.0.56
+          template: ${{ inputs.template }}
+        secrets:
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
