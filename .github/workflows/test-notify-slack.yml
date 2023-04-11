@@ -28,5 +28,3 @@ jobs:
           type: deployment
           version: v1.0.56
           template: ${{ inputs.template }}
-        secrets:
-          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}

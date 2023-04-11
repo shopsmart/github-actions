@@ -16,6 +16,7 @@ jobs:
   run-notify-slack-workflow:
     name: 'Uses the notfy-slack workflow'
     runs-on: ubuntu-latest
+    uses: shopsmart/github-actions/.github/workflows/notify-slack.yml@feature/slack-notify
     if: always()
     steps:
     - name: 'Check workflow status'
