@@ -14,7 +14,7 @@ defaults:
 jobs:
   test-notify-slack-action:
     name: 'Uses the notify-slack action'
-    uses: ./.github/actions/test-notify-slack
+    uses: ./.github/actions/test-notify-slack@feature/slack-notify
     runs-on: ubuntu-latest
     if: always()
     steps:
