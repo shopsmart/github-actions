@@ -1,5 +1,3 @@
----
-
 name: 'Run notify-slack action'
 
 on:
@@ -11,6 +9,9 @@ defaults:
   run:
     shell: bash
 
+outputs:
+  status: ${{ steps.notify.outputs.status }}
+
 jobs:
   test-notify-slack-action:
     name: 'Uses the notify-slack action'
@@ -19,11 +20,11 @@ jobs:
     steps:
       - name: 'Test notify-slack action'
         id: notify
-        uses: .github/actions/test-notify-slack
+        uses: shopsmart/github-actions/actions/notify-slack@feature/slack-notify
         with:
           application: github-actions
           environment: staging
-          status: ${{ steps.check.outputs.status }}
+          status: ${{ steps.notify.outputs.status }}
           type: deployment
           version: v1.0.56
           template: ${{ inputs.template }}
@@ -32,14 +33,17 @@ jobs:
       - name: 'Checkout actions'
         uses: actions/checkout@v3
 
-      - name: 'Check workflow status'
+      - name: 'Check workflow status - failure'
+        id: check-failure
         if: ${{ steps.notify.outputs.status == 'failure' }}
         run: echo "Workflow failed"
 
-      - name: 'Check workflow status'
+      - name: 'Check workflow status - cancelled'
+        id: check-cancelled
         if: ${{ steps.notify.outputs.status == 'cancelled' }}
         run: echo "Workflow was cancelled"
 
-      - name: 'Check workflow status'
+      - name: 'Check workflow status - success'
+        id: check-success
         if: ${{ steps.notify.outputs.status == 'success' }}
         run: echo "Workflow was successful"

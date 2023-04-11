@@ -1,5 +1,3 @@
----
-
 name: 'Notify slack'
 
 on:
@@ -53,7 +51,7 @@ defaults:
 jobs:
   notify-slack:
     name: 'Publish slack notification'
-    uses: shopsmart/github-actions/actions/notify-slack@feature/slack-notify
+    uses: ./.github/actions/notify-slack
     with:
       application: ${{ inputs.application }}
       environment: ${{ inputs.environment }}
@@ -61,3 +59,5 @@ jobs:
       type: ${{ inputs.type }}
       template: ${{ inputs.template }}
       version: ${{ inputs.version }}
+    secrets:
+      slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
