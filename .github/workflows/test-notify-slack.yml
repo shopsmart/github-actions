@@ -9,14 +9,13 @@ defaults:
   run:
     shell: bash
 
-outputs:
-  status: ${{ steps.notify.outputs.status }}
-
 jobs:
   test-notify-slack-action:
     name: 'Uses the notify-slack action'
     runs-on: ubuntu-latest
     if: always()
+    outputs:
+      status: ${{ steps.notify.outputs.status }}
     steps:
       - name: 'Test notify-slack action'
         id: notify
@@ -24,7 +23,7 @@ jobs:
         with:
           application: github-actions
           environment: staging
-          status: ${{ steps.notify.outputs.status }}
+          status: ${{ needs.jobs.outputs.status }}
           type: deployment
           version: v1.0.56
           template: ${{ inputs.template }}

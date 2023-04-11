@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   run-notify-slack-workflow:
-    uses: .github/workflows/notify-slack.yml@feature/slack-notify
+    uses: ./.github/workflows/notify-slack.yml@feature/slack-notify
     with:
       application: github-actions
       environment: staging
