@@ -8,6 +8,11 @@ inputs:
     description: 'The friendly name for the application'
     type: string
     required: true
+  data:
+    description: 'The path to the file with data to pass to the render'
+    type: string
+    required: false
+    default: ''
   environment:
     description: |
       The environment variables to pass to the render.  Each environment variable should be in format VAR=VAL with one on each line.

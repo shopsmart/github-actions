@@ -53,7 +53,7 @@ defaults:
 jobs:
   notify-slack:
     name: 'Publish slack notification'
-    uses: ./actions/notify-slack
+    uses: ./actions/notify-slack@feature/slack-notify
     with:
       application: ${{ inputs.application }}
       environment: ${{ inputs.environment }}
