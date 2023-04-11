@@ -14,8 +14,14 @@ defaults:
 jobs:
   test-notify-slack-action:
     name: 'Uses the notify-slack action'
+    uses: ./.github/actions/test-notify-slack
     runs-on: ubuntu-latest
+    if: always()
     steps:
+      - name: 'Check workflow status'
+        id: check
+        uses: martialonline/workflow-status@v3
+
       - name: 'Checkout actions'
         uses: actions/checkout@v3
 
@@ -24,7 +30,7 @@ jobs:
         with:
           application: github-actions
           environment: staging
-          status: success
+          status: ${{ steps.check.outputs.status }}
           type: deployment
           version: v1.0.56
           template: ${{ inputs.template }}
