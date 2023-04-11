@@ -17,11 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
-      - name: 'Check workflow status'
-        id: check
-        uses: martialonline/workflow-status@v3
-
       - name: 'Test notify-slack action'
+        id: notify
         uses: ./.github/actions/test-notify-slack
         with:
           application: github-actions
@@ -31,3 +28,15 @@ jobs:
           version: v1.0.56
           template: ${{ inputs.template }}
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: 'Check workflow status'
+        if: ${{ steps.notify.outputs.status == 'failure' }}
+        run: echo "Workflow failed"
+
+      - name: 'Check workflow status'
+        if: ${{ steps.notify.outputs.status == 'cancelled' }}
+        run: echo "Workflow was cancelled"
+
+      - name: 'Check workflow status'
+        if: ${{ steps.notify.outputs.status == 'success' }}
+        run: echo "Workflow was successful"
