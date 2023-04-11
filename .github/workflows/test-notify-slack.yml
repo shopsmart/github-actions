@@ -15,24 +15,24 @@ jobs:
   test-notify-slack-action:
     name: 'Uses the notify-slack action'
     runs-on: ubuntu-latest
-    if: always()
     outputs:
       status: ${{ steps.notify.outputs.status }}
     steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v3
+
       - name: 'Test notify-slack action'
         id: notify
         uses: shopsmart/github-actions/actions/notify-slack@feature/slack-notify
         with:
           application: github-actions
           environment: staging
-          status: ${{ needs.jobs.outputs.status }}
-          type: deployment
+          status: ${{ needs.outputs.status }}
+          type: test
           version: v1.0.56
           template: ./github-actions/actions/notify-slack/message.json.j2
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-      - name: 'Checkout actions'
-        uses: actions/checkout@v3
 
       - name: 'Check workflow status - failure'
         id: check-failure

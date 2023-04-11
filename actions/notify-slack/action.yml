@@ -84,7 +84,7 @@ runs:
         echo ' "emoji": "'"$EMOJI"'"'
         echo '}'
         } > data.json
-        echo "file=$PWD/data.json" >> $GITHUB_OUTPUT
+        echo "file=$PWD/data.json" >> ${{ env.GITHUB_OUTPUT }}
       shell: bash
 
     - name: 'Render payload'

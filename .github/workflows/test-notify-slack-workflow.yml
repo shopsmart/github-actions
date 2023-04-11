@@ -5,8 +5,9 @@ name: 'Run notify-slack workflow'
 on:
   pull_request:
     paths:
-      - .github/workflows/notify-slack.yml
+      - actions/notify-slack/*
       - .github/actions/test-notify-slack/*
+      - .github/workflows/test-notify-slack.yml
 
 defaults:
   run:
@@ -18,8 +19,7 @@ jobs:
     with:
       application: github-actions
       environment: staging
-      status: ${{ inputs.status}}
+      status: test
       type: deployment
       version: v1.0.56
-      template: ${{ inputs.template }}
       slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
