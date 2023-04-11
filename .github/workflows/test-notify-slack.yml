@@ -29,6 +29,9 @@ jobs:
           template: ${{ inputs.template }}
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
+      - name: 'Checkout actions'
+        uses: actions/checkout@v3
+
       - name: 'Check workflow status'
         if: ${{ steps.notify.outputs.status == 'failure' }}
         run: echo "Workflow failed"

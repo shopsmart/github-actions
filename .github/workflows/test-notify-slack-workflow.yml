@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   run-notify-slack-workflow:
-    uses: shopsmart/github-actions/.github/workflows/notify-slack.yml@feature/slack-notify
+    uses: github/workflows/notify-slack.yml
     with:
       application: github-actions
       environment: staging
