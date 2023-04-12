@@ -7,7 +7,7 @@ on:
     paths:
       - actions/notify-slack/*
       - .github/actions/test-notify-slack/*
-      - .github/workflows/test-notify-slack.yml
+      - .github/workflows/test-notify-slack.yml@feature/slack-notify
 
 defaults:
   run:

@@ -62,7 +62,7 @@ runs:
       id: render
       uses: shopsmart/render-j2-action@v1
       with:
-        # template: ${{ github.action_path }}/message.json.j2
+        template: .github/actions/test-notify-slack/message.json.j2
         format: json
         env_vars: |
           APPLICATION=${{ inputs.application }}
