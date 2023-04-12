@@ -57,7 +57,7 @@ runs:
     - name: 'Render payload'
       uses: shopsmart/render-j2-action@v1
       with:
-        template: ${{ github.action_path }}/message.json.j2
+        template: ${{ inputs.template }}
         data: ${{ inputs.data }}
         format: json
 
