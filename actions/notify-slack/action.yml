@@ -13,6 +13,9 @@ inputs:
     type: string
     required: false
     default: ''
+  emoji:
+    description: 'The github release emoji to display'
+    default: ''
   environment:
     description: |
       The environment variables to pass to the render.  Each environment variable should be in format VAR=VAL with one on each line.
@@ -67,6 +70,7 @@ runs:
         env_vars: |
           APPLICATION=${{ inputs.application }}
           ENVIRONMENT=${{ inputs.environment }}
+          EMOJI=${{ inputs.emoji }}
           VERSION=${{ inputs.version }}
           TYPE=${{ inputs.type }}
           STATUS=${{ inputs.status }}
