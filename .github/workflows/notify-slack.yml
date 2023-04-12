@@ -51,7 +51,7 @@ defaults:
 jobs:
   notify-slack:
     name: 'Publish slack notification'
-    uses: ./.github/workflow/notify-slack
+    uses: shopsmart/github-actions/actions/notify-slack@feature/slack-notify
     with:
       application: ${{ inputs.application }}
       environment: ${{ inputs.environment }}
