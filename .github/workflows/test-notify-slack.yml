@@ -30,7 +30,7 @@ jobs:
           status: ${{ needs.outputs.status }}
           type: test
           version: v1.0.56
-          template: ./github-actions/actions/notify-slack/message.json.j2
+          template: .github/actions/test-notify-slack/message.json.j2
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 
