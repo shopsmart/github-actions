@@ -5,7 +5,7 @@
       "text": {
         "type": "plain_text",
         "emoji": true,
-        "text": ":{{ emoji }}: {{ type | title }} {{ status }} for {{ application }}"
+        "text": ":{{ env("EMOJI") }}: {{ env("TYPE") | title }} {{ env("STATUS") }} for {{ env("APPLICATION") }}"
       }
     },
     {
@@ -15,7 +15,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "{{ message }}"
+        "text": "{{ env("MESSAGE") }}"
       }
     },
     {
@@ -31,11 +31,11 @@
         },
         {
           "type": "mrkdwn",
-          "text": "<https://github.com/{{ repository }}|{{ repository }}>"
+          "text": "<https://github.com/{{ env("REPOSITORY") }}|{{ env("REPOSITORY") }}>"
         },
         {
           "type": "mrkdwn",
-          "text": "<https://github.com/{{ repository }}/tree/{{ ref }}|{{ ref }}>"
+          "text": "<https://github.com/{{ env("REPOSITORY") }}/tree/{{ env("REF") }}|{{ env("REF") }}>"
         }
       ]
     },
@@ -52,11 +52,11 @@
         },
         {
           "type": "mrkdwn",
-          "text": "<{{ link }}|{{ environment }}>"
+          "text": "<{{ env("LINK") }}|{{ env("ENVIRONMENT") }}>"
         },
         {
           "type": "plain_text",
-          "text": "{{ actor }}"
+          "text": "{{ env("ACTOR") }}"
         }
       ]
     },
@@ -65,7 +65,7 @@
       "elements": [
         {
           "type": "mrkdwn",
-          "text": "<https://github.com/{{ repository }}/actions/runs/{{ run_id }}|Run {{ run_id }}>"
+          "text": "<https://github.com/{{ env("REPOSITORY") }}/actions/runs/{{ env("RUN_ID") }}|Run {{ env("RUN_ID") }}>"
         },
         {
           "type": "mrkdwn",
