@@ -70,5 +70,5 @@ runs:
         status: ${{ inputs.status }}
         type: ${{ inputs.deployment }}
         version: ${{ inputs.version }}
-        template: ${{ inputs.template }}
+        template: .github/actions/test-notify-slack/message.json.j2
         slack-webhook-url: ${{ inputs.slack-webhook-url }}

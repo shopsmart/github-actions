@@ -3,7 +3,7 @@ name: 'Run notify-slack action'
 on:
   pull_request:
     paths:
-      - actions/notify-slack/*
+      - ./github-actions/actions/notify-slack/*
       - .github/actions/test-notify-slack/*
       - .github/workflows/test-notify-slack.yml
 
