@@ -50,10 +50,13 @@
           "type": "mrkdwn",
           "text": "{{ env("ACTOR") }}
         },
+        {% set link = env("LINK", '') -%}
+        {%- if link == '' -%}
         {
           "type": "mrkdwn",
-          "text": "<{{ env("LINK") }}|{{ env("ENVIRONMENT") }}>"
+          "text": "<{{ link }}|{{ env("ENVIRONMENT") }}>"
         },
+        {%- endif %}
         {
           "type": "plain_text",
           "text": "{{ env("ACTOR") }}"

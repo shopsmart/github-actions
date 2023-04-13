@@ -54,12 +54,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: 'Run timestamp'
-      id: timestamp
-      run: |
-        TIMESTAMP="$(date +%s)"
-        echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+    - name: 'Get info'
+      id: info
+      run: ${{ github.action_path }}/get-info.sh
       shell: bash
+      env:
+        EMOJI: ${{ inputs.emoji }}
+        STATUS: ${{ inputs.status }}
 
     - name: 'Render payload'
       id: render
@@ -70,16 +71,17 @@ runs:
         env_vars: |
           APPLICATION=${{ inputs.application }}
           ENVIRONMENT=${{ inputs.environment }}
-          EMOJI=${{ inputs.emoji }}
+          EMOJI=${{ steps.info.outputs.emoji }}
           VERSION=${{ inputs.version }}
           TYPE=${{ inputs.type }}
           STATUS=${{ inputs.status }}
           ACTOR=${{ github.actor }}
           RUN_ID=${{ github.run_id }}
+          LINK=${{ inputs.link }}
           REPOSITORY=${{ github.repository }}
           TEMPLATE=${{ inputs.template }}
           REF=${{ github.ref_name }}
-          TIMESTAMP=${{ steps.timestamp.outputs.timestamp }}
+          TIMESTAMP=${{ steps.info.outputs.timestamp }}
 
     - name: 'Post message to slack'
       id: slack
