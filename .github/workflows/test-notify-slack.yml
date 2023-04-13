@@ -3,7 +3,7 @@ name: 'Run notify-slack action'
 on:
   pull_request:
     paths:
-      - ./github-actions/actions/notify-slack/*
+      - actions/notify-slack/*
       - .github/actions/test-notify-slack/*
       - .github/workflows/test-notify-slack.yml
 
@@ -15,8 +15,6 @@ jobs:
   test-notify-slack-action:
     name: 'Uses the notify-slack action'
     runs-on: ubuntu-latest
-    outputs:
-      status: ${{ steps.notify.outputs.status }}
     steps:
       - name: 'Checkout actions'
         uses: actions/checkout@v3
@@ -27,24 +25,8 @@ jobs:
         with:
           application: github-actions
           environment: staging
-          status: ${{ needs.outputs.status }}
+          status: ${{ inputs.status }}
           type: test
           version: v1.0.56
           template: .github/actions/test-notify-slack/message.json.j2
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-
-      - name: 'Check workflow status - failure'
-        id: check-failure
-        if: ${{ steps.notify.outputs.status == 'failure' }}
-        run: echo "Workflow failed"
-
-      - name: 'Check workflow status - cancelled'
-        id: check-cancelled
-        if: ${{ steps.notify.outputs.status == 'cancelled' }}
-        run: echo "Workflow was cancelled"
-
-      - name: 'Check workflow status - success'
-        id: check-success
-        if: ${{ steps.notify.outputs.status == 'success' }}
-        run: echo "Workflow was successful"

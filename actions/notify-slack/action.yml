@@ -66,7 +66,7 @@ runs:
       uses: shopsmart/render-j2-action@v1
       with:
         template: ${{ github.action_path }}/message.json.j2
-        format: json
+        format: ${{ inputs.format }}
         env_vars: |
           APPLICATION=${{ inputs.application }}
           ENVIRONMENT=${{ inputs.environment }}

@@ -5,7 +5,8 @@ name: 'Run notify-slack workflow'
 on:
   pull_request:
     paths:
-      - .github/actions/test-notify-slack/*
+      - actions/notify-slack/*
+      - .github/workflows/notify-slack.yml
       - .github/workflows/test-notify-slack.yml
 
 defaults:
