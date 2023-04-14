@@ -23,18 +23,13 @@ function get-info() {
     esac
 
   fi
-  echo emoji="$EMOJI" >>"$GITHUB_OUTPUT"
-  TIMESTAMP="$(date +%s)"
-  MESSAGE="A ${TYPE:-}for ${APPLICATION:-}:${VERSION:-} to ${ENVIRONMENT:-} resulted in ${STATUS:-}"
 
-  if [ "${STATUS:-}" = "success" ]; then
-    echo "status=success" >>"$GITHUB_OUTPUT"
-    echo "message=$MESSAGE" >>"$GITHUB_OUTPUT"
-  else
-    echo "status=failure" >>"$GITHUB_OUTPUT"
-    echo "message=$MESSAGE" >>"$GITHUB_OUTPUT"
+  if [ -z "${MESSAGE:-}" ]; then
+    MESSAGE="A ${TYPE:-} for ${APPLICATION:-}:${VERSION:-} to ${ENVIRONMENT:-} resulted in ${STATUS:-}"
   fi
-
+  echo emoji="$EMOJI" >>"$GITHUB_OUTPUT"
+  echo "message=${MESSAGE:-}" >>"$GITHUB_OUTPUT"
+  TIMESTAMP="$(date +%s)"
   echo "timestamp=$TIMESTAMP" >>"$GITHUB_OUTPUT"
 }
 

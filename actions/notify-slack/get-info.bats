@@ -17,3 +17,11 @@ function teardown() {
     [ "$status" -eq 0 ]
     grep -q 'emoji=test' "$GITHUB_OUTPUT"
 }
+
+@test "it should mot change MESSAGE if set." {
+    MESSAGE=test
+    run get-info
+
+    [ "$status" -eq 0 ]
+    grep -q 'message=test' "$GITHUB_OUTPUT"
+}
