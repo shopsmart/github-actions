@@ -18,5 +18,5 @@ runs:
         status: success
         type: test
         version: v1.0.56
-        template: ${{ github.action_path }}/message.json.j2
+        template: .github/actions/test-notify-slack/message.json.j2
         slack-webhook-url: ${{ inputs.slack-webhook-url }}
