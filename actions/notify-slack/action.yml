@@ -59,10 +59,10 @@ runs:
       run: ${{ github.action_path }}/get-info.sh
       shell: bash
       env:
-        APPLICATION: ${{ input.application }}
+        APPLICATION: ${{ inputs.application }}
         EMOJI: ${{ inputs.emoji }}
         STATUS: ${{ inputs.status }}
-        TYPE: ${{ input.type }}
+        TYPE: ${{ inputs.type }}
         VERSION: ${{ inputs.version }}
 
     - name: 'Render payload'
