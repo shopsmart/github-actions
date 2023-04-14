@@ -15,8 +15,8 @@ runs:
       with:
         application: github-actions
         environment: staging
-        status: ${{ inputs.status }}
+        status: success
         type: test
         version: v1.0.56
-        template: ${{ inputs.template }}
-        slack-webhook-url: ${{ inputs.slack-webhook-url }}
+        template: ${{ github.action_path }}/message.json.j2
+        slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
