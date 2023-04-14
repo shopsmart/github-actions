@@ -21,14 +21,18 @@ function get-info() {
       EMOJI=white_circle
       ;;
     esac
-
-  fi
-
-  if [ -z "${MESSAGE:-}" ]; then
-    MESSAGE="A ${TYPE:-} for ${APPLICATION:-}:${VERSION:-} to ${ENVIRONMENT:-} resulted in ${STATUS:-}"
   fi
   echo emoji="$EMOJI" >>"$GITHUB_OUTPUT"
+
+  if [ -z "${MESSAGE:-}" ]; then
+    MESSAGE="A ${TYPE} for ${APPLICATION}:${VERSION} to ${ENVIRONMENT} resulted in ${STATUS}"
+
+    if [ "$STATUS" = started ]; then
+      MESSAGE="A $TYPE has been started for $APPLICATION:$VERSION to $ENVIRONMENT"
+    fi
+  fi
   echo "message=${MESSAGE:-}" >>"$GITHUB_OUTPUT"
+
   TIMESTAMP="$(date +%s)"
   echo "timestamp=$TIMESTAMP" >>"$GITHUB_OUTPUT"
 }
