@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+TYPE="deployment"
+APPLICATION="github-actions"
+VERSION="1.0"
+ENVIRONMENT="staging"
+STATUS="success"
+
 function get-info() {
   set -eo pipefail
 
