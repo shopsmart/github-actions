@@ -19,4 +19,5 @@ runs:
         type: test
         version: v1.0.56
         template: ${{ github.action_path }}/message.json.j2
+      secrets:
         slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
