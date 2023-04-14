@@ -61,7 +61,7 @@ runs:
       env:
         APPLICATION: ${{ inputs.application }}
         EMOJI: ${{ inputs.emoji }}
-        ENVIRONMENT: ${{ input.environment }}
+        ENVIRONMENT: ${{ inputs.environment }}
         STATUS: ${{ inputs.status }}
         TYPE: ${{ inputs.type }}
         VERSION: ${{ inputs.version }}
