@@ -18,7 +18,7 @@ function teardown() {
     grep -q 'emoji=test' "$GITHUB_OUTPUT"
 }
 
-@test "it should mot change MESSAGE if set." {
+@test "it should not change MESSAGE if set" {
     MESSAGE=test
     run get-info
 
