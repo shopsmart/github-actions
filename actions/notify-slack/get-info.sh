@@ -4,8 +4,6 @@ function get-info() {
   set -eo pipefail
 
   if [ -z "${EMOJI:-}" ]; then
-
-    # MESSAGE="A $TYPE for $APPLICATION:$VERSION to $ENVIRONMENT resulted in $STATUS"
     case "${STATUS:-}" in
     success)
       EMOJI=large_green_circle
@@ -15,7 +13,6 @@ function get-info() {
       ;;
     started)
       EMOJI=large_blue_circle
-      # MESSAGE="A $TYPE has been started for $APPLICATION:$VERSION to $ENVIRONMENT"
       ;;
     *)
       EMOJI=white_circle
