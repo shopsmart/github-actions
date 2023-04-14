@@ -9,13 +9,6 @@ runs:
     - name: 'Checkout'
       uses: actions/checkout@v3
 
-    - name: 'Render payload'
-      uses: shopsmart/render-j2-action@v1
-      with:
-        template: ${{ github.action_path }}/message.json.j2
-        data: ${{ inputs.data }}
-        format: ${{ inputs.format }}
-
     - name: 'Post message to slack'
       id: slack
       uses: ./actions/notify-slack
