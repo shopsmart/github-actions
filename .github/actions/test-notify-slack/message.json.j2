@@ -5,7 +5,7 @@
       "text": {
         "type": "plain_text",
         "emoji": true,
-        "text": ":{{ env("EMOJI") }}: {{ env("TYPE") | title }} {{ env("STATUS") }} for {{ env("APPLICATION") }}"
+        "text": ":{{ env(\"EMOJI\") }}: {{ env(\"TYPE\") | title }} {{ env(\"STATUS\") }} for {{ env(\"APPLICATION\") }}"
       }
     },
     {
@@ -15,7 +15,7 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "{{ env("MESSAGE") }}"
+        "text": "{{ env(\"MESSAGE\") }}"
       }
     },
     {
@@ -23,19 +23,19 @@
       "fields": [
         {
           "type": "mrkdwn",
-          "text": "{{ env("REPOSITORY") }}"
+          "text": "{{ env(\"REPOSITORY\") }}"
         },
         {
           "type": "mrkdwn",
-          "text": "{{ env("REF") }}"
+          "text": "{{ env(\"REF\") }}"
         },
         {
           "type": "mrkdwn",
-          "text": "<https://github.com/{{ env("REPOSITORY") }}|{{ env("REPOSITORY") }}>"
+          "text": "<https://github.com/{{ env(\"REPOSITORY\") }}|{{ env(\"REPOSITORY\") }}>"
         },
         {
           "type": "mrkdwn",
-          "text": "<https://github.com/{{ env("REPOSITORY") }}/tree/{{ env("REF") }}|{{ env("REF") }}>"
+          "text": "<https://github.com/{{ env(\"REPOSITORY\") }}/tree/{{ env(\"REF\") }}|{{ env(\"REF\") }}>"
         }
       ]
     },
@@ -44,19 +44,19 @@
       "fields": [
         {
           "type": "mrkdwn",
-          "text": "{{ env("ENVIRONMENT") }}
+          "text": "{{ env(\"ENVIRONMENT\") }}"
         },
         {
           "type": "mrkdwn",
-          "text": "{{ env("ACTOR") }}
+          "text": "{{ env(\"ACTOR\") }}"
         },
         {
           "type": "mrkdwn",
-          "text": "<{{ env("LINK") }}|{{ env("ENVIRONMENT") }}>"
+          "text": "<{{ env(\"LINK\") }}|{{ env(\"ENVIRONMENT\") }}>"
         },
         {
           "type": "plain_text",
-          "text": "{{ env("ACTOR") }}"
+          "text": "{{ env(\"ACTOR\") }}"
         }
       ]
     },
@@ -65,11 +65,11 @@
       "elements": [
         {
           "type": "mrkdwn",
-          "text": "<https://github.com/{{ env("REPOSITORY") }}/actions/runs/{{ env("RUN_ID") }}|Run {{ env("RUN_ID") }}>"
+          "text": "<https://github.com/{{ env(\"REPOSITORY\") }}/actions/runs/{{ env(\"RUN_ID\") }}|Run {{ env(\"RUN_ID\") }}>"
         },
         {
           "type": "mrkdwn",
-          "text": "<!date^{{ env("TIMESTAMP") }}^{date_short_pretty} at {time}|February 18th, 2014 at 6:39 AM PST>"
+          "text": "<!date^{{ env(\"TIMESTAMP\") }}^{date_short_pretty} at {time}|February 18th, 2014 at 6:39 AM PST>"
         }
       ]
     }
