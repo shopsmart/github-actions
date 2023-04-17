@@ -31,6 +31,9 @@ inputs:
     type: string
     required: false
     default: ''
+  message:
+    description: 'The message to display per status'
+    default: ''
   version:
     description: 'The version that is being deployed'
     type: string
@@ -62,6 +65,7 @@ runs:
         APPLICATION: ${{ inputs.application }}
         EMOJI: ${{ inputs.emoji }}
         ENVIRONMENT: ${{ inputs.environment }}
+        MESSAGE: ${{ inputs.message }}
         STATUS: ${{ inputs.status }}
         TYPE: ${{ inputs.type }}
         VERSION: ${{ inputs.version }}
@@ -80,6 +84,7 @@ runs:
           TYPE=${{ inputs.type }}
           STATUS=${{ inputs.status }}
           ACTOR=${{ github.actor }}
+          MESSAGE=${{ steps.info.outputs.message }}
           RUN_ID=${{ github.run_id }}
           LINK=${{ inputs.link }}
           REPOSITORY=${{ github.repository }}
