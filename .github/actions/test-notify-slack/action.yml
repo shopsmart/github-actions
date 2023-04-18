@@ -3,6 +3,12 @@
 name: 'Test notify slack action'
 description: 'Runs validation against the notify-slack action'
 
+inputs:
+  slack-webhook-url:
+    description: 'The slack webhook url to post the message to'
+    type: string
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -19,4 +25,4 @@ runs:
         type: deployment
         version: v1.0.56
         template: .github/actions/test-notify-slack/message.json.j2
-        slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        slack-webhook-url: ${{ inputs.slack-webhook-url }}

@@ -22,3 +22,5 @@ jobs:
       - name: 'Test notify-slack action'
         id: notify
         uses: ./.github/actions/test-notify-slack
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
