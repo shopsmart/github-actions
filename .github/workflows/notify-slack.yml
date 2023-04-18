@@ -24,12 +24,12 @@ on:
       template:
         description: 'The path to the template file to render'
         type: string
-        required: true
+        required: false
 
       version:
         description: 'The version that is being deployed'
         type: string
-        default: ${{ github.ref }}
+        required: false
 
       type:
         description: 'The type of action that is being performed such as build or deployment'

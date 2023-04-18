@@ -45,7 +45,7 @@ inputs:
   template:
     description: 'The path to the template file to render'
     type: string
-    required: true
+    default: ${{ github.action_path }}/message.json.j2
   status:
     description: 'The status of the deployment.  Options are started, success, and failure'
     type: string
