@@ -23,11 +23,11 @@
       "fields": [
         {
           "type": "mrkdwn",
-          "text": "{{ env("REPOSITORY") }}"
+          "text": "*Repository*"
         },
         {
           "type": "mrkdwn",
-          "text": "{{ env("REF") }}"
+          "text": "*Github Ref*"
         },
         {
           "type": "mrkdwn",
@@ -44,15 +44,20 @@
       "fields": [
         {
           "type": "mrkdwn",
+          "text": "*Environment*"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Actor*"
+        },
+        {
+          "type": "mrkdwn",
+          {% set link = env("LINK", '') -%}
+          {%- if link == '' -%}
           "text": "{{ env("ENVIRONMENT") }}"
-        },
-        {
-          "type": "mrkdwn",
-          "text": "{{ env("ACTOR") }}"
-        },
-        {
-          "type": "mrkdwn",
-          "text": "<{{ env("LINK") }}|{{ env("ENVIRONMENT") }}>"
+          {%- else -%}
+          "text": "<{{ link }}|{{ env("ENVIRONMENT") }}>"
+          {%- endif %}
         },
         {
           "type": "plain_text",
