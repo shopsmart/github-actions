@@ -53,13 +53,15 @@ defaults:
 jobs:
   notify-slack:
     name: 'Publish slack notification'
-    uses: ./.github/actions/notify-slack
-    with:
-      application: ${{ inputs.application }}
-      environment: ${{ inputs.environment }}
-      status: ${{ inputs.status }}
-      type: ${{ inputs.type }}
-      template: ${{ inputs.template }}
-      version: ${{ inputs.version }}
-    secrets:
-      slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Notify slack'
+        uses: shopsmart/github-actions/actions/notify-slack@feature/slack-notify
+        with:
+          application: ${{ inputs.application }}
+          environment: ${{ inputs.environment }}
+          status: ${{ inputs.status }}
+          type: ${{ inputs.type }}
+          template: ${{ inputs.template }}
+          version: ${{ inputs.version }}
+          slack-webhook-url: ${{ secrets.slack-webhook-url }}
