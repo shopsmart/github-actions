@@ -19,4 +19,4 @@ runs:
         type: deployment
         version: v1.0.56
         template: .github/actions/test-notify-slack/message.json.j2
-        slack-webhook-url: ${{ secrets.slack-webhook-url }}
+        slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
