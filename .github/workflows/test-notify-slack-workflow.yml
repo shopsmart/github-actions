@@ -22,4 +22,5 @@ jobs:
       status: test
       type: deployment
       version: v1.0.56
+    secrets:
       slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
