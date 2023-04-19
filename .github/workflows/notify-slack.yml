@@ -50,9 +50,6 @@ defaults:
   run:
     shell: bash
 
-env:
-  GITHUB_ACTION_PATH: ${{ github.action_path }}
-
 jobs:
   notify-slack:
     name: 'Publish slack notification'
