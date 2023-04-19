@@ -74,7 +74,7 @@ runs:
       id: render
       uses: shopsmart/render-j2-action@v1
       with:
-        template: ${{ github.action_path }}/message.json.j2
+        template: ${{ inputs.template }}
         format: ${{ inputs.format }}
         env_vars: |
           APPLICATION=${{ inputs.application }}
@@ -88,7 +88,6 @@ runs:
           RUN_ID=${{ github.run_id }}
           LINK=${{ inputs.link }}
           REPOSITORY=${{ github.repository }}
-          TEMPLATE=${{ inputs.template }}
           REF=${{ github.ref_name }}
           TIMESTAMP=${{ steps.info.outputs.timestamp }}
 
