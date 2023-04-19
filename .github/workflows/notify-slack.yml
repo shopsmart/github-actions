@@ -24,7 +24,7 @@ on:
       template:
         description: 'The path to the template file to render'
         type: string
-        required: true
+        required: false
 
       version:
         description: 'The version that is being deployed'

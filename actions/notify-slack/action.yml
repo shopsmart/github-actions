@@ -89,7 +89,6 @@ runs:
           LINK=${{ inputs.link }}
           REPOSITORY=${{ github.repository }}
           REF=${{ github.ref_name }}
-          TEMPLATE=${{ inputs.template }}
           TIMESTAMP=${{ steps.info.outputs.timestamp }}
 
     - name: 'Post message to slack'
