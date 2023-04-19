@@ -62,5 +62,6 @@ jobs:
           environment: ${{ inputs.environment }}
           status: ${{ inputs.status }}
           type: ${{ inputs.type }}
+          template: ${{ github.action_path }}/message.json.j2
           version: ${{ inputs.version }}
           slack-webhook-url: ${{ secrets.slack-webhook-url }}
