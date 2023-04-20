@@ -79,7 +79,7 @@ runs:
 
     - name: 'Render payload'
       id: render
-      uses: shopsmart/render-j2-action@bugfix/file-check
+      uses: shopsmart/render-j2-action@v2
       with:
         template: ${{ steps.info.outputs.template }}
         format: ${{ inputs.format }}
