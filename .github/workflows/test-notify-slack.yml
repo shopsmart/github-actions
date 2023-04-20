@@ -1,0 +1,26 @@
+name: 'Run notify-slack action'
+
+on:
+  pull_request:
+    paths:
+      - actions/notify-slack/*
+      - .github/actions/test-notify-slack/*
+      - .github/workflows/test-notify-slack.yml
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-notify-slack-action:
+    name: 'Uses the notify-slack action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v3
+
+      - name: 'Test notify-slack action'
+        id: notify
+        uses: ./.github/actions/test-notify-slack
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}

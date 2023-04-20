@@ -1,0 +1,125 @@
+---
+
+name: 'Notify slack'
+description: 'Posts a slack message with the status of the pipeline'
+
+inputs:
+  application:
+    description: 'The friendly name for the application'
+    type: string
+    required: true
+  emoji:
+    description: 'The github release emoji to display'
+    default: ''
+  message:
+    description: 'The message to display per status'
+    default: ''
+  version:
+    description: 'The version that is being deployed'
+    type: string
+    default: ${{ github.ref }}
+  type:
+    description: 'The type of action that is being performed such as build or deployment'
+    type: string
+    required: true
+  template:
+    description: 'The path to the template file to render'
+    type: string
+    default: ${{ github.action_path }}/message.json.j2
+  status:
+    description: 'The status of the deployment.  Options are started, success, and failure'
+    type: string
+    required: true
+  slack-webhook-url:
+    description: 'The slack webhook url to post the message to'
+    required: true
+
+  # pulled from shopsmart/render-j2-action
+  data:
+    description: 'The path to the file with data to pass to the render'
+    type: string
+    required: false
+    default: ''
+  environment:
+    description: |
+      The environment variables to pass to the render.  Each environment variable should be in format VAR=VAL with one on each line.
+      Example:
+        environment: |
+          FOO=bar
+          BAR=baz
+    type: string
+    required: false
+    default: ''
+  format:
+    description: 'The format the data file will be in'
+    type: string
+    required: false
+    default: ''
+  filters:
+    description: 'Load custom Jinja2 filters from a Python file: all top-level functions are imported.'
+    required: false
+    default: ''
+  tests:
+    description: 'Load custom Jinja2 tests from a Python file.'
+    required: false
+    default: ''
+  customize:
+    description: 'A Python file that implements hooks to fine-tune the j2cli behavior'
+    required: false
+    default: ''
+  undefined:
+    description: 'If true, undefined variables will be used in templates (no error will be raised)'
+    required: false
+    default: 'false'
+
+runs:
+  using: "composite"
+  steps:
+    - name: 'Get info'
+      id: info
+      run: ${{ github.action_path }}/get-info.sh
+      shell: bash
+      env:
+        APPLICATION: ${{ inputs.application }}
+        EMOJI: ${{ inputs.emoji }}
+        ENVIRONMENT: ${{ inputs.environment }}
+        MESSAGE: ${{ inputs.message }}
+        STATUS: ${{ inputs.status }}
+        TEMPLATE: ${{ inputs.template }}
+        TYPE: ${{ inputs.type }}
+        VERSION: ${{ inputs.version }}
+
+    - name: 'Render payload'
+      id: render
+      uses: shopsmart/render-j2-action@v2
+      with:
+        customize: ${{ inputs.customize }}
+        data: ${{ inputs.data }}
+        env_vars: |
+          APPLICATION=${{ inputs.application }}
+          ENVIRONMENT=${{ inputs.environment }}
+          EMOJI=${{ steps.info.outputs.emoji }}
+          VERSION=${{ inputs.version }}
+          TYPE=${{ inputs.type }}
+          STATUS=${{ inputs.status }}
+          ACTOR=${{ github.actor }}
+          MESSAGE=${{ steps.info.outputs.message }}
+          RUN_ID=${{ github.run_id }}
+          LINK=${{ inputs.link }}
+          REPOSITORY=${{ github.repository }}
+          TIMESTAMP=${{ steps.info.outputs.timestamp }}
+          ${{ inputs.environment }}
+        filters: ${{ inputs.filters }}
+        format: ${{ inputs.format }}
+        template: ${{ steps.info.outputs.template }}
+        tests: ${{ inputs.tests }}
+        undefined: ${{ inputs.undefined }}
+
+    - name: 'Post message to slack'
+      id: slack
+      uses: slackapi/slack-github-action@v1
+      with:
+        payload: ${{ steps.render.outputs.content }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

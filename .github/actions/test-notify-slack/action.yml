@@ -1,0 +1,38 @@
+---
+
+name: 'Test notify slack action'
+description: 'Runs validation against the notify-slack action'
+
+inputs:
+  slack-webhook-url:
+    description: 'The slack webhook url to post the message to'
+    type: string
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: 'Setup brew'
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+
+    - name: 'Use local actions'
+      uses: ./.github/actions/use-local-actions
+
+    - name: 'Post message to slack'
+      id: slack
+      uses: ./actions/notify-slack
+      with:
+        application: github-actions
+        environment: staging
+        status: success
+        type: deployment
+        version: v1.0.56
+        template: ${{ github.action_path }}/message.json.j2
+        slack-webhook-url: ${{ inputs.slack-webhook-url }}

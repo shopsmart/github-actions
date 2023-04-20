@@ -1,0 +1,82 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "emoji": true,
+        "text": ":{{ env("EMOJI") }}: {{ env("TYPE") | title }} {{ env("STATUS") }} for {{ env("APPLICATION") }}"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "{{ env("MESSAGE") }}"
+      }
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Repository*"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Github Ref*"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<https://github.com/{{ env("REPOSITORY") }}|{{ env("REPOSITORY") }}>"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<https://github.com/{{ env("REPOSITORY") }}/tree/{{ env("VERSION") }}|{{ env("VERSION") }}>"
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "fields": [
+        {
+          "type": "mrkdwn",
+          "text": "*Environment*"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "*Actor*"
+        },
+        {
+          "type": "mrkdwn",
+          {% set link = env("LINK", '') -%}
+          {%- if link == '' -%}
+          "text": "{{ env("ENVIRONMENT") }}"
+          {%- else -%}
+          "text": "<{{ link }}|{{ env("ENVIRONMENT") }}>"
+          {%- endif %}
+        },
+        {
+          "type": "plain_text",
+          "text": "{{ env("ACTOR") }}"
+        }
+      ]
+    },
+    {
+      "type": "context",
+      "elements": [
+        {
+          "type": "mrkdwn",
+          "text": "<https://github.com/{{ env("REPOSITORY") }}/actions/runs/{{ env("RUN_ID") }}|Run {{ env("RUN_ID") }}>"
+        },
+        {
+          "type": "mrkdwn",
+          "text": "<!date^{{ env("TIMESTAMP") }}^{date_short_pretty} at {time}|February 18th, 2014 at 6:39 AM PST>"
+        }
+      ]
+    }
+  ]
+}
