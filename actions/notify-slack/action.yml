@@ -81,6 +81,7 @@ runs:
       id: render
       uses: shopsmart/render-j2-action@bugfix/file-check
       with:
+        debug: true
         template: ${{ steps.info.outputs.template }}
         format: ${{ inputs.format }}
         env_vars: |
