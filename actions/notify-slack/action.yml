@@ -107,7 +107,6 @@ runs:
           RUN_ID=${{ github.run_id }}
           LINK=${{ inputs.link }}
           REPOSITORY=${{ github.repository }}
-          REF=${{ github.ref_name }}
           TIMESTAMP=${{ steps.info.outputs.timestamp }}
           ${{ inputs.environment }}
         filters: ${{ inputs.filters }}
