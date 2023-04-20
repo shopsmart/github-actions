@@ -89,12 +89,6 @@ runs:
         TYPE: ${{ inputs.type }}
         VERSION: ${{ inputs.version }}
 
-    - name: 'Debugging'
-      shell: bash
-      run: |
-        echo "$GITHUB_ACTION_PATH"
-        ls -al "$GITHUB_ACTION_PATH"
-
     - name: 'Render payload'
       id: render
       uses: shopsmart/render-j2-action@v2
