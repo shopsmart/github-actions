@@ -71,15 +71,11 @@ runs:
         TYPE: ${{ inputs.type }}
         VERSION: ${{ inputs.version }}
 
-    - name: 'Debugging'
-      run: echo "${{ inputs.template }}"
-      shell: bash
-
     - name: 'Render payload'
       id: render
       uses: shopsmart/render-j2-action@v1
       with:
-        template: ${{ inputs.template || '${{ github.action_path }}/message.json.j2' }}
+        template: ${{ steps.info.outputs.template }}
         format: ${{ inputs.format }}
         env_vars: |
           APPLICATION=${{ inputs.application }}
