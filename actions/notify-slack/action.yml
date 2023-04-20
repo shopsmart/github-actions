@@ -8,28 +8,8 @@ inputs:
     description: 'The friendly name for the application'
     type: string
     required: true
-  data:
-    description: 'The path to the file with data to pass to the render'
-    type: string
-    required: false
-    default: ''
   emoji:
     description: 'The github release emoji to display'
-    default: ''
-  environment:
-    description: |
-      The environment variables to pass to the render.  Each environment variable should be in format VAR=VAL with one on each line.
-      Example:
-        environment: |
-          FOO=bar
-          BAR=baz
-    type: string
-    required: false
-    default: ''
-  format:
-    description: 'The format the data file will be in'
-    type: string
-    required: false
     default: ''
   message:
     description: 'The message to display per status'
@@ -53,6 +33,44 @@ inputs:
   slack-webhook-url:
     description: 'The slack webhook url to post the message to'
     required: true
+
+  # pulled from shopsmart/render-j2-action
+  data:
+    description: 'The path to the file with data to pass to the render'
+    type: string
+    required: false
+    default: ''
+  environment:
+    description: |
+      The environment variables to pass to the render.  Each environment variable should be in format VAR=VAL with one on each line.
+      Example:
+        environment: |
+          FOO=bar
+          BAR=baz
+    type: string
+    required: false
+    default: ''
+  format:
+    description: 'The format the data file will be in'
+    type: string
+    required: false
+    default: ''
+  filters:
+    description: 'Load custom Jinja2 filters from a Python file: all top-level functions are imported.'
+    required: false
+    default: ''
+  tests:
+    description: 'Load custom Jinja2 tests from a Python file.'
+    required: false
+    default: ''
+  customize:
+    description: 'A Python file that implements hooks to fine-tune the j2cli behavior'
+    required: false
+    default: ''
+  undefined:
+    description: 'If true, undefined variables will be used in templates (no error will be raised)'
+    required: false
+    default: 'false'
 
 runs:
   using: "composite"
@@ -81,8 +99,8 @@ runs:
       id: render
       uses: shopsmart/render-j2-action@v2
       with:
-        template: ${{ steps.info.outputs.template }}
-        format: ${{ inputs.format }}
+        customize: ${{ inputs.customize }}
+        data: ${{ inputs.data }}
         env_vars: |
           APPLICATION=${{ inputs.application }}
           ENVIRONMENT=${{ inputs.environment }}
@@ -97,6 +115,12 @@ runs:
           REPOSITORY=${{ github.repository }}
           REF=${{ github.ref_name }}
           TIMESTAMP=${{ steps.info.outputs.timestamp }}
+          ${{ inputs.environment }}
+        filters: ${{ inputs.filters }}
+        format: ${{ inputs.format }}
+        template: ${{ steps.info.outputs.template }}
+        tests: ${{ inputs.tests }}
+        undefined: ${{ inputs.undefined }}
 
     - name: 'Post message to slack'
       id: slack
