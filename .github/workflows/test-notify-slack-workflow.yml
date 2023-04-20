@@ -21,7 +21,6 @@ jobs:
       environment: staging
       status: test
       type: deployment
-      template: ${{ inputs.template }}
       version: v1.0.56
     secrets:
       slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
