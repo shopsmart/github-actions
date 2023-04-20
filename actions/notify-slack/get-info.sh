@@ -30,6 +30,9 @@ function get-info() {
   fi
   echo "message=${MESSAGE:-}" >>"$GITHUB_OUTPUT"
 
+  [ -n "$TEMPLATE" ] || TEMPLATE="$GITHUB_ACTION_PATH/message.json.j2"
+  echo "template=$TEMPLATE" >>"$GITHUB_OUTPUT"
+
   TIMESTAMP="$(date +%s)"
   echo "timestamp=$TIMESTAMP" >>"$GITHUB_OUTPUT"
 }

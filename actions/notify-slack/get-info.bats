@@ -3,11 +3,12 @@
 load get-info.sh
 
 function setup() {
-    export GITHUB_OUTPUT="$BATS_TEST_TMPDIR/output"
+  export GITHUB_OUTPUT="$BATS_TEST_TMPDIR/output"
+  export GITHUB_ACTION_PATH="$BATS_TEST_DIRNAME"
 }
 
 function teardown() {
-    :
+  :
 }
 
 @test "it should not change EMOJI if set" {
@@ -89,4 +90,12 @@ function teardown() {
     timestamp=$(grep -oE 'timestamp=[0-9]+' "$GITHUB_OUTPUT" | cut -d= -f2)
     now=$(date +%s)
     [ "$timestamp" -le "$now" ]
+}
+
+@test "it should default the template" {
+  TEMPLATE=''
+  run get-info
+
+  [ "$status" -eq 0 ]
+  grep -q "template=$GITHUB_ACTION_PATH/message.json.j2" "$GITHUB_OUTPUT"
 }

@@ -67,11 +67,12 @@ runs:
         ENVIRONMENT: ${{ inputs.environment }}
         MESSAGE: ${{ inputs.message }}
         STATUS: ${{ inputs.status }}
+        TEMPLATE: ${{ inputs.template }}
         TYPE: ${{ inputs.type }}
         VERSION: ${{ inputs.version }}
 
     - name: 'Debugging'
-      run: echo "${{ inputs.template || '${{ github.action_path }}/message.json.j2' }}"
+      run: echo "${{ inputs.template }}"
       shell: bash
 
     - name: 'Render payload'
