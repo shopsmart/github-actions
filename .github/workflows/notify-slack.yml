@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Notify slack'
-        uses: shopsmart/github-actions/actions/notify-slack@feature/slack-notify
+        uses: shopsmart/github-actions/actions/notify-slack@v2
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
