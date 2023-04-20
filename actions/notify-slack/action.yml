@@ -70,6 +70,9 @@ runs:
         TYPE: ${{ inputs.type }}
         VERSION: ${{ inputs.version }}
 
+    - name: 'Debugging'
+      run: echo "${{ inputs.template }}"
+
     - name: 'Render payload'
       id: render
       uses: shopsmart/render-j2-action@v1
