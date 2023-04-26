@@ -98,7 +98,7 @@ jobs:
           ref: ${{ inputs.ref }}
 
       - name: 'Render task definition'
-        uses: shopsmart/render-j2-action@feature/multiple-data-files
+        uses: shopsmart/render-j2-action@v2
         with:
           template: ${{ inputs.template }}
           data: ${{ inputs.data }}
