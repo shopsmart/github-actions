@@ -134,7 +134,7 @@ jobs:
       revision-number: ${{ steps.revision.outputs.revision-number }}
     steps:
       - name: 'Notify slack of deployment started'
-        if: inputs.notify-slack == 'true'
+        if: inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@feature/notify-slack-on-deploy
         with:
           application: ${{ inputs.application }}
@@ -190,8 +190,8 @@ jobs:
         env:
           TASK_DEFINITION_ARN: ${{ steps.register.outputs.task-definition-arn }}
 
-      - name: 'Notify slack of deployment started'
-        if: always() && inputs.notify-slack == 'true'
+      - name: 'Notify slack of deployment status'
+        if: always() && inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@feature/notify-slack-on-deploy
         with:
           application: ${{ inputs.application }}

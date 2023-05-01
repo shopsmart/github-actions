@@ -256,7 +256,7 @@ jobs:
           sha="$(git rev-parse HEAD)"
           echo "sha=$sha" >> $GITHUB_OUTPUT
 
-      - name: 'Notify slack of deployment started'
+      - name: 'Notify slack of build started'
         if: inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@feature/notify-slack-on-deploy
         with:
@@ -387,7 +387,7 @@ jobs:
           files: docker-image-*.tgz
           token: ${{ secrets.github-token || github.token }}
 
-      - name: 'Notify slack of deployment started'
+      - name: 'Notify slack of build status'
         if: always() && inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@feature/notify-slack-on-deploy
         with:
