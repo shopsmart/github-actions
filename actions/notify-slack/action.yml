@@ -11,7 +11,7 @@ inputs:
   environment:
     description: 'The environment this ${type} is being performed for'
     type: string
-    required: false
+    default: ''
   emoji:
     description: 'The github release emoji to display'
     default: ''
