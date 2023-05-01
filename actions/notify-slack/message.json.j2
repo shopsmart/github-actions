@@ -1,3 +1,4 @@
+{%- set environment = env("ENVIRONEMNT", "") -%}
 {
   "blocks": [
     {
@@ -53,10 +54,12 @@
         {
           "type": "mrkdwn",
           {% set link = env("LINK", '') -%}
-          {%- if link == '' -%}
-          "text": "{{ env("ENVIRONMENT") }}"
+          {%- if link != '' and environment != '' -%}
+          "text": "<{{ link }}|{{ environment }}>"
+          {%- elif link == '' and environment != '' -%}
+          "text": "{{ environment }}"
           {%- else -%}
-          "text": "<{{ link }}|{{ env("ENVIRONMENT") }}>"
+          "text": "NONE"
           {%- endif %}
         },
         {

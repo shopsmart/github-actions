@@ -393,7 +393,7 @@ jobs:
         with:
           application: ${{ inputs.application }}
           status: ${{ job.status }}
-          type: deployment
+          type: build
           template: ${{ inputs.slack-template }}
           version: ${{ inputs.ref || steps.sha.outputs.sha }}
           slack-webhook-url: ${{ secrets.slack-webhook-url }}
