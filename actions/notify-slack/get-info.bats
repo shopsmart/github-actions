@@ -59,6 +59,17 @@ function teardown() {
   grep -q 'emoji=white_circle' "$GITHUB_OUTPUT"
 }
 
+@test "it should set MESSAGE to default value and not include \"to \$ENVIRONMENT\" if MESSAGE AND ENVIRONMENT are not set and STATUS is not started" {
+  TYPE=test
+  APPLICATION=github-actions
+  VERSION=1.0
+  STATUS=success
+  run get-info
+
+  [ "$status" -eq 0 ]
+  grep -q 'message=A test for github-actions:1.0 resulted in success' "$GITHUB_OUTPUT"
+}
+
 @test "it should set MESSAGE to default value if not set and STATUS is not started" {
   TYPE=test
   APPLICATION=github-actions
@@ -81,6 +92,17 @@ function teardown() {
 
   [ "$status" -eq 0 ]
   grep -q 'message=A test has been started for github-actions:2.0 to staging' "$GITHUB_OUTPUT"
+}
+
+@test "it should set MESSAGE to custom value and not include \"to \$ENVIRONMENT\" if MESSAGE and ENVIRONMENT are not set and STATUS is started" {
+  TYPE=test
+  APPLICATION=github-actions
+  VERSION=2.0
+  STATUS=started
+  run get-info
+
+  [ "$status" -eq 0 ]
+  grep -q 'message=A test has been started for github-actions:2.0' "$GITHUB_OUTPUT"
 }
 
 @test "it should set TIMESTAMP to current timestamp" {
