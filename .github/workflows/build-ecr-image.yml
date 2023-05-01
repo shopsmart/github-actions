@@ -257,7 +257,7 @@ jobs:
           echo "sha=$sha" >> $GITHUB_OUTPUT
 
       - name: 'Notify slack of deployment started'
-        if: inputs.notify-slack == 'true'
+        if: inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@v2
         with:
           application: ${{ inputs.application }}
@@ -388,7 +388,7 @@ jobs:
           token: ${{ secrets.github-token || github.token }}
 
       - name: 'Notify slack of deployment started'
-        if: always() && inputs.notify-slack == 'true'
+        if: always() && inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@v2
         with:
           application: ${{ inputs.application }}
