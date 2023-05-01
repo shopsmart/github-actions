@@ -93,6 +93,10 @@ runs:
         TYPE: ${{ inputs.type }}
         VERSION: ${{ inputs.version }}
 
+    - name: 'Debug'
+      shell: bash
+      run: echo "'${{ inputs.environment }}'"
+
     - name: 'Render payload'
       id: render
       uses: shopsmart/render-j2-action@v2
