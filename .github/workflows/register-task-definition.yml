@@ -135,7 +135,7 @@ jobs:
     steps:
       - name: 'Notify slack of deployment started'
         if: inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@feature/notify-slack-on-deploy
+        uses: shopsmart/github-actions/actions/notify-slack@v2
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
@@ -192,7 +192,7 @@ jobs:
 
       - name: 'Notify slack of deployment status'
         if: always() && inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@feature/notify-slack-on-deploy
+        uses: shopsmart/github-actions/actions/notify-slack@v2
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
