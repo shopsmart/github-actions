@@ -99,6 +99,11 @@ on:
         type: string
         required: false
 
+      link:
+        description: 'The link to the application'
+        type: string
+        required: false
+
     secrets:
       aws-account-id:
         description: 'The AWS account id that the ecr repository lives under'
@@ -143,6 +148,7 @@ jobs:
           type: deployment
           template: ${{ inputs.slack-template }}
           version: ${{ inputs.version }}
+          link: ${{ inputs.link }}
           slack-webhook-url: ${{ secrets.slack-webhook-url }}
 
       - name: 'Download task-definition'
@@ -200,4 +206,5 @@ jobs:
           type: deployment
           template: ${{ inputs.slack-template }}
           version: ${{ inputs.version }}
+          link: ${{ inputs.link }}
           slack-webhook-url: ${{ secrets.slack-webhook-url }}
