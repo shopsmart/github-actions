@@ -195,6 +195,22 @@ on:
         type: string
       # end docker/build-push-action inputs
 
+      # notify-slack
+      notify-slack:
+        description: 'Indicates if a slack notification should go out before and after the deploy'
+        type: boolean
+        default: false
+
+      application:
+        description: 'The name of the application; required if notify-slack is true'
+        type: string
+        required: false
+
+      slack-template:
+        description: 'The j2 template to pass to the notify-slack action'
+        type: string
+        required: false
+
     secrets:
       aws-account-id:
         description: 'The AWS account id that the ecr repository lives under'
@@ -210,6 +226,10 @@ on:
 
       github-token:
         description: "GitHub Token used to authenticate against a repository for Git context"
+        required: false
+
+      slack-webhook-url:
+        description: 'The webhook URL to send the slack notification to; requires notify-slack to be true'
         required: false
 
 env:
@@ -235,6 +255,17 @@ jobs:
         run: |
           sha="$(git rev-parse HEAD)"
           echo "sha=$sha" >> $GITHUB_OUTPUT
+
+      - name: 'Notify slack of build started'
+        if: inputs.notify-slack == true
+        uses: shopsmart/github-actions/actions/notify-slack@v2
+        with:
+          application: ${{ inputs.application }}
+          status: started
+          type: build
+          template: ${{ inputs.slack-template }}
+          version: ${{ inputs.ref || steps.sha.outputs.sha }}
+          slack-webhook-url: ${{ secrets.slack-webhook-url }}
 
       - name: 'Is github release?'
         id: is-gh-release
@@ -355,3 +386,14 @@ jobs:
           tag_name: ${{ inputs.ref }}
           files: docker-image-*.tgz
           token: ${{ secrets.github-token || github.token }}
+
+      - name: 'Notify slack of build status'
+        if: always() && inputs.notify-slack == true
+        uses: shopsmart/github-actions/actions/notify-slack@v2
+        with:
+          application: ${{ inputs.application }}
+          status: ${{ job.status }}
+          type: build
+          template: ${{ inputs.slack-template }}
+          version: ${{ inputs.ref || steps.sha.outputs.sha }}
+          slack-webhook-url: ${{ secrets.slack-webhook-url }}

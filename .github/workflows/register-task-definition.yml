@@ -78,10 +78,40 @@ on:
         type: string
         default: task-definition
 
+      # notify-slack
+      notify-slack:
+        description: 'Indicates if a slack notification should go out before and after the deploy'
+        type: boolean
+        default: false
+
+      application:
+        description: 'The name of the application; required if notify-slack is true'
+        type: string
+        required: false
+
+      slack-template:
+        description: 'The j2 template to pass to the notify-slack action'
+        type: string
+        required: false
+
+      version:
+        description: 'The version of the application being deployed; required if notify-slack is true'
+        type: string
+        required: false
+
+      link:
+        description: 'The link to the application'
+        type: string
+        required: false
+
     secrets:
       aws-account-id:
         description: 'The AWS account id that the ecr repository lives under'
         required: true
+
+      slack-webhook-url:
+        description: 'The webhook URL to send the slack notification to; requires notify-slack to be true'
+        required: false
 
     outputs:
       revision-number:
@@ -108,6 +138,19 @@ jobs:
     outputs:
       revision-number: ${{ steps.revision.outputs.revision-number }}
     steps:
+      - name: 'Notify slack of deployment started'
+        if: inputs.notify-slack == true
+        uses: shopsmart/github-actions/actions/notify-slack@v2
+        with:
+          application: ${{ inputs.application }}
+          environment: ${{ inputs.environment }}
+          link: ${{ inputs.link }}
+          status: started
+          type: deployment
+          template: ${{ inputs.slack-template }}
+          version: ${{ inputs.version }}
+          slack-webhook-url: ${{ secrets.slack-webhook-url }}
+
       - name: 'Download task-definition'
         uses: actions/download-artifact@v3
         with:
@@ -152,3 +195,16 @@ jobs:
         run: echo "revision-number=${TASK_DEFINITION_ARN##*:}" >> $GITHUB_OUTPUT
         env:
           TASK_DEFINITION_ARN: ${{ steps.register.outputs.task-definition-arn }}
+
+      - name: 'Notify slack of deployment status'
+        if: always() && inputs.notify-slack == true
+        uses: shopsmart/github-actions/actions/notify-slack@v2
+        with:
+          application: ${{ inputs.application }}
+          environment: ${{ inputs.environment }}
+          link: ${{ inputs.link }}
+          status: ${{ job.status }}
+          type: deployment
+          template: ${{ inputs.slack-template }}
+          version: ${{ inputs.version }}
+          slack-webhook-url: ${{ secrets.slack-webhook-url }}

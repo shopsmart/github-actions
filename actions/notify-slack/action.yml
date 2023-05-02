@@ -8,6 +8,10 @@ inputs:
     description: 'The friendly name for the application'
     type: string
     required: true
+  environment:
+    description: 'The environment this ${type} is being performed for'
+    type: string
+    default: ''
   emoji:
     description: 'The github release emoji to display'
     default: ''
@@ -30,6 +34,10 @@ inputs:
     description: 'The status of the deployment.  Options are started, success, and failure'
     type: string
     required: true
+  link:
+    description: 'The link to the application'
+    type: string
+    required: false
   slack-webhook-url:
     description: 'The slack webhook url to post the message to'
     required: true
@@ -40,7 +48,7 @@ inputs:
     type: string
     required: false
     default: ''
-  environment:
+  env_vars:
     description: |
       The environment variables to pass to the render.  Each environment variable should be in format VAR=VAL with one on each line.
       Example:
@@ -108,7 +116,7 @@ runs:
           LINK=${{ inputs.link }}
           REPOSITORY=${{ github.repository }}
           TIMESTAMP=${{ steps.info.outputs.timestamp }}
-          ${{ inputs.environment }}
+          ${{ inputs.env_vars }}
         filters: ${{ inputs.filters }}
         format: ${{ inputs.format }}
         template: ${{ steps.info.outputs.template }}

@@ -1,3 +1,4 @@
+{%- set environment = env("ENVIRONMENT", "") -%}
 {
   "blocks": [
     {
@@ -31,7 +32,7 @@
         },
         {
           "type": "mrkdwn",
-          "text": "<https://github.com/{{ env("REPOSITORY") }}|{{ env("REPOSITORY") }}>"
+          "text": "<https://github.com/{{ env("REPOSITORY") }}|{{ env("APPLICATION") }}>"
         },
         {
           "type": "mrkdwn",
@@ -53,10 +54,12 @@
         {
           "type": "mrkdwn",
           {% set link = env("LINK", '') -%}
-          {%- if link == '' -%}
-          "text": "{{ env("ENVIRONMENT") }}"
+          {%- if link != '' and environment != '' -%}
+          "text": "<{{ link }}|{{ environment }}>"
+          {%- elif link == '' and environment != '' -%}
+          "text": "{{ environment }}"
           {%- else -%}
-          "text": "<{{ link }}|{{ env("ENVIRONMENT") }}>"
+          "text": "NONE"
           {%- endif %}
         },
         {
