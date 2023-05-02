@@ -144,11 +144,11 @@ jobs:
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
+          link: ${{ inputs.link }}
           status: started
           type: deployment
           template: ${{ inputs.slack-template }}
           version: ${{ inputs.version }}
-          link: ${{ inputs.link }}
           slack-webhook-url: ${{ secrets.slack-webhook-url }}
 
       - name: 'Download task-definition'
@@ -202,9 +202,9 @@ jobs:
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
+          link: ${{ inputs.link }}
           status: ${{ job.status }}
           type: deployment
           template: ${{ inputs.slack-template }}
           version: ${{ inputs.version }}
-          link: ${{ inputs.link }}
           slack-webhook-url: ${{ secrets.slack-webhook-url }}
