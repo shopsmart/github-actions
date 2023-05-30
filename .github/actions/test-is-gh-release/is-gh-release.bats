@@ -25,3 +25,9 @@ function teardown() {
 
   [ "$status" -eq 0 ]
 }
+
+@test "it should consider cli/cli v2.3.0 a release" {
+  run [ "$CLI_CLI_V2_3_0_IS_RELEASE" = 'true' ]
+
+  [ "$status" -eq 0 ]
+}

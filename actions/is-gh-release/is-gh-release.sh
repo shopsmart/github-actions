@@ -5,7 +5,7 @@ function is-gh-release() {
   local is_release=false
 
   if [ -n "$ref" ]; then
-    if gh release view "$ref"; then
+    if gh -R "$REPOSITORY" release view "$ref"; then
       echo "::debug::The $ref ref is a release"
       is_release=true
     else
