@@ -41,6 +41,14 @@ runs:
       with:
         ref: v2.0.2
 
+    # cli/cli v2.3.0
+    - name: 'cli/cli v2.3.0: Is GH release?'
+      id: cli_cli_v2_3_0
+      uses: ./actions/is-gh-release
+      with:
+        ref: v2.3.0
+        repository: cli/cli
+
     - name: 'Validate'
       shell: bash
       run: bats -r ${{ github.action_path }}/is-gh-release.bats
@@ -48,3 +56,4 @@ runs:
         EMPTY_STRING_IS_RELEASE: ${{ steps.empty_string.outputs.is-release }}
         NOTHERE_IS_RELEASE: ${{ steps.nothere.outputs.is-release }}
         V2_0_2_IS_RELEASE: ${{ steps.v2_0_2.outputs.is-release }}
+        CLI_CLI_V2_3_0_IS_RELEASE: ${{ steps.cli_cli_v2_3_0.outputs.is-release }}

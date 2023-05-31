@@ -13,6 +13,7 @@ function teardown() {
 
 function gh() {
   echo "$*" >> "$GH_CMD_FILE"
+  shift 2 # -R "$REPOSITORY"
   if [ "$1 $2" = "release view" ]; then
     if [[ "$3" =~ v.* ]]; then
       echo "release found"

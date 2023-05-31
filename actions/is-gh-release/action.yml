@@ -9,6 +9,10 @@ inputs:
     required: true
     type: string
     default: ''
+  repository:
+    description: 'The repository to search for the release under'
+    type: string
+    default: ${{ github.repository }}
 
 outputs:
   is-release:
@@ -24,3 +28,4 @@ runs:
       run: ${{ github.action_path }}/is-gh-release.sh "${{ inputs.ref }}"
       env:
         GH_TOKEN: ${{ github.token }}
+        REPOSITORY: ${{ inputs.repository }}
