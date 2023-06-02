@@ -35,8 +35,8 @@ jobs:
       file: .github/actions/test-build-ecr-image/Dockerfile
       repository-name: github-actions-tests
       role-name: github-actions-tests
-      build-args: VERSION=${{ github.ref_name }}
-      ref: ${{ github.ref_name }}
+      build-args: VERSION=${{ github.base_ref }}
+      ref: ${{ github.base_ref }}
     secrets:
       aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 
