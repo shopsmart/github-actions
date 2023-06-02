@@ -336,7 +336,7 @@ jobs:
           cache-from: ${{ inputs.cache-from }}
           cache-to: ${{ inputs.cache-to }}
           cgroup-parent: ${{ inputs.cgroup-parent }}
-          context: ${{ steps.context.outputs.context || inputs.context }}
+          context: ${{ inputs.context }}
           file: ${{ inputs.file }}
           labels: |
             github.sha=${{ steps.sha.outputs.sha }}
