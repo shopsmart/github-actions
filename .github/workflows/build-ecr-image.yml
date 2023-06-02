@@ -118,7 +118,7 @@ on:
         required: false
         type: string
         # https://github.com/docker/actions-toolkit/blob/main/src/context.ts#LL48C22-L48C31
-        default: "${{ github.server_url }}/${{ github.repo }}#${{ inputs.ref }}" # to allow the ref change
+        default: "${{ github.server_url }}/${{ github.repository }}.git#${{ inputs.ref }}" # to allow the ref change
       file:
         description: "Path to the Dockerfile"
         required: false
