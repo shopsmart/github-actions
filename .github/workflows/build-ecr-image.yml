@@ -117,8 +117,6 @@ on:
         description: "Build's context is the set of files located in the specified PATH or URL"
         required: false
         type: string
-        # https://github.com/docker/actions-toolkit/blob/main/src/context.ts#LL48C22-L48C31
-        default: "${{ github.server_url }}/${{ github.repository }}.git#${{ inputs.ref }}" # to allow the ref change
       file:
         description: "Path to the Dockerfile"
         required: false
@@ -258,6 +256,14 @@ jobs:
           sha="$(git rev-parse HEAD)"
           echo "sha=$sha" >> $GITHUB_OUTPUT
 
+      - name: 'Resolve context'
+        id: context
+        if: inputs.ref != '' && ! inputs.context
+        env:
+          # Modified from default: https://github.com/docker/actions-toolkit/blob/main/src/context.ts#LL48C22-L48C31
+          CONTEXT: "${{ github.server_url }}/${{ github.repository }}.git#${{ steps.sha.outputs.sha }}"
+        run: echo "context=$CONTEXT" >> "$GITHUB_OUTPUT"
+
       - name: 'Notify slack of build started'
         if: inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@v2
@@ -337,7 +343,7 @@ jobs:
           cache-from: ${{ inputs.cache-from }}
           cache-to: ${{ inputs.cache-to }}
           cgroup-parent: ${{ inputs.cgroup-parent }}
-          context: ${{ inputs.context }}
+          context: ${{ steps.context.outputs.context || inputs.context }}
           file: ${{ inputs.file }}
           labels: |
             github.sha=${{ steps.sha.outputs.sha }}
