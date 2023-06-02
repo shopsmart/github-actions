@@ -70,11 +70,11 @@ jobs:
   run-build-ecr-image-workflow-tag:
     uses: ./.github/workflows/build-ecr-image.yml
     with:
-      ref: v2.2.0-rc.0
+      ref: v2.6.4-rc.0
       file: .github/actions/test-build-ecr-image/Dockerfile
       repository-name: github-actions-tests
       role-name: github-actions-tests
-      build-args: VERSION=v2.2.0-rc.0
+      build-args: VERSION=v2.6.4-rc.0
     secrets:
       aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 
