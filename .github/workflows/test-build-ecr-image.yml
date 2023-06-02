@@ -29,7 +29,6 @@ jobs:
       aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
 
   test-build-ecr-image-workflow:
-    name: 'Uses the build-ecr-image workflow'
     runs-on: ubuntu-latest
     needs: run-build-ecr-image-workflow
     steps:
