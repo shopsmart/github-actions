@@ -117,6 +117,7 @@ on:
         description: "Build's context is the set of files located in the specified PATH or URL"
         required: false
         type: string
+        default: . # uses checkout ref
       file:
         description: "Path to the Dockerfile"
         required: false
