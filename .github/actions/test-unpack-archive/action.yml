@@ -6,15 +6,12 @@ description: 'Runs validation agains the unpack-archive action'
 runs:
   using: 'composite'
   steps:
+    - name: 'Setup Homebrew'
+      uses: Homebrew/actions/setup-homebrew@master
+
     - name: 'Install BATS'
       shell: bash
-      run: |
-        # Add brews to the path
-        echo "/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
-        # Setup brew environment
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        # Install bats
-        brew install bats-core
+      run: brew install bats-core
 
     - name: 'Checkout'
       uses: actions/checkout@v2
