@@ -1,0 +1,200 @@
+---
+
+name: 'Deploy lambda function'
+
+on:
+  workflow_call:
+    inputs:
+      # Metadata
+      application:
+        description: The name of the application; required if notify-slack is true
+        type: string
+        required: false
+      environment:
+        description: The name of the environment
+        type: string
+        required: true
+      version:
+        description: The version of the application being deployed
+        type: string
+        default: ${{ github.sha }}
+
+      # Source artifact
+      pattern:
+        description: |
+          The pattern that will resolve to the zip file.
+          If using a local file, this should resolve to the local file desired for uplaod.
+          If using a github release assets, this should be the pattern to search for.
+          If using an artifact, this should also resolve to the local file desired for upload after downloading the artifact.
+        type: string
+        default: ''
+      artifact-name:
+        description: 'The name of the artifact to which the zip-file can be pulled'
+        type: string
+        default: ''
+      github-token:
+        description: 'The github token to allow for searching for release assets'
+        type: string
+        default: ${{ github.token }}
+      github-tag:
+        description: 'The github tag to pull the release asset from.  Setting this value will enable pulling from github vs downloading an artifact'
+        type: string
+        default: ''
+
+      # AWS configurations
+      aws-access-key-id:
+        description: 'The AWS access key id to log into AWS with'
+        type: string
+        default: ''
+      aws-secret-access-key:
+        description: 'The AWS secret access key to log into AWS with'
+        type: string
+        default: ''
+      aws-region:
+        description: 'The AWS region to log into'
+        type: string
+        default: 'us-east-1'
+      role-to-assume:
+        description: 'Allows one to configure the assume role'
+        type: string
+        default: ''
+      role-duration-seconds:
+        description: 'Allows one to configure the duration of assume role'
+        type: number
+        default: 1200
+
+      # Lambda options
+      function-name:
+        description: The name of the function name
+        type: string
+        required: true
+      function-tags:
+        description: |
+          Key value pairs to attach to the lambda function
+
+          Example:
+            function-tags: |
+              version=v1
+              owner=carl
+        default: ''
+      create-function-version:
+        description: If true, a lambda version will be created
+        type: boolean
+        default: true
+      publish:
+        description: If true, publishes the lambda function
+        type: boolean
+        default: true
+
+      # s3 options
+      s3-bucket:
+        description: The s3 bucket to upload the artifact to
+        type: string
+        default: ''
+      s3-key:
+        description: The path within the s3 bucket to upload the artifact to
+        type: string
+        default: ''
+      s3-tags:
+        description: |
+          Key value pairs to attach to the s3 object
+
+          Example:
+            s3-tags: |
+              version=v1
+              owner=carl
+        type: string
+        default: ''
+
+      # Current version file
+      current-version-file:
+        description: 'If set, will write the current version to a file within the s3 bucket with the provided key'
+        type: string
+        default: ''
+
+      # notify-slack
+      notify-slack:
+        description: 'Indicates if a slack notification should go out before and after the deploy'
+        type: boolean
+        default: false
+
+      slack-template:
+        description: 'The j2 template to pass to the notify-slack action'
+        type: string
+        required: false
+
+    secrets:
+      aws-account-id:
+        description: 'The AWS account id that the ecr repository lives under'
+        required: true
+
+      slack-webhook-url:
+        description: 'The webhook URL to send the slack notification to; requires notify-slack to be true'
+        required: false
+    # outputs:
+
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy-lambda-function:
+    name: 'Deploy lambda function'
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: 'Download release assets'
+        shell: bash
+        run: gh -R "${{ github.repository }}" release download -p "${{ inputs.pattern }}" "${{ inputs.tag }}"
+        env:
+          GH_TOKEN: ${{ inputs.github-token }}
+        # Only if we are downloading assets from gh release
+        if: inputs.tag != ''
+
+      - name: 'Download artifacts'
+        if: inputs.tag == '' && inputs.artifact-name != ''
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ inputs.artifact-name }}
+
+      - name: 'Resolve zip file'
+        run: echo "${{ inputs.pattern }}"
+
+      - name: 'Configure AWS credentials'
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ inputs.aws-access-key-id }}
+          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+          aws-region: ${{ inputs.aws-region }}
+          role-to-assume: ${{ inputs.role-to-assume }}
+          role-duration-seconds: ${{ inputs.role-duration-seconds }}
+
+      - name: 'Deploy lambda function'
+        uses: shopsmart/github-actions/actions/deploy-lambda-function@v2
+        with:
+          function-name: ${{ inputs.function-name }}
+          function-tags: ${{ inputs.function-tags }}
+          create-function-version: ${{ inputs.create-function-version }}
+          publish: ${{ inputs.publish }}
+          s3-bucket: ${{ inputs.s3-bucket }}
+          s3-key: ${{ inputs.s3-key }}
+          s3-tags: ${{ inputs.s3-tags }}
+
+      - name: 'Create version file'
+        if: inputs.s3-bucket != '' && inputs.current-version-file != ''
+        run: |
+          echo "${{ inputs.version }}" > current-version
+          s3 cp current-version "s3://${{ inputs.s3-bucket }}/${{ inputs.current-version-file }}"
+
+      - name: 'Notify slack of build status'
+        if: always() && inputs.notify-slack == true
+        uses: shopsmart/github-actions/actions/notify-slack@v2
+        with:
+          application: ${{ inputs.application }}
+          environment: ${{ inputs.environment }}
+          status: ${{ job.status }}
+          type: build
+          template: ${{ inputs.slack-template }}
+          version: ${{ inputs.version }}
+          slack-webhook-url: ${{ secrets.slack-webhook-url }}

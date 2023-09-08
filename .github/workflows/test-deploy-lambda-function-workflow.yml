@@ -1,0 +1,26 @@
+---
+
+  name: 'Run deploy-lambda-function workflow'
+
+  on:
+    pull_request:
+      paths:
+        - actions/deploy-lambda-function/*
+        - .github/workflows/deploy-lambda-function.yml
+        - .github/workflows/test-deploy-lambda-function-workflow.yml
+
+  defaults:
+    run:
+      shell: bash
+
+  jobs:
+    run-deploy-lambda-function-workflow:
+      uses: ./.github/workflows/deploy-lambda-function.yml
+      with:
+        application: github-actions
+        environment: staging
+        status: test
+        type: deployment
+        version: v1.0.56
+      secrets:
+        slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
