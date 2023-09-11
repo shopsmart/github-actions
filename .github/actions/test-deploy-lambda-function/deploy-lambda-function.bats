@@ -31,3 +31,15 @@ function teardown() {
   [ "$status" -eq 0 ]
   [ "$output" = "$VERSION_TAG" ]
 }
+
+@test "it should have uploaded the artifact to s3" {
+  local filename=''
+  filename="$(basename "$S3_KEY")"
+
+  run aws s3 ls --no-cli-pager \
+    "s3://$S3_BUCKET/$S3_KEY"
+
+  [ "$status" -eq 0 ]
+  [ -n "$output" ]
+  [[ "$output" =~ .*\ "${filename}"$ ]]
+}

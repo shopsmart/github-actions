@@ -64,7 +64,7 @@ runs:
   using: 'composite'
   steps:
     - name: 'Upload lambda code'
-      uses: shopsmart/github-actions/actions/deploy-to-s3-bucket@v2
+      uses: shopsmart/github-actions/actions/deploy-to-s3-bucket@feature/custom-lambda-deploy
       with:
         unpack: false
         s3-bucket: ${{ inputs.s3-bucket }}
@@ -82,7 +82,7 @@ runs:
         LAMBDA_TAGS: ${{ inputs.function-tags }}
       if: inputs.function-tags != ''
 
-    - name: 'Cut a version of the lambda'
-      if: inputs.create-function-version == true
-      shell: bash
-      run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.tag }}"
+    # - name: 'Cut a version of the lambda'
+    #   if: inputs.create-function-version == true
+    #   shell: bash
+    #   run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.tag }}"

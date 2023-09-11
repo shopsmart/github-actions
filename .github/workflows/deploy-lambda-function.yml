@@ -76,6 +76,7 @@ on:
             function-tags: |
               version=v1
               owner=carl
+        type: string
         default: ''
       create-function-version:
         description: If true, a lambda version will be created

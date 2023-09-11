@@ -39,6 +39,10 @@ runs:
         function-name: shopsmart-github-actions-tests
         function-tags: version=${{ github.sha }}
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+        s3-bucket: shopsmart-github-actions-tests
+        s3-key: lambda-artifacts/${{ github.sha }}/function.zip
+        s3-tags: version=${{ github.sha }}
+        current-version-file: lambda-artifacts/current-version
 
     - name: 'Configure AWS Credentials'
       uses: aws-actions/configure-aws-credentials@v1-node16
@@ -50,5 +54,7 @@ runs:
       shell: bash
       run: bats -r ${{ github.action_path }}/deploy-lambda-function.bats
       env:
+        S3_BUCKET: shopsmart-github-actions-tests
+        S3_KEY: lambda-artifacts/${{ github.sha }}/function.zip
         FUNCTION_ARN: arn:aws:lambda:us-east-1:${{ inputs.aws-account-id }}:function:shopsmart-github-actions-tests
         VERSION_TAG: ${{ github.sha }}
