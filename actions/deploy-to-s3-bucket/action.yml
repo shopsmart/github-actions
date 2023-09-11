@@ -52,7 +52,7 @@ runs:
 
     - name: 'Unpack assets'
       id: unpack
-      if: inputs.unpack
+      if: inputs.unpack == true
       uses: shopsmart/github-actions/actions/unpack-archive@v2
       with:
         filename: ${{ inputs.pattern }}
