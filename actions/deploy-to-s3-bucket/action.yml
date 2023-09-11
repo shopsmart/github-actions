@@ -11,13 +11,11 @@ inputs:
     required: true
   unpack:
     description: If true, unpacks the asset file
-    type: boolean
-    default: true
+    default: 'true'
 
   # GH release Options
   github-token:
     description: 'The github token to allow for searching for release assets'
-    type: string
     default: ${{ github.token }}
   tag:
     description: 'The github release tag to pull that assets from'
@@ -52,7 +50,7 @@ runs:
 
     - name: 'Unpack assets'
       id: unpack
-      if: inputs.unpack == true
+      if: inputs.unpack == 'true'
       uses: shopsmart/github-actions/actions/unpack-archive@v2
       with:
         filename: ${{ inputs.pattern }}

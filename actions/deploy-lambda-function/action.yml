@@ -6,27 +6,22 @@ description: 'Deploys a lambda function'
 inputs:
   zip-file:
     description: The path to the zip file to upload as the new lambda function code.
-    type: string
     required: true
 
   # GH release Options
   github-token:
     description: 'The github token to allow for searching for release assets'
-    type: string
     default: ${{ github.token }}
   tag:
     description: 'The github release tag to pull that assets from'
-    type: string
     default: ''
   artifact-name:
     description: The name of the artifact to download if not downloading from a release
-    type: string
     default: ''
 
   # Lambda options
   function-name:
     description: The name of the function name
-    type: string
     required: true
   function-tags:
     description: |
@@ -39,17 +34,14 @@ inputs:
     default: ''
   create-function-version:
     description: If true, a lambda version will be created
-    type: boolean
-    default: true
+    default: 'true'
 
   # s3 options
   s3-bucket:
     description: The s3 bucket to upload the artifact to
-    type: string
     default: ''
   s3-key:
     description: The path within the s3 bucket to upload the artifact to
-    type: string
     default: ''
   s3-tags:
     description: |
@@ -59,6 +51,7 @@ inputs:
         s3-tags: |
           version=v1
           owner=carl
+    default: ''
 
 runs:
   using: 'composite'
