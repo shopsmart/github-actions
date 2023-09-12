@@ -18,6 +18,12 @@ function aws() {
   echo "$*" > "$AWS_CMD_FILE"
 }
 
+@test "it should require a path" {
+  run upload-assets ''
+
+  [ "$status" -eq 1 ]
+}
+
 @test "it should copy to s3 bucket without path" {
   run upload-assets my-path
 

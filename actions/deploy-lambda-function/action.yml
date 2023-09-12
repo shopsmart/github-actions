@@ -59,6 +59,7 @@ runs:
     - name: 'Upload lambda code'
       uses: shopsmart/github-actions/actions/deploy-to-s3-bucket@feature/custom-lambda-deploy
       with:
+        pattern: ${{ inputs.zip-file }}
         unpack: false
         s3-bucket: ${{ inputs.s3-bucket }}
         s3-bucket-path: ${{ inputs.s3-key }}
