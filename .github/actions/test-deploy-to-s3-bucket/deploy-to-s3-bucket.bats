@@ -20,7 +20,7 @@ function teardown() {
   run aws s3 cp --recursive "s3://$S3_BUCKET/$S3_BUCKET_PATH" "$BATS_TEST_TMPDIR"
 
   [ "$status" -eq 0 ]
-  [ -f "$BATS_TEST_TMPDIR/assets.tgz" ]
+  [ -f "$BATS_TEST_TMPDIR/archive.tgz" ]
 }
 
 # @test "it should have set the tag on all assets" {
