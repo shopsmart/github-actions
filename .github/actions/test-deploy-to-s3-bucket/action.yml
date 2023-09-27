@@ -40,7 +40,6 @@ runs:
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
     - name: 'Run deploy-to-s3-bucket action'
-      id: unpack
       uses: ./actions/deploy-to-s3-bucket
       with:
         pattern: 'archive.tgz'
@@ -48,7 +47,6 @@ runs:
         s3-bucket-path: ${{ steps.id.outputs.id }}
 
     - name: 'Run deploy-to-s3-bucket action uploading the archive itself'
-      id: unpack
       uses: ./actions/deploy-to-s3-bucket
       with:
         pattern: 'archive.tgz'
