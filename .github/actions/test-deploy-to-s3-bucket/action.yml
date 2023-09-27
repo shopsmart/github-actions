@@ -47,6 +47,15 @@ runs:
         s3-bucket: shopsmart-github-actions-tests
         s3-bucket-path: ${{ steps.id.outputs.id }}
 
+    - name: 'Run deploy-to-s3-bucket action uploading the archive itself'
+      id: unpack
+      uses: ./actions/deploy-to-s3-bucket
+      with:
+        pattern: 'archive.tgz'
+        unpack: false
+        s3-bucket: shopsmart-github-actions-tests
+        s3-bucket-path: ${{ steps.id.outputs.id }}/
+
     - name: 'Validate'
       shell: bash
       run: bats -r ${{ github.action_path }}/deploy-to-s3-bucket.bats
