@@ -14,14 +14,16 @@ function deploy-lambda() {
     echo "[ERROR] A function name must be provided" >&2
     return 1
   }
-  if [ -z "$zip_file" ] && [ -z "$s3_bucket" ] || [ -z "$s3_key" ]; then
-    echo "[ERROR] A zip file or an s3 bucket and s3 key must be provided" >&2
-    return 2
+  if [ -z "$zip_file" ]; then
+    if [ -z "$s3_bucket" ] || [ -z "$s3_key" ]; then
+      echo "[ERROR] A zip file or an s3 bucket and s3 key must be provided" >&2
+      return 2
+    fi
   fi
 
   local options=()
 
-  if [ -z "$s3_bucket" ] || [ -z "$s3_path" ]; then
+  if [ -z "$s3_bucket" ] || [ -z "$s3_key" ]; then
     # resolve zip file if wildcard
     [ "$zip_file" = "${zip_file#*\*}" ] || {
       echo "[DEBUG] Found a wildcard file" >&2
@@ -49,7 +51,6 @@ function deploy-lambda() {
   # shellcheck disable=SC2068
   # We want options to expand here
   aws lambda update-function-code --function-name "$function_name" ${options[@]}
-
 }
 
 if [ "${BASH_SOURCE[0]}" = "$0" ]; then
