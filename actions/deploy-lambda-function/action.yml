@@ -21,8 +21,8 @@ inputs:
           version=v1
           owner=carl
     default: ''
-  create-function-version:
-    description: If true, a lambda version will be created
+  publish-version:
+    description: If true, a lambda version will be published
     default: 'true'
 
   # s3 options
@@ -44,6 +44,11 @@ inputs:
           version=v1
           owner=carl
     default: ''
+
+outputs:
+  version:
+    description: The version of the lambda that was published (if publish-version is true)
+    value: ${{ steps.publish-version.outputs.version }}
 
 runs:
   using: 'composite'
@@ -72,7 +77,8 @@ runs:
         LAMBDA_TAGS: ${{ inputs.function-tags }}
       if: inputs.function-tags != ''
 
-    # - name: 'Cut a version of the lambda'
-    #   if: inputs.create-function-version == true
-    #   shell: bash
-    #   run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.tag }}"
+    - name: 'Cut a version of the lambda'
+      id: publish-version
+      if: inputs.publish-version == true
+      shell: bash
+      run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.tag }}"
