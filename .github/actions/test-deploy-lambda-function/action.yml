@@ -41,7 +41,7 @@ runs:
       id: deploy
       uses: ./actions/deploy-lambda-function
       with:
-        pattern: ${{ github.action_path }}/archive.zip
+        zip-file: ${{ github.action_path }}/archive.zip
         function-name: shopsmart-github-actions-tests
         function-tags: version=${{ github.sha }}
 
