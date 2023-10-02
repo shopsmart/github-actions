@@ -36,7 +36,7 @@ function teardown() {
   run aws lambda list-versions-by-function --no-cli-pager \
     --function-name "$FUNCTION_NAME" \
     --max-items 1 \
-    --query '.Versions[].Version'
+    --query 'Versions[].Version'
 
   [ "$status" -eq 0 ]
   [ "$output" = "$PUBLISHED_VERSION" ]

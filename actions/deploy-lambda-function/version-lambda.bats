@@ -38,7 +38,7 @@ function aws() {
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]
   cat "$AWS_CMD_FILE" >&3
-  [ "$(< "$AWS_CMD_FILE")" = "lambda publish-version --function-name $LAMBDA_FUNCTION --description v1.0.0 --query .Version --output text --no-cli-pager" ]
+  [ "$(< "$AWS_CMD_FILE")" = "lambda publish-version --function-name $LAMBDA_FUNCTION --description v1.0.0 --query Version --output text --no-cli-pager" ]
 }
 
 @test "it should pass the revision id if provided" {
@@ -48,7 +48,7 @@ function aws() {
 
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]
-  [ "$(< "$AWS_CMD_FILE")" = "lambda publish-version --function-name $LAMBDA_FUNCTION --description v1.0.0 --revision-id $REVISION_ID --query .Version --output text --no-cli-pager" ]
+  [ "$(< "$AWS_CMD_FILE")" = "lambda publish-version --function-name $LAMBDA_FUNCTION --description v1.0.0 --revision-id $REVISION_ID --query Version --output text --no-cli-pager" ]
 }
 
 @test "it should output the version number" {

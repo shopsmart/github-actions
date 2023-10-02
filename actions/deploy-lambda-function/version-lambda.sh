@@ -26,7 +26,7 @@ function version-lambda() {
       --function-name "$function_name" \
       --description "$description" \
       ${options[@]} \
-      --query .Version \
+      --query Version \
       --output text \
       --no-cli-pager
   )"
