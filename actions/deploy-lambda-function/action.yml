@@ -81,4 +81,4 @@ runs:
       id: publish-version
       if: inputs.publish-version == 'true'
       shell: bash
-      run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.tag }}"
+      run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.tag || github.sha }}"
