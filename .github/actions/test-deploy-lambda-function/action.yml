@@ -31,20 +31,19 @@ runs:
         sed -i "s/const VERSION = 'dev'/const VERSION = '${{ github.sha }}'/" index.js
         zip archive.zip ./index.js
 
-    - name: 'Run deploy-lambda-function action'
-      id: unpack
-      uses: ./actions/deploy-lambda-function
-      with:
-        pattern: ${{ github.action_path }}/archive.zip
-        function-name: shopsmart-github-actions-tests
-        function-tags: version=${{ github.sha }}
-        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
-
     - name: 'Configure AWS Credentials'
       uses: aws-actions/configure-aws-credentials@v1-node16
       with:
         aws-region: 'us-east-1'
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
+    - name: 'Run deploy-lambda-function action'
+      id: deploy
+      uses: ./actions/deploy-lambda-function
+      with:
+        pattern: ${{ github.action_path }}/archive.zip
+        function-name: shopsmart-github-actions-tests
+        function-tags: version=${{ github.sha }}
 
     - name: 'Validate'
       shell: bash
@@ -52,3 +51,4 @@ runs:
       env:
         FUNCTION_ARN: arn:aws:lambda:us-east-1:${{ inputs.aws-account-id }}:function:shopsmart-github-actions-tests
         VERSION_TAG: ${{ github.sha }}
+        PUBLISHED_VERSION: ${{ steps.deploy.outputs.version }}

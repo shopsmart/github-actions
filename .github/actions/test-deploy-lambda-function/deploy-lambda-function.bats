@@ -22,7 +22,7 @@ function teardown() {
   [[ "$(< "$outfile")" =~ .*'\"version\":\"'"$VERSION_TAG"'\"'.* ]]
 }
 
-@test "it should have tagged the lambda version" {
+@test "it should have tagged the lambda" {
   run aws lambda list-tags --no-cli-pager \
     --resource "$FUNCTION_ARN" \
     --query 'Tags.version' \
@@ -30,4 +30,14 @@ function teardown() {
 
   [ "$status" -eq 0 ]
   [ "$output" = "$VERSION_TAG" ]
+}
+
+@test "it should have published a lambda version" {
+  run aws lambda list-versions-by-function --no-cli-pager \
+    --function-name "$FUNCTION_NAME" \
+    --max-items 1 \
+    --query '.Versions[].Version'
+
+  [ "$status" -eq 0 ]
+  [ "$output" = "$PUBLISHED_VERSION" ]
 }
