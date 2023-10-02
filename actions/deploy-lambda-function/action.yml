@@ -26,6 +26,9 @@ inputs:
     default: 'true'
 
   # s3 options
+  upload-to-s3:
+    description: If true and an s3-bucket is provided, the action will upload the asset to s3 before updating the lambda
+    default: 'true'
   s3-bucket:
     description: The s3 bucket to upload the artifact to
     default: ''
@@ -47,7 +50,7 @@ runs:
   steps:
     - name: 'Upload lambda code'
       uses: shopsmart/github-actions/actions/deploy-to-s3-bucket@feature/custom-lambda-deploy
-      if: inputs.s3-bucket != ''
+      if: inputs.s3-bucket != '' && inputs.upload-to-s3 == 'true'
       with:
         pattern: ${{ inputs.zip-file }}
         unpack: false
