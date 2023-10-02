@@ -79,6 +79,6 @@ runs:
 
     - name: 'Cut a version of the lambda'
       id: publish-version
-      if: inputs.publish-version == true
+      if: inputs.publish-version == 'true'
       shell: bash
       run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.tag }}"
