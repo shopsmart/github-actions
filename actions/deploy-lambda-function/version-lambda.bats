@@ -37,7 +37,6 @@ function aws() {
 
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]
-  cat "$AWS_CMD_FILE" >&3
   [ "$(< "$AWS_CMD_FILE")" = "lambda publish-version --function-name $LAMBDA_FUNCTION --description v1.0.0 --query Version --output text --no-cli-pager" ]
 }
 
@@ -56,6 +55,5 @@ function aws() {
 
   [ "$status" -eq 0 ]
   [ -f "$GITHUB_OUTPUT" ]
-  cat "$GITHUB_OUTPUT"
   [ "$(< "$GITHUB_OUTPUT")" = version=1 ]
 }
