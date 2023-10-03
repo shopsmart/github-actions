@@ -48,7 +48,7 @@ jobs:
       function-name: shopsmart-github-actions-tests
       function-tags: test=shopsmart/github-actions/deploy-lambda-function-workflow
       s3-bucket: shopsmart-github-actions-tests
-      s3-bucket-path: ${{ github.sha }}
+      s3-key: ${{ github.sha }}/
       s3-tags: test=shopsmart/github-actions/deploy-lambda-function-workflow
       current-version-path: .current-versions/staging
       # aws options
