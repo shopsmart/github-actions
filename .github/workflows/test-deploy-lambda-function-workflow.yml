@@ -57,7 +57,7 @@ jobs:
       s3-tags: test=shopsmart/github-actions/deploy-lambda-function-workflow
       current-version-path: .current-versions/staging
       # aws options
-      role-name: shopsmart-github-actions-tests
+      role-name: github-actions-tests
       # slack options
       notify-slack: true
       application: github-actions
