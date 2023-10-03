@@ -14,6 +14,10 @@ on:
       - .github/workflows/deploy-lambda-function.yml
       - .github/workflows/test-deploy-lambda-function-workflow.yml
 
+permissions:
+  contents: read  # default
+  id-token: write # aws auth
+
 defaults:
   run:
     shell: bash
