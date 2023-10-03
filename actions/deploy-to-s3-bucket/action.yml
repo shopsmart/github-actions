@@ -9,32 +9,17 @@ inputs:
       If downloading release assets from github, the pattern for the assets file.
       Otherwise, the path to the assets.  If it is an archive, it will unpacked.
     required: true
+  unpack:
+    description: If true, unpacks the pattern as if it were a compressed file.
+    default: 'true'
 
   # GH release Options
   github-token:
     description: 'The github token to allow for searching for release assets'
-    type: string
     default: ${{ github.token }}
   tag:
     description: 'The github release tag to pull that assets from'
     default: ''
-
-  # AWS (S3) Options
-  aws-access-key-id:
-    description: 'The AWS access key id to log into ECR with'
-    default: ''
-  aws-secret-access-key:
-    description: 'The AWS secret access key to log into ECR with'
-    default: ''
-  aws-region:
-    description: 'The AWS region to log into if using ECR'
-    default: 'us-east-1'
-  role-to-assume:
-    description: 'Allows one to configure the assume role'
-    default: ''
-  role-duration-seconds:
-    description: 'Allows one to configure the duration of assume role'
-    default: 1200
 
   s3-bucket:
     description: 'The name of the s3 bucket to upload the assets to'
@@ -65,30 +50,33 @@ runs:
 
     - name: 'Unpack assets'
       id: unpack
+      if: inputs.unpack == 'true'
       uses: shopsmart/github-actions/actions/unpack-archive@v2
       with:
         filename: ${{ inputs.pattern }}
         destination: assets
 
-    - name: 'Configure AWS credentials'
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ inputs.aws-access-key-id }}
-        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
-        aws-region: ${{ inputs.aws-region }}
-        role-to-assume: ${{ inputs.role-to-assume }}
-        role-duration-seconds: ${{ inputs.role-duration-seconds }}
+    - name: 'Resolve assets location'
+      id: assets
+      shell: bash
+      run: |
+        if [ '${{ inputs.unpack }}' == 'true' ]; then
+          LOCATION="${{ steps.unpack.outputs.destination }}"
+        fi
+        echo "location=$LOCATION" >> "$GITHUB_OUTPUT"
+      env:
+        LOCATION: ${{ inputs.pattern }}
 
     - name: 'Upload assets'
       shell: bash
-      run: ${{ github.action_path }}/upload-assets.sh "${{ steps.unpack.outputs.destination }}"
+      run: ${{ github.action_path }}/upload-assets.sh "${{ steps.assets.outputs.location }}"
       env:
         S3_BUCKET: ${{ inputs.s3-bucket }}
         S3_BUCKET_PATH: ${{ inputs.s3-bucket-path }}
 
     - name: 'Tag assets'
       shell: bash
-      run: ${{ github.action_path }}/tag-assets.sh "${{ steps.unpack.outputs.destination }}"
+      run: ${{ github.action_path }}/tag-assets.sh "${{ steps.assets.outputs.location }}"
       env:
         S3_BUCKET: ${{ inputs.s3-bucket }}
         S3_BUCKET_PATH: ${{ inputs.s3-bucket-path }}
