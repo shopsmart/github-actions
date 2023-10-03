@@ -35,7 +35,8 @@ function teardown() {
 @test "it should have published a lambda version" {
   run aws lambda list-versions-by-function --no-cli-pager \
     --function-name "$FUNCTION_NAME" \
-    --query 'Versions[-1].Version'
+    --query 'Versions[-1].Version' \
+    --output text
 
   [ "$status" -eq 0 ]
   [ "$output" = "$PUBLISHED_VERSION" ]
