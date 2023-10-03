@@ -41,17 +41,23 @@ jobs:
   run-deploy-lambda-function-workflow:
     uses: ./.github/workflows/deploy-lambda-function.yml
     with:
-      # metadata
-      application: github-actions
       environment: staging
-      version: v1.0.56
       # lambda options
       pattern: archive.zip
       artifact-name: lambda-function
       function-name: shopsmart-github-actions-tests
       function-tags: test=shopsmart/github-actions/deploy-lambda-function-workflow
-      s3-bucket:
+      s3-bucket: shopsmart-github-actions-tests
+      s3-path: ${{ github.sha }}
+      s3-tags: test=shopsmart/github-actions/deploy-lambda-function-workflow
+      current-version-path: .current-versions/staging
+      # aws options
+      role-name: shopsmart-github-actions-tests
+      # slack options
+      notify-slack: true
+      application: github-actions
     secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
       slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   validate-deploy-lambda-function-workflow:
