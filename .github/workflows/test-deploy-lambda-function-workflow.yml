@@ -1,0 +1,67 @@
+---
+
+name: 'Run deploy-lambda-function workflow'
+
+on:
+  pull_request:
+    paths:
+      # dependencies
+      - actions/deploy-to-s3-bucket/*
+      - actions/notify-slack/*
+      - .github/workflows/notify-slack.yml
+      # The code being tested
+      - actions/deploy-lambda-function/*
+      - .github/workflows/deploy-lambda-function.yml
+      - .github/workflows/test-deploy-lambda-function-workflow.yml
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  create-lambda-function-asset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+
+      - name: 'Create archive file'
+        shell: bash
+        working-directory: .github/actinos/test-deploy-lambda-function
+        run: |
+          sed -i "s/const VERSION = 'dev'/const VERSION = '${{ github.sha }}'/" index.js
+          zip archive.zip ./index.js
+
+      - name: 'Upload the archive file'
+        uses: actions/upload-artifact@v3
+        with:
+          name: lambda-function
+          path: .github/actinos/test-deploy-lambda-function/archive.zip
+
+  run-deploy-lambda-function-workflow:
+    uses: ./.github/workflows/deploy-lambda-function.yml
+    with:
+      # metadata
+      application: github-actions
+      environment: staging
+      version: v1.0.56
+      # lambda options
+      pattern: archive.zip
+      artifact-name: lambda-function
+      function-name: shopsmart-github-actions-tests
+      function-tags: test=shopsmart/github-actions/deploy-lambda-function-workflow
+      s3-bucket:
+    secrets:
+      slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  validate-deploy-lambda-function-workflow:
+    name: 'Run validation against the deploy-lambda-function workflow run'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/test-deploy-lambda-function-workflow
+        with:
+          published-version: ${{ jobs.run-deploy-lambda-function-workflow.outputs.published-version }}
+          aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
