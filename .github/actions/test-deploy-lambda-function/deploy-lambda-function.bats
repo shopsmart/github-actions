@@ -33,10 +33,11 @@ function teardown() {
 }
 
 @test "it should have published a lambda version" {
+  # We set max items to 2 because the first will always be $LATEST
   run aws lambda list-versions-by-function --no-cli-pager \
     --function-name "$FUNCTION_NAME" \
-    --max-items 1 \
-    --query 'Versions[].Version'
+    --max-items 2 \
+    --query 'Versions[1].Version'
 
   [ "$status" -eq 0 ]
   [ "$output" = "$PUBLISHED_VERSION" ]
