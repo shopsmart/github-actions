@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: lambda-function
-          path: .github/actinos/test-deploy-lambda-function/archive.zip
+          path: .github/actions/test-deploy-lambda-function-workflow/archive.zip
 
   run-deploy-lambda-function-workflow:
     uses: ./.github/workflows/deploy-lambda-function.yml
