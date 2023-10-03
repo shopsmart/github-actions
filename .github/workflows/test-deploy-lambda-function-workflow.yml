@@ -27,7 +27,7 @@ jobs:
 
       - name: 'Create archive file'
         shell: bash
-        working-directory: .github/actinos/test-deploy-lambda-function
+        working-directory: .github/actions/test-deploy-lambda-function-workflow
         run: |
           sed -i "s/const VERSION = 'dev'/const VERSION = '${{ github.sha }}'/" index.js
           zip archive.zip ./index.js
