@@ -40,15 +40,6 @@ function aws() {
   [ "$status" -ne 0 ]
 }
 
-@test "it should require an s3 bucket and s3 path if no zip file" {
-  export S3_BUCKET=my-s3-bucket
-  export S3_KEY=''
-
-  run deploy-lambda "$FUNCTION_NAME" ""
-
-  [ "$status" -ne 0 ]
-}
-
 @test "it should require the zip to be an actual file" {
   run deploy-lambda "$FUNCTION_NAME" "$BATS_TEST_DIRNAME/nothere.zip"
 
@@ -75,27 +66,4 @@ function aws() {
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]
   [[ "$(< "$AWS_CMD_FILE")" =~ "lambda update-function-code --function-name $LAMBDA_FUNCTION --zip-file fileb://$zip_file" ]]
-}
-
-@test "it should set s3 options" {
-  export S3_BUCKET=my-s3-bucket
-  export S3_KEY=my-s3-key
-
-  run deploy-lambda "$LAMBDA_FUNCTION" "$BATS_TEST_TMPDIR/*.zip"
-
-  [ "$status" -eq 0 ]
-  [ -f "$AWS_CMD_FILE" ]
-  [[ "$(< "$AWS_CMD_FILE")" =~ "lambda update-function-code --function-name $LAMBDA_FUNCTION --s3-bucket $S3_BUCKET --s3-key $S3_KEY" ]]
-}
-
-@test "it should set allow s3 object version" {
-  export S3_BUCKET=my-s3-bucket
-  export S3_KEY=my-s3-key
-  export S3_OBJECT_VERSION=123456
-
-  run deploy-lambda "$LAMBDA_FUNCTION" "$BATS_TEST_TMPDIR/*.zip"
-
-  [ "$status" -eq 0 ]
-  [ -f "$AWS_CMD_FILE" ]
-  [[ "$(< "$AWS_CMD_FILE")" =~ "lambda update-function-code --function-name $LAMBDA_FUNCTION --s3-bucket $S3_BUCKET --s3-key $S3_KEY --s3-object-version $S3_OBJECT_VERSION" ]]
 }

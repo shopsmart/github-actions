@@ -4,13 +4,43 @@ name: 'Deploy lambda function'
 description: 'Deploys a lambda function'
 
 inputs:
-  zip-file:
-    description: The path to the zip file to upload as the new lambda function code.
+  pattern:
+    description: |
+      If downloading release assets from github, the pattern for the zip file.
+      Otherwise, the path to the zip.
+    type: string
     required: true
 
-  # Lambda options
+  # GH release Options
+  github-token:
+    description: 'The github token to allow for searching for release assets'
+    type: string
+    default: ${{ github.token }}
+  tag:
+    description: 'The github release tag to pull that assets from'
+    type: string
+    default: ''
+
+  # AWS (S3) Options
+  aws-access-key-id:
+    description: 'The AWS access key id to log into ECR with'
+    default: ''
+  aws-secret-access-key:
+    description: 'The AWS secret access key to log into ECR with'
+    default: ''
+  aws-region:
+    description: 'The AWS region to log into if using ECR'
+    default: 'us-east-1'
+  role-to-assume:
+    description: 'Allows one to configure the assume role'
+    default: ''
+  role-duration-seconds:
+    description: 'Allows one to configure the duration of assume role'
+    default: 1200
+
   function-name:
     description: The name of the function name
+    type: string
     required: true
   function-tags:
     description: |
@@ -21,54 +51,30 @@ inputs:
           version=v1
           owner=carl
     default: ''
-  publish-version:
-    description: If true, a lambda version will be published
-    default: 'true'
-
-  # s3 options
-  upload-to-s3:
-    description: If true and an s3-bucket is provided, the action will upload the asset to s3 before updating the lambda
-    default: 'true'
-  s3-bucket:
-    description: The s3 bucket to upload the artifact to
-    default: ''
-  s3-key:
-    description: The path within the s3 bucket to upload the artifact to
-    default: ''
-  s3-tags:
-    description: |
-      Key value pairs to attach to the s3 object
-
-      Example:
-        s3-tags: |
-          version=v1
-          owner=carl
-    default: ''
-
-outputs:
-  version:
-    description: The version of the lambda that was published (if publish-version is true)
-    value: ${{ steps.publish-version.outputs.version }}
 
 runs:
   using: 'composite'
   steps:
-    - name: 'Upload lambda code'
-      uses: shopsmart/github-actions/actions/deploy-to-s3-bucket@v3
-      if: inputs.s3-bucket != '' && inputs.upload-to-s3 == 'true'
+    - name: 'Download release assets'
+      shell: bash
+      run: gh -R "${{ github.repository }}" release download -p "${{ inputs.pattern }}" "${{ inputs.tag }}"
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+      # Only if we are downloading assets from gh release
+      if: inputs.tag != ''
+
+    - name: 'Configure AWS credentials'
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        pattern: ${{ inputs.zip-file }}
-        unpack: false
-        s3-bucket: ${{ inputs.s3-bucket }}
-        s3-bucket-path: ${{ inputs.s3-key }}
-        s3-tags: ${{ inputs.s3-tags }}
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ inputs.role-to-assume }}
+        role-duration-seconds: ${{ inputs.role-duration-seconds }}
 
     - name: 'Deploy lambda code'
       shell: bash
-      run: ${{ github.action_path }}/deploy-lambda.sh "${{ inputs.function-name }}" "${{ inputs.zip-file }}"
-      env:
-        S3_BUCKET: ${{ inputs.s3-bucket }}
-        S3_KEY: ${{ inputs.s3-key }}
+      run: ${{ github.action_path }}/deploy-lambda.sh "${{ inputs.function-name }}" "${{ inputs.pattern }}"
 
     - name: 'Tag the lambda'
       shell: bash
@@ -76,9 +82,3 @@ runs:
       env:
         LAMBDA_TAGS: ${{ inputs.function-tags }}
       if: inputs.function-tags != ''
-
-    - name: 'Cut a version of the lambda'
-      id: publish-version
-      if: inputs.publish-version == 'true'
-      shell: bash
-      run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.tag || github.sha }}"
