@@ -47,7 +47,7 @@ runs:
     - name: 'Upload lambda code to s3'
       id: upload-code
       shell: bash
-      run: ${{ github.action_path }}/deploy-lambda.sh "${{ inputs.zip-file }}" "${{ inputs.s3-bucket }}" "${{ inputs.s3-key }}"
+      run: ${{ github.action_path }}/upload-lambda.sh "${{ inputs.zip-file }}" "${{ inputs.s3-bucket }}" "${{ inputs.s3-key }}"
       if: inputs.s3-bucket != '' && inputs.upload-to-s3 == 'true'
 
     - name: 'Deploy lambda code'
