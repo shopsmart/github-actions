@@ -62,6 +62,7 @@ runs:
         s3-bucket: ${{ inputs.s3-bucket }}
         s3-bucket-path: ${{ inputs.s3-key }}
         s3-tags: ${{ inputs.s3-tags }}
+        xtrace: 'true'
 
     - name: 'Deploy lambda code'
       shell: bash
