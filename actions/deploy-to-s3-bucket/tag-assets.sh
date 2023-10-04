@@ -3,6 +3,11 @@
 function tag-assets() {
   set -eo pipefail
 
+  if [ "${XTRACE:-false}" != true ]; then
+    echo "[DEBUG] Enabling xtrace" >&2
+    set -x
+  fi
+
   local path="${1:-}"
   [ -n "$path" ] || {
     echo "[ERROR] Path to assets to tag not provided" >&2
