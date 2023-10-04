@@ -23,13 +23,12 @@ function teardown() {
   [ -f "$BATS_TEST_TMPDIR/archive.tgz" ]
 }
 
-# @test "it should have set the tag on all assets" {
-#   run aws s3api get-object-tagging \
-#     --bucket $S3_BUCKET \
-#     --key $S3_BUCKET_PATH/index.html \
-#     --no-cli-pager \
-#   | jq -r '.TagSet | to_entries[] | select(.key == "version")'
+@test "it should have set the tag on assets" {
+  run aws s3api get-object-tagging --no-cli-pager \
+    --bucket $S3_BUCKET \
+    --key $S3_BUCKET_PATH/index.html \
+    --query 'TagSet[?Key==`test`].Value'
 
-#   [ "$status" -eq 0 ]
-#   [ "$output" = "$VERSION" ]
-# }
+  [ "$status" -eq 0 ]
+  [[ "$output" =~ "$S3_TAG" ]]
+}

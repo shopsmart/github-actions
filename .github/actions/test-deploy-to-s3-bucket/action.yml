@@ -44,7 +44,8 @@ runs:
       with:
         pattern: 'archive.tgz'
         s3-bucket: shopsmart-github-actions-tests
-        s3-bucket-path: ${{ steps.id.outputs.id }}
+        s3-bucket-path: ${{ steps.id.outputs.id }}/
+        s3-tags: test=actions/deploy-to-s3-bucket#unpacked
 
     - name: 'Run deploy-to-s3-bucket action uploading the archive itself'
       uses: ./actions/deploy-to-s3-bucket
@@ -53,6 +54,7 @@ runs:
         unpack: false
         s3-bucket: shopsmart-github-actions-tests
         s3-bucket-path: ${{ steps.id.outputs.id }}/
+        s3-tags: test=actions/deploy-to-s3-bucket#archive
 
     - name: 'Validate'
       shell: bash
@@ -60,3 +62,4 @@ runs:
       env:
         S3_BUCKET: shopsmart-github-actions-tests
         S3_BUCKET_PATH: ${{ steps.id.outputs.id }}
+        S3_TAG: test=actions/deploy-to-s3-bucket#.*
