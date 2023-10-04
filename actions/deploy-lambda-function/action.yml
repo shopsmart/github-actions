@@ -54,7 +54,7 @@ runs:
   using: 'composite'
   steps:
     - name: 'Upload lambda code'
-      uses: shopsmart/github-actions/actions/deploy-to-s3-bucket@v3
+      uses: shopsmart/github-actions/actions/deploy-to-s3-bucket@bugfix/s3-tags
       if: inputs.s3-bucket != '' && inputs.upload-to-s3 == 'true'
       with:
         pattern: ${{ inputs.zip-file }}
