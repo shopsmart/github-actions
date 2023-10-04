@@ -32,6 +32,10 @@ function tag-assets() {
   done <<<"$S3_TAGS"
   tags="TagSet=[${tags::-1}]"
 
+  if [ -n "${S3_BUCKET_PATH:-}" ] && [ "${S3_BUCKET_PATH: -1}" = / ]; then
+    S3_BUCKET_PATH="${S3_BUCKET_PATH::-1}"
+  fi
+
   find "$path" -type f | while read -r file; do
     file="${file//"$path"\/}"
     [ -z "$S3_BUCKET_PATH" ] || file="$S3_BUCKET_PATH/$file"
