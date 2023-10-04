@@ -64,4 +64,4 @@ runs:
       env:
         S3_BUCKET: shopsmart-github-actions-tests
         S3_BUCKET_PATH: ${{ steps.id.outputs.id }}
-        S3_TAG: test=actions/deploy-to-s3-bucket:.*
+        S3_TAG: actions/deploy-to-s3-bucket:.*
