@@ -3,6 +3,11 @@
 function upload-assets() {
   set -eo pipefail
 
+  if [ "${XTRACE:-false}" = true ]; then
+    echo "[DEBUG] Enabling xtrace" >&2
+    set -x
+  fi
+
   local path="$1"
 
   local s3_path="$S3_BUCKET"

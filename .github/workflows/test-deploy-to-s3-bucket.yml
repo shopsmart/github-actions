@@ -5,8 +5,12 @@ name: 'Run deploy-to-s3-bucket action'
 on:
   pull_request:
     paths:
-      - actions/deploy-to-s3-bucket/*
+      # Dependencies
       - actions/unpack-archive/*
+      # Targets
+      - actions/deploy-to-s3-bucket/*
+      - .github/actions/test-deploy-to-s3-bucket/*
+      - .github/workflows/test-deploy-to-s3-bucket.yml
 
 permissions:
   id-token: write

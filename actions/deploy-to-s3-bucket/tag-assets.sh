@@ -3,6 +3,11 @@
 function tag-assets() {
   set -eo pipefail
 
+  if [ "${XTRACE:-false}" = true ]; then
+    echo "[DEBUG] Enabling xtrace" >&2
+    set -x
+  fi
+
   local path="${1:-}"
   [ -n "$path" ] || {
     echo "[ERROR] Path to assets to tag not provided" >&2
@@ -26,6 +31,10 @@ function tag-assets() {
     tags+="{Key='""$key""',Value='""$val""'},"
   done <<<"$S3_TAGS"
   tags="TagSet=[${tags::-1}]"
+
+  if [ -n "${S3_BUCKET_PATH:-}" ] && [ "${S3_BUCKET_PATH: -1}" = / ]; then
+    S3_BUCKET_PATH="${S3_BUCKET_PATH::-1}"
+  fi
 
   find "$path" -type f | while read -r file; do
     file="${file//"$path"\/}"
