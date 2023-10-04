@@ -25,11 +25,11 @@ function teardown() {
 
 @test "it should have set the tag on assets" {
   run aws s3api get-object-tagging --no-cli-pager \
-    --bucket $S3_BUCKET \
-    --key $S3_BUCKET_PATH/index.html \
+    --bucket "$S3_BUCKET" \
+    --key "$S3_BUCKET_PATH/index.html" \
     --query 'TagSet[?Key==`test`].Value' \
     --output text
 
   [ "$status" -eq 0 ]
-  [[ "$output" =~ "$S3_TAG" ]]
+  [[ "$output" =~ $S3_TAG ]]
 }
