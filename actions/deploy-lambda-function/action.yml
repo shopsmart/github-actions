@@ -45,11 +45,9 @@ runs:
   using: 'composite'
   steps:
     - name: 'Upload lambda code to s3'
+      id: upload-code
       shell: bash
-      run: ${{ github.action_path }}/deploy-lambda.sh "${{ inputs.zip-file }}"
-      env:
-        S3_BUCKET: ${{ inputs.s3-bucket }}
-        S3_KEY: ${{ inputs.s3-key }}
+      run: ${{ github.action_path }}/deploy-lambda.sh "${{ inputs.zip-file }}" "${{ inputs.s3-bucket }}" "${{ inputs.s3-key }}"
       if: inputs.s3-bucket != '' && inputs.upload-to-s3 == 'true'
 
     - name: 'Deploy lambda code'
@@ -57,7 +55,7 @@ runs:
       run: ${{ github.action_path }}/deploy-lambda.sh "${{ inputs.function-name }}" "${{ inputs.zip-file }}"
       env:
         S3_BUCKET: ${{ inputs.s3-bucket }}
-        S3_KEY: ${{ inputs.s3-key }}
+        S3_KEY: ${{ inputs.s3-key || steps.upload-code.outputs.s3-key }}
 
     - name: 'Tag the lambda'
       shell: bash
