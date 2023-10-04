@@ -19,7 +19,7 @@ runs:
       run: brew install bats-core jq
 
     - name: 'Checkout'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: 'Use local actions'
       uses: ./.github/actions/use-local-actions
@@ -33,24 +33,22 @@ runs:
       shell: bash
       run: tar -zcvf archive.tgz -C ${{ github.action_path }}/assets .
 
+    - name: 'Configure AWS Credentials'
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: 'us-east-1'
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
     - name: 'Run deploy-to-s3-bucket action'
-      id: unpack
       uses: ./actions/deploy-to-s3-bucket
       with:
         pattern: 'archive.tgz'
         s3-bucket: shopsmart-github-actions-tests
         s3-bucket-path: ${{ steps.id.outputs.id }}
-        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
-
-    - name: 'Configure AWS Credentials'
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-region: 'us-east-1'
-        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
     - name: 'Validate'
       shell: bash
-      run: bats -r ${{ github.action_path }}/deploy-to-s3-bucket.bats
+      run: bats --tap --verbose-run ${{ github.action_path }}/deploy-to-s3-bucket.bats
       env:
         S3_BUCKET: shopsmart-github-actions-tests
         S3_BUCKET_PATH: ${{ steps.id.outputs.id }}
