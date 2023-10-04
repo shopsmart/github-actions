@@ -3,7 +3,7 @@
 function upload-assets() {
   set -eo pipefail
 
-  if [ "${XTRACE:-false}" != true ]; then
+  if [ "${XTRACE:-false}" = true ]; then
     echo "[DEBUG] Enabling xtrace" >&2
     set -x
   fi
