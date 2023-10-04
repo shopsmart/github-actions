@@ -32,10 +32,20 @@ runs:
         zip archive.zip ./index.js
 
     - name: 'Configure AWS Credentials'
-      uses: aws-actions/configure-aws-credentials@v1-node16
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: 'us-east-1'
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
+    - name: 'Run deploy-lambda-function action'
+      id: deploy
+      uses: ./actions/deploy-lambda-function
+      with:
+        zip-file: ${{ github.action_path }}/archive.zip
+        function-name: shopsmart-github-actions-tests
+        function-tags: version=${{ github.sha }}
+        s3-bucket: shopsmart-github-actions-tests
+        s3-key: deploy-lambda-function/${{ github.sha }}/lambda.zip
 
     - name: 'Run deploy-lambda-function action'
       id: deploy
@@ -52,3 +62,5 @@ runs:
         FUNCTION_ARN: arn:aws:lambda:us-east-1:${{ inputs.aws-account-id }}:function:shopsmart-github-actions-tests
         VERSION_TAG: ${{ github.sha }}
         PUBLISHED_VERSION: ${{ steps.deploy.outputs.version }}
+        S3_BUCKET: shopsmart-github-actions-tests
+        S3_KEY: deploy-lambda-function/${{ github.sha }}/lambda.zip

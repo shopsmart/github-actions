@@ -16,6 +16,13 @@ function teardown() {
   [ -f "$BATS_TEST_TMPDIR/style.css" ]
 }
 
+@test "it should have deployed the single asset to the s3 bucket" {
+  run aws s3 cp --recursive "s3://$S3_BUCKET/$S3_BUCKET_PATH" "$BATS_TEST_TMPDIR"
+
+  [ "$status" -eq 0 ]
+  [ -f "$BATS_TEST_TMPDIR/archive.tgz" ]
+}
+
 # @test "it should have set the tag on all assets" {
 #   run aws s3api get-object-tagging \
 #     --bucket $S3_BUCKET \

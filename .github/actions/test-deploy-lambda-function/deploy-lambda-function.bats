@@ -8,6 +8,13 @@ function teardown() {
   :
 }
 
+@test "it should have uploaded the archive to s3" {
+  run aws s3 cp "s3://$S3_BUCKET/$S3_KEY" "$BATS_TEST_TMPDIR/archive.zip"
+
+  [ "$status" -eq 0 ]
+  [ -f "$BATS_TEST_TMPDIR/archive.zip" ]
+}
+
 @test "it should have deployed the code to lambda" {
   local outfile="$BATS_TEST_TMPDIR/out.json"
   run aws lambda invoke --no-cli-pager \
