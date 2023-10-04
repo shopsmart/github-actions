@@ -58,7 +58,7 @@ runs:
 
     - name: 'Validate'
       shell: bash
-      run: bats -r ${{ github.action_path }}/deploy-to-s3-bucket.bats
+      run: bats --tap --verbose-run ${{ github.action_path }}/deploy-to-s3-bucket.bats
       env:
         S3_BUCKET: shopsmart-github-actions-tests
         S3_BUCKET_PATH: ${{ steps.id.outputs.id }}
