@@ -33,3 +33,14 @@ function teardown() {
   [ "$status" -eq 0 ]
   [[ "$output" =~ $S3_TAG ]]
 }
+
+@test "it should have set the tag on the archive" {
+  run aws s3api get-object-tagging --no-cli-pager \
+    --bucket "$S3_BUCKET" \
+    --key "$S3_BUCKET_PATH/archive.zip" \
+    --query 'TagSet[?Key==`test`].Value' \
+    --output text
+
+  [ "$status" -eq 0 ]
+  [[ "$output" =~ $S3_TAG ]]
+}
