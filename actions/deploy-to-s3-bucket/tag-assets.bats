@@ -41,12 +41,20 @@ function aws() {
 
   tagset="TagSet=[{Key='Foo',Value='bar'},{Key='team',Value='my-team'},{Key='owner',Value='anonymous'}]"
 
-  cat "$AWS_CMD_FILE"
-
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]
   [[ "$(< "$AWS_CMD_FILE")" =~ "s3api put-object-tagging --bucket my-s3-bucket --key my-path/index.html --tagging $tagset".* ]]
   [[ "$(< "$AWS_CMD_FILE")" =~ .*"s3api put-object-tagging --bucket my-s3-bucket --key my-path/style.css --tagging $tagset" ]]
+}
+
+@test "it should tag the one asset if a file is provided" {
+  run tag-assets "$ASSETS_PATH/index.html"
+
+  tagset="TagSet=[{Key='Foo',Value='bar'},{Key='team',Value='my-team'},{Key='owner',Value='anonymous'}]"
+
+  [ "$status" -eq 0 ]
+  [ -f "$AWS_CMD_FILE" ]
+  [ "$(< "$AWS_CMD_FILE")" = "s3api put-object-tagging --bucket my-s3-bucket --key my-path/index.html --tagging $tagset" ]
 }
 
 @test "it should tag all assets within path without S3_BUCKET_PATH" {
@@ -55,8 +63,6 @@ function aws() {
   run tag-assets "$ASSETS_PATH"
 
   tagset="TagSet=[{Key='Foo',Value='bar'},{Key='team',Value='my-team'},{Key='owner',Value='anonymous'}]"
-
-  cat "$AWS_CMD_FILE"
 
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]

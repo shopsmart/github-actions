@@ -14,6 +14,17 @@ function tag-assets() {
     return 1
   }
 
+  local base_path="$path"
+  if [ -f "$path" ]; then
+    echo "[DEBUG] A file was provided" >&2
+    base_path="$(dirname "$path")"
+  elif [ -d "$path" ]; then
+    echo "[DEBUG] A directory was provided" >&2
+  else
+    echo "[ERROR] A file or directory must be provided" >&2
+    return 1
+  fi
+
   [ -n "$S3_TAGS" ] || {
     echo "[DEBUG] No tags provided" >&2
     return 0
@@ -37,7 +48,7 @@ function tag-assets() {
   fi
 
   find "$path" -type f | while read -r file; do
-    file="${file//"$path"\/}"
+    file="${file//"$base_path"\/}"
     [ -z "$S3_BUCKET_PATH" ] || file="$S3_BUCKET_PATH/$file"
     aws s3api put-object-tagging \
       --bucket "$S3_BUCKET" \
