@@ -7,6 +7,7 @@ on:
     paths:
       - actions/deploy-lambda-function/*
       - .github/actions/test-deploy-lambda-function/*
+      - .github/workflows/test-deploy-lambda-function.yml
 
 permissions:
   id-token: write

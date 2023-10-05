@@ -9,9 +9,6 @@ inputs:
       If downloading release assets from github, the pattern for the assets file.
       Otherwise, the path to the assets.  If it is an archive, it will unpacked.
     required: true
-  unpack:
-    description: If true, unpacks the pattern as if it were a compressed file.
-    default: 'true'
 
   # GH release Options
   github-token:
@@ -50,33 +47,21 @@ runs:
 
     - name: 'Unpack assets'
       id: unpack
-      if: inputs.unpack == 'true'
       uses: shopsmart/github-actions/actions/unpack-archive@v2
       with:
         filename: ${{ inputs.pattern }}
         destination: assets
 
-    - name: 'Resolve assets location'
-      id: assets
-      shell: bash
-      run: |
-        if [ '${{ inputs.unpack }}' == 'true' ]; then
-          LOCATION="${{ steps.unpack.outputs.destination }}"
-        fi
-        echo "location=$LOCATION" >> "$GITHUB_OUTPUT"
-      env:
-        LOCATION: ${{ inputs.pattern }}
-
     - name: 'Upload assets'
       shell: bash
-      run: ${{ github.action_path }}/upload-assets.sh "${{ steps.assets.outputs.location }}"
+      run: ${{ github.action_path }}/upload-assets.sh "${{ steps.unpack.outputs.destination }}"
       env:
         S3_BUCKET: ${{ inputs.s3-bucket }}
         S3_BUCKET_PATH: ${{ inputs.s3-bucket-path }}
 
     - name: 'Tag assets'
       shell: bash
-      run: ${{ github.action_path }}/tag-assets.sh "${{ steps.assets.outputs.location }}"
+      run: ${{ github.action_path }}/tag-assets.sh "${{ steps.unpack.outputs.destination }}"
       env:
         S3_BUCKET: ${{ inputs.s3-bucket }}
         S3_BUCKET_PATH: ${{ inputs.s3-bucket-path }}
