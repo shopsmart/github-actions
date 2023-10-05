@@ -74,5 +74,5 @@ jobs:
 
       - uses: ./.github/actions/test-deploy-lambda-function-workflow
         with:
-          published-version: ${{ job.run-deploy-lambda-function-workflow.outputs.published-version }}
+          published-version: ${{ needs.run-deploy-lambda-function-workflow.outputs.published-version }}
           aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
