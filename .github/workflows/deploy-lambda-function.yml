@@ -156,7 +156,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     outputs:
-      version: ${{ steps.deploy.outputs.version }}
+      published-version: ${{ steps.deploy.outputs.version }}
     steps:
       - name: 'Notify slack of deployment started'
         if: inputs.notify-slack == true
