@@ -141,7 +141,7 @@ on:
     outputs:
       published-version:
         description: 'The version of the lambda function that was created, only if publish-version is true (incremented by 1 by aws)'
-        value: ${{ jobs.deploy-lambda-function.outputs.version }}
+        value: ${{ jobs.deploy-lambda-function.outputs.published-version }}
 
 env:
   DEPLOY_IAM_ROLE: arn:aws:iam::${{ secrets.aws-account-id }}:role/${{ inputs.role-name }}
