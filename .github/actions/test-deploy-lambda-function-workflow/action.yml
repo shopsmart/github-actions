@@ -1,0 +1,40 @@
+---
+
+name: 'Test deploy-to-lambda-function action'
+description: 'Runs validation against the deploy-to-lambda-function action'
+
+inputs:
+  published-version:
+    description: 'The version of the lambda that was deployed'
+    required: true
+  aws-account-id:
+    description: 'The AWS Account id'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup brew'
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+
+    - name: 'Configure AWS Credentials'
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: 'us-east-1'
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
+    - name: 'Validate'
+      shell: bash
+      run: bats --tap --verbose-run ${{ github.action_path }}/deploy-lambda-function-workflow.bats
+      env:
+        S3_BUCKET: shopsmart-github-actions-tests
+        FUNCTION_ARN: arn:aws:lambda:us-east-1:${{ inputs.aws-account-id }}:function:shopsmart-github-actions-tests
+        VERSION_TAG: ${{ github.sha }}
+        PUBLISHED_VERSION: ${{ inputs.published-version }}
