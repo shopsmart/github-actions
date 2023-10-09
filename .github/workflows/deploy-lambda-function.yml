@@ -226,8 +226,11 @@ jobs:
           s3_path="${{ inputs.s3-bucket }}/${{ inputs.current-version-path }}"
           # Replace double slashes with single slashses
           s3_path="${s3_path//\/\//\/}"
+
           echo "[DEBUG] Uploading current-version to s3://$s3_path" >&2
-          aws s3 cp current-version "s3://$s3_path"
+          aws s3 cp \
+            --content-type text/plain \
+            current-version "s3://$s3_path"
 
       - name: 'Notify slack of deployment status'
         if: always() && inputs.notify-slack == true
