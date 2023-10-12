@@ -29,7 +29,7 @@ inputs:
   template:
     description: 'The path to the template file to render'
     type: string
-    default: ${{ github.action_path }}/message.json.j2
+    required: false
   status:
     description: 'The status of the deployment.  Options are started, success, and failure'
     type: string
@@ -93,7 +93,7 @@ runs:
         ENVIRONMENT: ${{ inputs.environment }}
         MESSAGE: ${{ inputs.message }}
         STATUS: ${{ inputs.status }}
-        TEMPLATE: ${{ inputs.template }}
+        TEMPLATE: ${{ inputs.template || format('{0}/message.json.j2', github.action_path) }}
         TYPE: ${{ inputs.type }}
         VERSION: ${{ inputs.version }}
 
