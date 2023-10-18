@@ -13,6 +13,10 @@ inputs:
     description: 'The repository to search for the release under'
     type: string
     default: ${{ github.repository }}
+  github-token:
+    description: 'The github token with access to the repository'
+    type: string
+    default: ${{ github.token }}
 
 outputs:
   is-release:
@@ -27,5 +31,5 @@ runs:
       shell: bash
       run: ${{ github.action_path }}/is-gh-release.sh "${{ inputs.ref }}"
       env:
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ inputs.github-token }}
         REPOSITORY: ${{ inputs.repository }}
