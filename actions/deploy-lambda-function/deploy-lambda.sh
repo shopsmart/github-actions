@@ -26,18 +26,18 @@ function deploy-lambda() {
   if [ -z "$s3_bucket" ] || [ -z "$s3_key" ]; then
     # resolve zip file if wildcard
     [ "$zip_file" = "${zip_file#*\*}" ] || {
-      echo "[DEBUG] Found a wildcard file" >&2
+      echo "[INFO ] Found a wildcard file" >&2
       local pre_wildcard="${zip_file%\**}"
       local post_wildcard="${zip_file#*\*}"
       zip_file="$(builtin echo "$pre_wildcard"*"$post_wildcard")"
-      echo "[DEBUG] Expanded '$pre_wildcard*$post_wildcard' to $zip_file" >&2
+      echo "[INFO ] Expanded '$pre_wildcard*$post_wildcard' to $zip_file" >&2
     }
     [ -f "$zip_file" ] || {
-      echo "[ERROR] Zip file does not exist" >&2
+      echo "[INFO ] Zip file does not exist" >&2
       return 3
     }
 
-    echo "[DEBUG] Uploading $zip_file to $function_name function" >&2
+    echo "[INFO ] Uploading $zip_file to $function_name function" >&2
     options+=(--zip-file "fileb://$zip_file")
   else
     options+=(--s3-bucket "$s3_bucket")
@@ -45,7 +45,7 @@ function deploy-lambda() {
     # object version
     [ -z "$s3_object_version" ] || options+=(--s3-object-version "$s3_object_version")
 
-    echo "[DEBUG] Updating $function_name function to use s3://$s3_bucket/$s3_key#$s3_object_version" >&2
+    echo "[INFO ] Updating $function_name function to use s3://$s3_bucket/$s3_key#$s3_object_version" >&2
   fi
 
   # shellcheck disable=SC2068
