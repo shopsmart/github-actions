@@ -88,16 +88,6 @@ on:
         description: 'The path within the s3 bucket to upload the artifact to'
         type: string
         default: ''
-      s3-tags:
-        description: |
-          Key value pairs to attach to the s3 object
-
-          Example:
-            s3-tags: |
-              version=v1
-              owner=carl
-        type: string
-        default: ''
 
       # current version file
       current-version-path:
@@ -211,9 +201,6 @@ jobs:
           upload-to-s3: ${{ inputs.upload-to-s3 }}
           s3-bucket: ${{ inputs.s3-bucket }}
           s3-key: ${{ inputs.s3-key }}
-          s3-tags: |
-            version=${{ inputs.version }}
-            ${{ inputs.s3-tags }}
 
       # current version file
       - name: 'Create current version file'
