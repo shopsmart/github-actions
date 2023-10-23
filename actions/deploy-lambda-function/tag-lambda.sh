@@ -36,6 +36,7 @@ function tag-lambda() {
       --no-cli-pager
   )
 
+  echo "[INFO ] Tagging $function_name lambda" >&2
   aws lambda tag-resource \
     --resource "$lambda_arn" \
     --tags "$tags"

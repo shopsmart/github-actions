@@ -18,6 +18,7 @@ function version-lambda() {
   local revision_id="${REVISION_ID:-}"
   [ -z "$revision_id" ] || options+=(--revision-id "$revision_id")
 
+  echo "[INFO ] Publishing new version of the $function_name lambda" >&2
   local version=''
   # shellcheck disable=SC2068
   # We want options to expand here

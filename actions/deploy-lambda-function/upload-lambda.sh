@@ -28,7 +28,7 @@ function upload-lambda() {
   # Replace all double slashes with a single slash
   s3_path="${s3_path//\/\//\/}"
 
-  echo "[DEBUG] Copying $zip_file to s3://$s3_path" >&2
+  echo "[INFO ] Copying $zip_file to s3://$s3_path" >&2
   aws s3 cp "$zip_file" "s3://$s3_path"
 
   echo "s3-key=$s3_key" >> "$GITHUB_OUTPUT"
