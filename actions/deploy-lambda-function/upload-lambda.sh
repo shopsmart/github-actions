@@ -10,11 +10,11 @@ function upload-lambda() {
   }
   # resolve zip file if wildcard
   [ "$zip_file" = "${zip_file#*\*}" ] || {
-    echo "[INFO ] Found a wildcard file" >&2
+    echo "[DEBUG] Found a wildcard file" >&2
     local pre_wildcard="${zip_file%\**}"
     local post_wildcard="${zip_file#*\*}"
     zip_file="$(builtin echo "$pre_wildcard"*"$post_wildcard")"
-    echo "[INFO ] Expanded '$pre_wildcard*$post_wildcard' to $zip_file" >&2
+    echo "[DEBUG] Expanded '$pre_wildcard*$post_wildcard' to $zip_file" >&2
   }
   [ -f "$zip_file" ] || {
     echo "[ERROR] Cannot find zip file: $zip_file" >&2
@@ -37,7 +37,7 @@ function upload-lambda() {
   # Replace all double slashes with a single slash
   s3_path="${s3_path//\/\//\/}"
 
-  echo "[INFO ] Copying $zip_file to s3://$s3_path" >&2
+  echo "[DEBUG] Copying $zip_file to s3://$s3_path" >&2
   aws s3 cp "$zip_file" "s3://$s3_path"
 
   echo "s3-key=$s3_key" >> "$GITHUB_OUTPUT"
