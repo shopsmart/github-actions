@@ -8,10 +8,19 @@ function upload-lambda() {
     echo "[ERROR] Zip file is required" >&2
     return 1
   }
+  # resolve zip file if wildcard
+  [ "$zip_file" = "${zip_file#*\*}" ] || {
+    echo "[DEBUG] Found a wildcard file" >&2
+    local pre_wildcard="${zip_file%\**}"
+    local post_wildcard="${zip_file#*\*}"
+    zip_file="$(builtin echo "$pre_wildcard"*"$post_wildcard")"
+    echo "[DEBUG] Expanded '$pre_wildcard*$post_wildcard' to $zip_file" >&2
+  }
   [ -f "$zip_file" ] || {
     echo "[ERROR] Cannot find zip file: $zip_file" >&2
     return 2
   }
+
   local s3_bucket="${2:-}"
   [ -n "$s3_bucket" ] || {
     echo "[ERROR] S3 bucket is required" >&2
