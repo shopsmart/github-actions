@@ -23,10 +23,6 @@ on:
         description: 'If pulling from a github release, the release tag that should be pulled from'
         type: string
         default: ''
-      github-token:
-        description: 'The github token that has read access to the release assets'
-        type: string
-        default: ${{ github.token }}
 
       # AWS options
       role-name: # shorthand
@@ -166,7 +162,7 @@ jobs:
         shell: bash
         run: gh -R "${{ github.repository }}" release download -p "${{ inputs.pattern }}" "${{ inputs.release-tag }}"
         env:
-          GITHUB_TOKEN: ${{ inputs.github-token }}
+          GH_TOKEN: ${{ secrets.github-token || github.token }}
         # Only if we are downloading assets from gh release
         if: inputs.release-tag != ''
 
