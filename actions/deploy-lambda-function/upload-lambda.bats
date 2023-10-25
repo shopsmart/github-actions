@@ -75,3 +75,13 @@ function aws() {
   [ -f "$GITHUB_OUTPUT" ]
   [ "$(< "$GITHUB_OUTPUT")" = "s3-key=/$S3_KEY" ]
 }
+
+@test "it should expand wildcards" {
+  S3_KEY=artifact.zip
+
+  run upload-lambda "$BATS_TEST_TMPDIR/*.zip" "$S3_BUCKET" "$S3_KEY"
+
+  [ "$status" -eq 0 ]
+  [ -f "$AWS_CMD_FILE" ]
+  [ "$(< "$AWS_CMD_FILE")" = "s3 cp $ZIP_FILE s3://$S3_BUCKET/$S3_KEY" ]
+}
