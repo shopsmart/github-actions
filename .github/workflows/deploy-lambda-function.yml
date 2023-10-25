@@ -162,7 +162,7 @@ jobs:
         shell: bash
         run: gh -R "${{ github.repository }}" release download -p "${{ inputs.pattern }}" "${{ inputs.release-tag }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.github-token || github.token }}
+          GH_TOKEN: ${{ secrets.github-token || github.token }}
         # Only if we are downloading assets from gh release
         if: inputs.release-tag != ''
 
