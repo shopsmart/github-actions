@@ -88,4 +88,4 @@ jobs:
         uses: ./.github/actions/test-build-ecr-image
         with:
           aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
-          ref: v2.2.0-rc.0
+          ref: v2.6.4-rc.0
