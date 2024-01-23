@@ -102,3 +102,5 @@ jobs:
       ref: ${{ github.sha }}
       # And add the skip
       skip-if-exists: true
+    secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
