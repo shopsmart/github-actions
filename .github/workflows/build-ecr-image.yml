@@ -25,6 +25,11 @@ on:
         type: string
         required: true
 
+      skip-if-exists:
+        description: 'If true, skips all build steps if the image already exists.  This is helpful for immutable ECR repositories'
+        type: boolean
+        default: false
+
       # begin docker/setup-buildx-action inputs
       buildx-version:
         description: 'Buildx version. (eg. v0.3.0)'
@@ -257,8 +262,33 @@ jobs:
           sha="$(git rev-parse HEAD)"
           echo "sha=$sha" >> $GITHUB_OUTPUT
 
+      - name: 'Configure AWS credentials'
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-region: ${{ inputs.aws-region }}
+          role-to-assume: ${{ env.DEPLOY_IAM_ROLE }}
+          role-duration-seconds: 1200
+
+      - name: 'Login to Amazon ECR'
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: 'Check if the image already exists'
+        id: already-exists
+        run: |
+          # Do not error out if it does not exist
+          set +e
+
+          answer=false
+          aws ecr describe-images --output json --no-cli-pager \
+            --repository-name=${{ inputs.repository-name }} \
+            --image-ids=imageTag=${{ steps.sha.outputs.sha }}
+          if [ "$?" -eq 0 ]; then
+            answer=true
+          fi
+          echo "answer=$answer" >> "$GITHUB_OUTPUT"
+
       - name: 'Notify slack of build started'
-        if: inputs.notify-slack == true
+        if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@v2
         with:
           application: ${{ inputs.application }}
@@ -270,12 +300,14 @@ jobs:
 
       - name: 'Is github release?'
         id: is-gh-release
+        if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
         uses: shopsmart/github-actions/actions/is-gh-release@v2
         with:
           ref: ${{ inputs.ref }}
 
       - name: 'If release, add additional tag'
         id: additional-tag
+        if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
         run: |
           additional_tag=''
           if [[ "${{ steps.is-gh-release.outputs.is-release }}" == 'true' ]]; then
@@ -285,6 +317,7 @@ jobs:
 
       - name: 'If ssh private key provided, pass the default ssh agent'
         id: ssh
+        if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
         run: |
           ssh=''
           if [ -n "${{ secrets.ssh-private-key }}" ]; then
@@ -294,22 +327,13 @@ jobs:
 
       # for private dependencies
       - name: 'Install SSH Key'
-        if: steps.ssh.outputs.ssh != ''
+        if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && steps.ssh.outputs.ssh != ''
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.ssh-private-key }}
 
-      - name: 'Configure AWS credentials'
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-region: ${{ inputs.aws-region }}
-          role-to-assume: ${{ env.DEPLOY_IAM_ROLE }}
-          role-duration-seconds: 1200
-
-      - name: 'Login to Amazon ECR'
-        uses: aws-actions/amazon-ecr-login@v1
-
       - name: 'Setup docker buildx'
+        if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
         uses: docker/setup-buildx-action@v2
         with:
           version: ${{ inputs.buildx-version }}
@@ -325,6 +349,7 @@ jobs:
           append: ${{ inputs.append }}
 
       - name: 'Build docker image'
+        if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
         uses: docker/build-push-action@v5
         with:
           add-hosts: ${{ inputs.add-hosts }}
@@ -369,7 +394,7 @@ jobs:
           github-token: ${{ secrets.github-token || github.token }}
 
       - name: 'Pull and package docker image'
-        if: steps.is-gh-release.outputs.is-release == 'true'
+        if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && steps.is-gh-release.outputs.is-release == 'true'
         env:
           NAME: ${{ inputs.repository-name }}
           IMAGE: ${{ env.DOCKER_IMAGE }}:${{ steps.sha.outputs.sha }}
@@ -381,7 +406,7 @@ jobs:
           docker save "$IMAGE" | gzip > "docker-image-$NAME-$TAG.tgz"
 
       - name: 'Upload docker image'
-        if: steps.is-gh-release.outputs.is-release == 'true'
+        if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && steps.is-gh-release.outputs.is-release == 'true'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ inputs.ref }}
@@ -389,7 +414,7 @@ jobs:
           token: ${{ secrets.github-token || github.token }}
 
       - name: 'Notify slack of build status'
-        if: always() && inputs.notify-slack == true
+        if: always() && (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@v2
         with:
           application: ${{ inputs.application }}

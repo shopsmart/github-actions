@@ -89,3 +89,16 @@ jobs:
         with:
           aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
           ref: v2.6.4-rc.0
+
+  run-build-ecr-image-skip-if-exists:
+    needs: run-build-ecr-image-workflow-on-github-sha # The image has to have been created previously
+    uses: ./.github/workflows/build-ecr-image.yml
+    with:
+      # Copied from run-build-ecr-image-workflow-on-github-sha
+      file: .github/actions/test-build-ecr-image/Dockerfile
+      repository-name: github-actions-tests
+      role-name: github-actions-tests
+      build-args: VERSION=${{ github.sha }}
+      ref: ${{ github.sha }}
+      # And add the skip
+      skip-if-exists: true
