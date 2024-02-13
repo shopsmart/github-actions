@@ -1,0 +1,48 @@
+---
+
+name: 'Test render-jinjanator-template action'
+description: 'Runs validation against the render-jinjanator-template action'
+
+inputs:
+  ref:
+    description: 'The github ref to expect'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup brew'
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Checkout'
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.ref }}
+
+    - name: 'Run the render-jinjanator-template action'
+      id: render
+      uses: ./actions/render-jinjanator-template
+      with:
+        working-directory: ${{ github.action_path }}
+        template: task-definition.yml.j2
+        data: |
+          defaults.yml
+          data.yml
+        format: yaml
+        undefined: true
+        environment: |
+          FOO=bar
+          BAR=baz
+          AWS_ACCOUNT_ID=1111111111
+        output: task-definition.yml
+
+    - name: 'Validate'
+      shell: bash
+      run: bats --verbose-run -r ${{ github.action_path }}/render-jinjanator-template.bats
+      env:
+        VERSION_TAG: ${{ inputs.ref || github.sha }}
+        OUTPUT_FILE: ${{ steps.render.outputs.file }}
