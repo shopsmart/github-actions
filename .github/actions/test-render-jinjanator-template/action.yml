@@ -24,6 +24,7 @@ runs:
         ref: ${{ inputs.ref }}
 
     - name: 'Run the render-jinjanator-template action'
+      id: render
       uses: ./actions/render-jinjanator-template
       with:
         working-directory: ${{ github.action_path }}
@@ -44,3 +45,4 @@ runs:
       run: bats --verbose-run -r ${{ github.action_path }}/render-jinjanator-template.bats
       env:
         VERSION_TAG: ${{ inputs.ref || github.sha }}
+        OUTPUT_FILE: ${{ steps.render.outputs.file }}
