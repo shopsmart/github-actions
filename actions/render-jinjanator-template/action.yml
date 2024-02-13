@@ -45,6 +45,9 @@ inputs:
     description: 'The name of the output file to write rendered contents to'
     required: false
     default: output
+  working-directory:
+    description: 'The base directory where files will exist'
+    default: .
 
 outputs:
   file:

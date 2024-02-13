@@ -24,7 +24,6 @@ runs:
     - name: 'Run the render-jinjanator-template action'
       uses: ./actions/render-jinjanator-template
       with:
-        ref: ${{ inputs.ref || github.sha }}
         working-directory: ${{ github.action_path }}
         template: task-definition.yml.j2
         data: |
