@@ -81,14 +81,14 @@ function render() {
     while IFS= read -r env_var; do
       # Remove blank space around the string
       env_var="$(echo "${env_var?}" | xargs)"
-      var="${env_var%=*}"
+      # var="${env_var%=*}"
 
       [ -n "${env_var?}" ] || continue
 
       # Export for the j2 cli
       export "${env_var?}"
 
-      COMMAND+=(--import-env "$var")
+      # COMMAND+=(--import-env "$var")
     done <<<"$ENV_VARS"
   }
 
