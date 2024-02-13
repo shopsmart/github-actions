@@ -82,6 +82,9 @@ on:
       aws-account-id:
         description: 'The AWS account id that the ecr repository lives under'
         required: true
+      ssh-private-key:
+        description: 'An SSH private key to install for private dependencies'
+        required: false
 
 defaults:
   run:
@@ -96,6 +99,20 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.ref }}
+
+      - name: 'If ssh private key provided, setup ssh agent'
+        id: ssh
+        run: |
+          has_key='false'
+          [ -z "${{ secrets.ssh-private-key }}" ] || has_key='true'
+          echo "has_key=$has_key" >> "$GITHUB_OUTPUT"
+
+      # for private dependencies
+      - name: 'Install SSH Key'
+        if: steps.ssh.outputs.has_key == 'true'
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.ssh-private-key }}
 
       - name: 'Render task definition'
         uses: shopsmart/render-j2-action@v2
