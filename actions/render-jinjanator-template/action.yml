@@ -52,7 +52,7 @@ inputs:
 outputs:
   file:
     description: 'The file the rendered content was written to'
-    value: ${{ steps.render.outputs.file }}
+    value: ${{ inputs.working-directory }}/${{ steps.render.outputs.file }}
   content:
     description: 'The rendered content'
     value: ${{ steps.render.outputs.content }}
