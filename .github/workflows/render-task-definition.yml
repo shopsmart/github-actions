@@ -145,11 +145,12 @@ jobs:
       - name: 'Render task definition'
         uses: shopsmart/github-actions/actions/render-jinjanator-template@refactor/render-task-definition
         with:
+          working-directory: ${{ inputs.working-directory }}
           template: ${{ inputs.template }}
           data: ${{ inputs.data }}
           format: ${{ inputs.format }}
           format-options: ${{ inputs.format-options }}
-          environment-variables: |
+          environment: |
             TAG=${{ inputs.ref }}
             AWS_ACCOUNT_ID=${{ secrets.aws-account-id }}
             AWS_REGION=${{ inputs.aws-region }}
