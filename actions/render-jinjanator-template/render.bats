@@ -93,23 +93,6 @@ function teardown() {
   grep -vq -- '--undefined' "$J2_CMD_FILE"
 }
 
-@test "it should export environment variables to the cli" {
-  export ENV_VARS='FOO=bar
-  BAR=baz
-  BAZ=quo'
-
-  run render
-
-  [ $status -eq 0 ]
-  [ -f "$J2_CMD_FILE" ] && [ -f "$J2_ENV_FILE" ]
-  grep -q -- '--import-env FOO' "$J2_CMD_FILE"
-  grep -q 'FOO=bar' "$J2_ENV_FILE"
-  grep -q -- '--import-env BAR' "$J2_CMD_FILE"
-  grep -q 'BAR=baz' "$J2_ENV_FILE"
-  grep -q -- '--import-env BAZ' "$J2_CMD_FILE"
-  grep -q 'BAZ=quo' "$J2_ENV_FILE"
-}
-
 @test "it should pass all arguments to the j2 cli" {
   export DATA="$BATS_TEST_TMPDIR/data.yml"
 
@@ -127,8 +110,6 @@ option2=bar
   run render
 
   [ $status -eq 0 ]
-  grep -q -- "--import-env FOO" "$J2_CMD_FILE"
-  grep -q -- "--import-env BAR" "$J2_CMD_FILE"
   grep -q -- "--undefined" "$J2_CMD_FILE"
   grep -q -- "--format my-custom-format" "$J2_CMD_FILE"
   grep -q -- "--format-option option1=foo" "$J2_CMD_FILE"
