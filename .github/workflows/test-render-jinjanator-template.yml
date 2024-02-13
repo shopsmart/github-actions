@@ -26,3 +26,5 @@
 
         - name: 'Test render-jinjanator-template action'
           uses: ./.github/actions/test-render-jinjanator-template
+          with:
+            ref: ${{ github.sha }}
