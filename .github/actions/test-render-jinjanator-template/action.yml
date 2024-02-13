@@ -41,6 +41,6 @@ runs:
 
     - name: 'Validate'
       shell: bash
-      run: bats --verbose-run -r ${{ github.action_path }}/render-task-definition.bats
+      run: bats --verbose-run -r ${{ github.action_path }}/render-jinjanator-template.bats
       env:
         VERSION_TAG: ${{ inputs.ref || github.sha }}
