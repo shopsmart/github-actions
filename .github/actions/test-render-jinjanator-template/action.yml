@@ -36,6 +36,7 @@ runs:
         environment: |
           FOO=bar
           BAR=baz
+          AWS_ACCOUNT_ID=1111111111
         output: task-definition.yml
 
     - name: 'Validate'
