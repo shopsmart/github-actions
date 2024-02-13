@@ -5,17 +5,17 @@ name: 'Render task definition'
 on:
   workflow_call:
     inputs:
+      # custom options
       ref:
         description: 'The branch/sha/tag to render the task definition from'
         type: string
         default: ''
-
-      aws-region:
-        description: 'The aws region where resources live'
+      artifact-name:
+        description: 'The name of the artifact to upload'
         type: string
-        default: us-east-1
+        default: task-definition
 
-      # begin shopsmart/render-j2-action inputs
+      # render-jinjanator-template options
       template:
         description: 'The path to the template file to render'
         type: string
@@ -30,6 +30,18 @@ on:
         type: string
         required: false
         default: ''
+      format-options:
+        description: |
+          The format options to pass to the render.  Each option should be in
+          format OPTION=VALUE with one on each line.
+
+          Example:
+            format-options: |
+              FOO=bar
+              BAR=baz
+        type: string
+        required: false
+        default: ''
       environment:
         description: |
           The environment variables to pass to the render.  Each environment
@@ -38,21 +50,6 @@ on:
             environment: |
               FOO=bar
               BAR=baz
-        type: string
-        required: false
-        default: ''
-      filters:
-        description: 'Load custom Jinja2 filters from a Python file: all top-level functions are imported.'
-        type: string
-        required: false
-        default: ''
-      tests:
-        description: 'Load custom Jinja2 tests from a Python file.'
-        type: string
-        required: false
-        default: ''
-      customize:
-        description: 'A Python file that implements hooks to fine-tune the j2cli behavior'
         type: string
         required: false
         default: ''
@@ -66,22 +63,40 @@ on:
         type: string
         required: false
         default: 'task-definition.yml' # Changed default
-      debug:
-        description: 'If true, sets -x in the shell command'
-        type: boolean
-        required: false
-        default: false
-      # end shopsmart/render-j2-action inputs
 
-      artifact-name:
-        description: 'The name of the artifact to upload'
+      # setup-python options
+      python-version:
+        description: "Version range or exact version of Python or PyPy to use, using SemVer's version range syntax. Reads from .python-version if unset."
         type: string
-        default: task-definition
+        default: ''
+      python-version-file:
+        description: "File containing the Python version to use. Example: .python-version"
+        type: string
+        default: ''
+
+      # python requirements options
+      requirements-file:
+        description: 'The requirements file to install dependencies from, if not set will assume that it should install . via pyproject.toml'
+        type: string
+        default: ''
+      working-directory:
+        description: 'The base directory where files will exist'
+        type: string
+        default: .
+
+      # aws options
+      aws-region:
+        description: 'The aws region where resources live'
+        type: string
+        default: us-east-1
 
     secrets:
       aws-account-id:
         description: 'The AWS account id that the ecr repository lives under'
         required: true
+      ssh-private-key:
+        description: 'An SSH private key to install for private dependencies'
+        required: false
 
 defaults:
   run:
@@ -97,23 +112,50 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
+      - name: 'Setup python'
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+          python-version-file: ${{ inputs.python-version-file }}
+          cache: pip
+
+      - name: 'If ssh private key provided, setup ssh agent'
+        id: ssh
+        run: |
+          has_key='false'
+          [ -z "${{ secrets.ssh-private-key }}" ] || has_key='true'
+          echo "has_key=$has_key" >> "$GITHUB_OUTPUT"
+
+      # for private dependencies
+      - name: 'Install SSH Key'
+        if: steps.ssh.outputs.has_key == 'true'
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.ssh-private-key }}
+
+      - name: 'Install python dependencies'
+        working-directory: ${{ inputs.working-directory }}
+        run: |
+          if [ -n "${{ inputs.requirements-file }}" ]; then
+            pip install -r "${{ inputs.requirements-file }}"
+          elif [ -f pyproject.toml ]; then
+            pip install .
+          fi
+
       - name: 'Render task definition'
-        uses: shopsmart/render-j2-action@v2
+        uses: shopsmart/github-actions/actions/render-jinjanator-action@refactor/render-task-definition
         with:
           template: ${{ inputs.template }}
           data: ${{ inputs.data }}
           format: ${{ inputs.format }}
-          env_vars: |
+          format-options: ${{ inputs.format-options }}
+          environment-variables: |
             TAG=${{ inputs.ref }}
             AWS_ACCOUNT_ID=${{ secrets.aws-account-id }}
             AWS_REGION=${{ inputs.aws-region }}
             ${{ inputs.environment }}
-          filters: ${{ inputs.filters }}
-          tests: ${{ inputs.tests }}
-          customize: ${{ inputs.customize }}
           undefined: ${{ inputs.undefined }}
           output: ${{ inputs.output }}
-          debug: ${{ inputs.debug }}
 
       - name: 'Upload task definition'
         uses: actions/upload-artifact@v3

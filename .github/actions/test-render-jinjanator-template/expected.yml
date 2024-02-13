@@ -1,0 +1,31 @@
+---
+
+family: test-render-task-definition
+taskRoleArn: arn:aws:iam::1111111111:role/test-render-task-definition-task
+executionRoleArn: arn:aws:iam::1111111111:role/test-render-task-definition-execution
+networkMode: awsvpc
+cpu: '256'
+memory: '1024'
+containerDefinitions:
+- name: test-render-task-definition
+  image: alpine:latest
+  command: [tail, -f, /dev/null]
+  essential: true
+  logConfiguration:
+    logDriver: awslogs
+    options:
+      awslogs-group: test-render-task-definition
+      awslogs-region: us-east-1
+      awslogs-stream-prefix: test-render-task-definition
+  environment:
+    - name: APPLICATION
+      value: test-render-task-definition
+    - name: APP_VERSION
+      value: '{{ tag }}'
+  dockerLabels:
+    application: test-render-task-definition
+    version: '{{ tag }}'
+    default: yes
+requiresCompatibilities:
+  - EC2
+  - FARGATE

@@ -1,0 +1,75 @@
+---
+
+name: 'Render Jinjanator Template'
+description: 'Renders a Jinjanator Template'
+
+inputs:
+  template:
+    description: 'The path to the template file to render'
+    required: true
+  data:
+    description: 'The path to the file with data to pass to the render'
+    required: false
+    default: ''
+  format:
+    description: 'The format the data file will be in'
+    required: false
+    default: ''
+  format-options:
+    description: |
+      The format options to pass to the render.  Each option should be in
+      format OPTION=VALUE with one on each line.
+
+      Example:
+        format-options: |
+          FOO=bar
+          BAR=baz
+    required: false
+    default: ''
+  environment:
+    description: |
+      The environment variables to pass to the render.  Each environment
+      variable should be in format VAR=VAL with one on each line.
+
+      Example:
+        environment: |
+          FOO=bar
+          BAR=baz
+    required: false
+    default: ''
+  undefined:
+    description: 'If true, undefined variables will be used in templates (no error will be raised)'
+    required: false
+    default: 'false'
+  output:
+    description: 'The name of the output file to write rendered contents to'
+    required: false
+    default: output
+
+outputs:
+  file:
+    description: 'The file the rendered content was written to'
+    value: ${{ steps.render.outputs.file }}
+  content:
+    description: 'The rendered content'
+    value: ${{ steps.render.outputs.content }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Install dependencies'
+      shell: bash
+      run: pip install jinjanator confmerge
+
+    - name: 'Render'
+      id: render
+      shell: bash
+      run: "${{ github.action_path }}/render.sh"
+      env:
+        TEMPLATE: ${{ inputs.template }}
+        DATA: ${{ inputs.data }}
+        FORMAT: ${{ inputs.format }}
+        FORMAT_OPTIONS: ${{ inputs.format-options }}
+        ENV_VARS: ${{ inputs.environment }}
+        UNDEFINED: ${{ inputs.undefined }}
+        OUTPUT: ${{ inputs.output }}

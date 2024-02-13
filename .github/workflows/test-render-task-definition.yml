@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/render-task-definition.yml
       - .github/actions/test-render-task-definition/*
+      - actions/render-jinjanator-template/*
 
 permissions:
   id-token: write # aws auth
