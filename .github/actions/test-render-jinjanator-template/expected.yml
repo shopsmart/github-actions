@@ -21,10 +21,10 @@ containerDefinitions:
     - name: APPLICATION
       value: test-render-task-definition
     - name: APP_VERSION
-      value: '{{ tag }}'
+      value: 'latest'
   dockerLabels:
     application: test-render-task-definition
-    version: '{{ tag }}'
+    version: 'latest'
     default: yes
 requiresCompatibilities:
   - EC2
