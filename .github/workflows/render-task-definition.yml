@@ -82,7 +82,7 @@ on:
       working-directory:
         description: 'The base directory where files will exist'
         type: string
-        default: .
+        default: infra
 
       # aws options
       aws-region:
