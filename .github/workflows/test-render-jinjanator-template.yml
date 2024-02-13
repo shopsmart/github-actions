@@ -26,5 +26,3 @@
 
         - name: 'Test render-jinjanator-template action'
           uses: ./.github/actions/test-render-jinjanator-template
-          with:
-            aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
