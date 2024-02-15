@@ -116,7 +116,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python-version }}
-          python-version-file: ${{ inputs.python-version-file }}
+          python-version-file: ${{ inputs.working-directory }}/${{ inputs.python-version-file }}
           cache: pip
 
       - name: 'If ssh private key provided, setup ssh agent'
