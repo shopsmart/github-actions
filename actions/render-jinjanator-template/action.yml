@@ -62,7 +62,7 @@ runs:
   steps:
     - name: 'Install dependencies'
       shell: bash
-      run: pip install jinjanator confmerge
+      run: pip install jinjanator 'confmerge @ git+https://github.com/aisbergg/python-confmerge@06ec81b41043cc76d5fc60085daf3cfed2b610b1' # no release was provided
 
     - name: 'Render'
       id: render
