@@ -73,6 +73,10 @@ on:
         description: "File containing the Python version to use. Example: .python-version"
         type: string
         default: ''
+      python-cache:
+        description: "Used to specify a package manager for caching in the default directory. Supported values: pip, pipenv, poetry."
+        type: string
+        required: false
 
       # python requirements options
       requirements-file:
@@ -117,7 +121,7 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
           python-version-file: ${{ inputs.working-directory }}/${{ inputs.python-version-file }}
-          cache: pip
+          cache: ${{ inputs.python-cache }}
 
       - name: 'If ssh private key provided, setup ssh agent'
         id: ssh
