@@ -28,6 +28,7 @@ jobs:
         defaults.yml
         data.yml
       environment: TAG=${{ github.sha }}
+      python-version-file: .python-version
       working-directory: .github/actions/test-render-task-definition
     secrets:
       aws-account-id: '1111111111'
