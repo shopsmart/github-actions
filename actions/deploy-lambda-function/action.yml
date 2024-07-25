@@ -68,7 +68,7 @@ runs:
     #   An update is in progress for resource: arn:aws:lambda:<region>:***:function:<redacted>
     - name: 'Let the function settle'
       shell: bash
-      run: sleep 5 # seconds
+      run: sleep 10 # seconds
 
     - name: 'Cut a version of the lambda'
       id: publish-version
