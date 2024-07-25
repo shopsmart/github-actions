@@ -64,6 +64,12 @@ runs:
         LAMBDA_TAGS: ${{ inputs.function-tags }}
       if: inputs.function-tags != ''
 
+    # An error occurred (ResourceConflictException) when calling the PublishVersion operation: The operation cannot be performed at this time.
+    #   An update is in progress for resource: arn:aws:lambda:<region>:***:function:<redacted>
+    - name: 'Let the function settle'
+      shell: bash
+      run: sleep 10 # seconds
+
     - name: 'Cut a version of the lambda'
       id: publish-version
       if: inputs.publish-version == 'true'
