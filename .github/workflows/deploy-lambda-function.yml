@@ -186,7 +186,7 @@ jobs:
       # deploy
       - name: 'Deploy'
         id: deploy
-        uses: shopsmart/github-actions/actions/deploy-lambda-function@v3
+        uses: shopsmart/github-actions/actions/deploy-lambda-function@hotfix/sleep-before-publish-version
         with:
           zip-file: ${{ inputs.pattern }}
           function-name: ${{ inputs.function-name }}
