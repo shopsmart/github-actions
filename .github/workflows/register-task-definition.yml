@@ -152,7 +152,7 @@ jobs:
           slack-webhook-url: ${{ secrets.slack-webhook-url }}
 
       - name: 'Download task-definition'
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: ${{ inputs.artifact-name }}
 
