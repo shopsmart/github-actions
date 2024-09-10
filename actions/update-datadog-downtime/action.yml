@@ -1,0 +1,42 @@
+---
+
+name: 'Post datadog downtime update'
+description: 'Posts a downtime window update to Datadog'
+
+inputs:
+  scope:
+    description: 'The scope to which the downtime applies. Must follow the [common search syntax](https://docs.datadoghq.com/logs/explorer/search_syntax/)'
+    required: true
+  message:
+    description: 'A message to include with notifications for this downtime. Email notifications can be sent to specific users by using the same @username notation as events.'
+    required: false
+  monitor-tags:
+    description: 'A comma delimited list of monitor tags. For example, tags that are applied directly to monitors, not tags that are used in monitor queries (which are filtered by the scope parameter), to which the downtime applies. The resulting downtime applies to monitors that match all provided monitor tags. Setting monitor_tags to [*] configures the downtime to mute all monitors for the given scope.'
+    required: false
+  monitor-id:
+    description: 'ID of the monitor to prevent notifications.'
+    required: false
+  end:
+    description: 'ISO-8601 Datetime to end the downtime.  Additionally, one can specify time from now as `XhXmXs`.'
+    required: true
+  start:
+    description: 'ISO-8601 Datetime to start the downtime.  Additionally, one can specify time from now as `XhXmXs`.'
+    required: false
+
+  # secrets
+  datadog-api-key:
+    description: 'The secret API key to authenticate the request with'
+    required: true
+  datadog-app-key:
+    description: 'The app key to authenticate the request with (pairs with the api key)'
+    required: true
+
+outputs:
+  status-code:
+    description: 'The status code of the response provided by Datadog'
+  response:
+    description: 'The response body provided by Datadog'
+
+runs:
+  using: 'node20'
+  main: dist/index.js
