@@ -1,3 +1,6 @@
+# For Github Actions, we keep the dist in the source code for GHA to download and use.
+!dist/
+
 ## @see https://raw.githubusercontent.com/actions/checkout/main/.gitignore
 
 tests/tmp
