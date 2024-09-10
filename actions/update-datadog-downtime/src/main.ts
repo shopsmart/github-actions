@@ -33,3 +33,5 @@ async function run() {
   core.setOutput("status-code", resp.message.statusCode)
   core.setOutput("body", await resp.readBody())
 }
+
+run()
