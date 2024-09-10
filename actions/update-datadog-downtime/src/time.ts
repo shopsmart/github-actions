@@ -10,9 +10,10 @@ const CustomTimeRegex = /^([0-9]+\ *h\ *)?([0-9]+\ *m\ *)?([0-9]+\ *s\ *)?$/
  * @param provided The provided time string.  If not in the custom format, it should be an ISO-8601 format, but this function will not check.
  * @returns The datetime in ISO-8601 format.  If the provided datetime does not match the custom format, it will return what was provided
  */
-export function parseTime(now: moment.Moment, provided: string|undefined): string|null {
+export function parseTime(now: moment.Moment, provided: string|undefined): string|undefined {
+  // If provided is undefined, we get an error attempting to match
   if (!provided) {
-    return null
+    return undefined
   }
 
   const matches = provided.match(CustomTimeRegex)

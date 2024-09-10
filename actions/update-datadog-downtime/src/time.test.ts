@@ -1,4 +1,3 @@
-import * as core from '@actions/core'
 import moment from 'moment'
 import { parseTime } from './time'
 
