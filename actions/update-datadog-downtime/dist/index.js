@@ -46,6 +46,7 @@ class Config {
         this.message = core.getInput('message');
         this.monitorId = core.getInput('monitor-id');
         this.monitorTags = ((_a = core.getInput('monitor-tags')) === null || _a === void 0 ? void 0 : _a.split(',')) || [];
+        this.scope = core.getInput('scope');
         this.start = (0, time_1.parseTime)(this._moment, core.getInput('start'));
         this.end = (0, time_1.parseTime)(this._moment, core.getInput('end'));
     }
@@ -66,6 +67,7 @@ class Config {
                         end: this.end,
                         start: this.start,
                     },
+                    scope: this.scope,
                     status: 'active',
                 },
             },
@@ -149,6 +151,7 @@ function run() {
         core.setOutput("body", yield resp.readBody());
     });
 }
+run();
 
 
 /***/ }),

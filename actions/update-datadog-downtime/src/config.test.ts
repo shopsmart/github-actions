@@ -20,6 +20,7 @@ describe('config tests', () => {
       // Since we test the time module independently, we will ignore its functionality be passing in an
       //  already-formatted ISO-8601 date
       'end': '2024-09-09T22:09:27.992Z',
+      'scope': 'application:www,environment:staging',
     }
   })
 
@@ -78,6 +79,7 @@ describe('config tests', () => {
         schedule: {
           end: '2024-09-09T22:09:27.992Z',
         },
+        scope: 'application:www,environment:staging',
         status: 'active'
       }
     }

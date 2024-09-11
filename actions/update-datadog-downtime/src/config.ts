@@ -10,6 +10,7 @@ export class Config {
   message: string | null
   monitorId: string | null
   monitorTags: Array<string>
+  scope: string
   start: string | undefined
   end: string
 
@@ -21,6 +22,7 @@ export class Config {
     this.message = core.getInput('message')
     this.monitorId = core.getInput('monitor-id')
     this.monitorTags = core.getInput('monitor-tags')?.split(',') || []
+    this.scope = core.getInput('scope')
     this.start = parseTime(this._moment, core.getInput('start'))
     this.end = parseTime(this._moment, core.getInput('end'))!
   }
@@ -43,6 +45,7 @@ export class Config {
             end: this.end,
             start: this.start,
           },
+          scope: this.scope,
           status: 'active',
         },
       },
