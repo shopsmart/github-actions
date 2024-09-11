@@ -149,6 +149,9 @@ function run() {
         const resp = yield req.post(DowntimeURL, config.payload());
         core.setOutput("status-code", resp.message.statusCode);
         core.setOutput("body", yield resp.readBody());
+        if (resp.message.statusCode != httpm.HttpCodes.OK) {
+            core.setFailed(`The request to the Datadog Downtime API failed with status code: ${resp.message.statusCode}`);
+        }
     });
 }
 run();

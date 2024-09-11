@@ -32,6 +32,10 @@ async function run() {
 
   core.setOutput("status-code", resp.message.statusCode)
   core.setOutput("body", await resp.readBody())
+
+  if (resp.message.statusCode != httpm.HttpCodes.OK) {
+    core.setFailed(`The request to the Datadog Downtime API failed with status code: ${resp.message.statusCode}`)
+  }
 }
 
 run()
