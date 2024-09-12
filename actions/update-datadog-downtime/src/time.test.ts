@@ -2,7 +2,7 @@ import moment from 'moment'
 import { parseTime } from './time'
 
 describe('time tests', () => {
-  const now = moment()
+  const now = new Date()
 
   it('should return null if the input is undefined', () => {
     let t = parseTime(now, undefined)
@@ -19,7 +19,7 @@ describe('time tests', () => {
   })
 
   it('should add hours to now', () => {
-    const expected = now.add(4, 'hours').toDate().toISOString()
+    const expected = moment(now).add(4, 'hours').toDate().toISOString()
 
     let t = parseTime(now, '4h')
 
@@ -27,7 +27,7 @@ describe('time tests', () => {
   })
 
   it('should add minutes to now', () => {
-    const expected = now.add(4, 'minutes').toDate().toISOString()
+    const expected = moment(now).add(4, 'minutes').toDate().toISOString()
 
     let t = parseTime(now, '4m')
 
@@ -35,7 +35,7 @@ describe('time tests', () => {
   })
 
   it('should add seconds to now', () => {
-    const expected = now.add(4, 'seconds').toDate().toISOString()
+    const expected = moment(now).add(4, 'seconds').toDate().toISOString()
 
     let t = parseTime(now, '4s')
 
@@ -43,7 +43,7 @@ describe('time tests', () => {
   })
 
   it('should add hours and minutes to now', () => {
-    const expected = now.add(4, 'hours').add(6, 'minutes').toDate().toISOString()
+    const expected = moment(now).add(4, 'hours').add(6, 'minutes').toDate().toISOString()
 
     let t = parseTime(now, '4h 6m')
 
@@ -51,7 +51,7 @@ describe('time tests', () => {
   })
 
   it('should add hours and seconds to now', () => {
-    const expected = now.add(4, 'hours').add(6, 'seconds').toDate().toISOString()
+    const expected = moment(now).add(4, 'hours').add(6, 'seconds').toDate().toISOString()
 
     let t = parseTime(now, '4h 6s')
 
@@ -59,7 +59,7 @@ describe('time tests', () => {
   })
 
   it('should add minutes and seconds to now', () => {
-    const expected = now.add(4, 'minutes').add(6, 'seconds').toDate().toISOString()
+    const expected = moment(now).add(4, 'minutes').add(6, 'seconds').toDate().toISOString()
 
     let t = parseTime(now, '4m 6s')
 
@@ -67,9 +67,9 @@ describe('time tests', () => {
   })
 
   it('should add hours, minutes, and seconds to now', () => {
-    const expected = now.add(2, 'hours').add(4, 'minutes').add(6, 'seconds').toDate().toISOString()
+    const expected = moment(now).add(2, 'hours').add(4, 'minutes').add(6, 'seconds').toDate().toISOString()
 
-    let t = parseTime(now, '4m 6s')
+    let t = parseTime(now, '2h 4m 6s')
 
     expect(t).toEqual(expected)
   })

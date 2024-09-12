@@ -3,7 +3,7 @@ import moment from 'moment'
 import { parseTime } from './time'
 
 export class Config {
-  private _moment: moment.Moment
+  private _moment: Date
 
   apiKey: string
   appKey: string
@@ -15,7 +15,7 @@ export class Config {
   end: string
 
   constructor() {
-    this._moment = moment()
+    this._moment = new Date()
 
     this.apiKey = core.getInput('datadog-api-key')
     this.appKey = core.getInput('datadog-app-key')

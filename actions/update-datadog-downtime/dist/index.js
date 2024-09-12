@@ -29,18 +29,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Config = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const moment_1 = __importDefault(__nccwpck_require__(9623));
 const time_1 = __nccwpck_require__(5597);
 class Config {
     constructor() {
         var _a;
-        this._moment = (0, moment_1.default)();
+        this._moment = new Date();
         this.apiKey = core.getInput('datadog-api-key');
         this.appKey = core.getInput('datadog-app-key');
         this.message = core.getInput('message');
@@ -189,11 +185,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseTime = parseTime;
 const core = __importStar(__nccwpck_require__(2186));
+const moment_1 = __importDefault(__nccwpck_require__(9623));
 // We accept a custom format to add time from now, such as: 4h 5m 30s
-const CustomTimeRegex = /^([0-9]+\ *h\ *)?([0-9]+\ *m\ *)?([0-9]+\ *s\ *)?$/;
+const CustomTimeRegex = /^(([0-9]+)\ *h\ *)?(([0-9]+)\ *m\ *)?(([0-9]+)\ *s\ *)?$/;
 /**
  * Parses out our custom format or sends back what was provided
  *
@@ -208,19 +208,27 @@ function parseTime(now, provided) {
     }
     const matches = provided.match(CustomTimeRegex);
     // 0 = the whole match (since everything is optional)
-    // 1 = hours
-    // 2 = minutes
-    // 3 = seconds
+    // 1 = <number of hours>h
+    // 2 = <number of hours>
+    // 3 = <number of minutes>m
+    // 4 = <number of minutes>
+    // 5 = <number of seconds>s
+    // 6 = <number of seconds>
     if (provided == '' || matches == null || matches[0] == '') {
         core.debug('Time provided does not match custom format');
         return provided;
     }
-    core.debug(`Adding ${matches[0]} hours ${matches[1]} minutes ${matches[2]} seconds to ${now.toDate().toISOString()}`);
+    const t = {
+        hours: parseInt(matches[2]),
+        minutes: parseInt(matches[4]),
+        seconds: parseInt(matches[6]),
+    };
+    core.debug(`Adding ${t.hours} hours ${t.minutes} minutes ${t.seconds} seconds to ${now.toISOString()}`);
     // If any of the matches are undefined, moment adds nothing
-    return now
-        .add(matches[0], 'hours')
-        .add(matches[1], 'minutes')
-        .add(matches[2], 'seconds')
+    return (0, moment_1.default)(now)
+        .add(t.hours, 'hours')
+        .add(t.minutes, 'minutes')
+        .add(t.seconds, 'seconds')
         .toDate()
         .toISOString();
 }
