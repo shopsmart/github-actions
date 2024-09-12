@@ -136,6 +136,7 @@ const Headers = {
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const config = new config_1.Config();
+        core.debug(`Payload to be sent to datadog: ${config.json}`);
         const req = new httpm.HttpClient();
         req.requestOptions = {
             headers: {

@@ -18,6 +18,8 @@ const Headers = {
 async function run() {
   const config = new Config()
 
+  core.debug(`Payload to be sent to datadog: ${config.json}`)
+
   const req = new httpm.HttpClient()
   req.requestOptions = {
     headers: {
