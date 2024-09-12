@@ -133,7 +133,7 @@ on:
       datadog-end:
         description: 'ISO-8601 Datetime to end the downtime.  Additionally, one can specify time from now as `XhXmXs`.'
         type: string
-        required: true
+        required: false
       datadog-start:
         description: 'ISO-8601 Datetime to start the downtime.  Additionally, one can specify time from now as `XhXmXs`.'
         type: string
