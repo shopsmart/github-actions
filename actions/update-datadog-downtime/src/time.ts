@@ -1,3 +1,4 @@
+import * as core from '@actions/core'
 import moment from 'moment'
 
 // We accept a custom format to add time from now, such as: 4h 5m 30s
@@ -22,14 +23,17 @@ export function parseTime(now: moment.Moment, provided: string|undefined): strin
   // 2 = minutes
   // 3 = seconds
   if (provided == '' || matches == null || matches[0] == '') {
+    core.debug('Time provided does not match custom format')
     return provided
   }
 
+  core.debug(`Adding ${matches[1]} hours ${matches[2]} minutes ${matches[3]} seconds to ${now.toDate().toISOString()}`)
+
   // If any of the matches are undefined, moment adds nothing
   return now
-    .add(matches[0], 'hours')
-    .add(matches[1], 'minutes')
-    .add(matches[2], 'seconds')
+    .add(matches[1], 'hours')
+    .add(matches[2], 'minutes')
+    .add(matches[3], 'seconds')
     .toDate()
     .toISOString()
 }

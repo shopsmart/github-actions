@@ -162,12 +162,36 @@ run();
 /***/ }),
 
 /***/ 5597:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseTime = parseTime;
+const core = __importStar(__nccwpck_require__(2186));
 // We accept a custom format to add time from now, such as: 4h 5m 30s
 const CustomTimeRegex = /^([0-9]+\ *h\ *)?([0-9]+\ *m\ *)?([0-9]+\ *s\ *)?$/;
 /**
@@ -188,8 +212,10 @@ function parseTime(now, provided) {
     // 2 = minutes
     // 3 = seconds
     if (provided == '' || matches == null || matches[0] == '') {
+        core.debug('Time provided does not match custom format');
         return provided;
     }
+    core.debug(`Adding ${matches[0]} hours ${matches[1]} minutes ${matches[2]} seconds to ${now.toDate().toISOString()}`);
     // If any of the matches are undefined, moment adds nothing
     return now
         .add(matches[0], 'hours')
