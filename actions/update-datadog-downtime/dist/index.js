@@ -128,7 +128,7 @@ const config_1 = __nccwpck_require__(88);
 const DowntimeURL = "https://api.datadoghq.com/api/v2/downtime";
 const Headers = {
     ApiKey: "DD-API-KEY",
-    AppKey: "DD-APP-KEY",
+    AppKey: "DD-APPLICATION-KEY",
 };
 /**
  * The main runtime
