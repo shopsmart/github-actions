@@ -30,11 +30,14 @@ async function run() {
 
   const resp = await req.post(DowntimeURL, config.json)
 
-  core.setOutput("status-code", resp.message.statusCode)
-  core.setOutput("body", await resp.readBody())
+  const statusCode = resp.message.statusCode
+  const body = await resp.readBody()
+
+  core.setOutput("status-code", statusCode)
+  core.setOutput("body", body)
 
   if (resp.message.statusCode != httpm.HttpCodes.OK) {
-    core.setFailed(`The request to the Datadog Downtime API failed with status code: ${resp.message.statusCode}`)
+    core.setFailed(`The request to the Datadog Downtime API failed with status code: ${statusCode}\nErrors: ${body}`)
   }
 }
 
