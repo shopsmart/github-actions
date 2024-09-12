@@ -1,17 +1,6 @@
 ---
 
 repos:
-  # Put this first because the dist gets a few violations for the following hooks
-  - repo: local
-    hooks:
-      - id: build-create-datadog-downtime-dist
-        name: Build the create-datadog-downtime dist
-        entry: bash -c 'cd actions/create-datadog-downtime && npm run build'
-        language: system
-        verbose: true
-        files: ^actions/create-datadog-downtime/(src\/.*\.ts|jest\.config\.js|tsconfig\.json|package(-lock)?\.json)$
-        pass_filenames: false
-
   ## General
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.4.0
@@ -35,3 +24,13 @@ repos:
         args: [--autofix, --no-sort-keys, --indent=4]
       - id: trailing-whitespace
         exclude: ^.*/dist/.*$
+
+  - repo: local
+    hooks:
+      - id: build-create-datadog-downtime-dist
+        name: Build the create-datadog-downtime dist
+        entry: bash -c 'cd actions/create-datadog-downtime && npm run build'
+        language: system
+        verbose: true
+        files: ^actions/create-datadog-downtime/(src\/.*\.ts|jest\.config\.js|tsconfig\.json|package(-lock)?\.json)$
+        pass_filenames: false
