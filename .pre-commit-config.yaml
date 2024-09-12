@@ -6,7 +6,7 @@ repos:
     hooks:
       - id: build-create-datadog-downtime-dist
         name: Build the create-datadog-downtime dist
-        entry: cd actions/create-datadog-downtime && npm run build
+        entry: bash -c 'cd actions/create-datadog-downtime && npm run build'
         language: system
         verbose: true
         files: ^actions/create-datadog-downtime/(src\/.*\.ts|jest\.config\.js|tsconfig\.json|package(-lock)?\.json)$
