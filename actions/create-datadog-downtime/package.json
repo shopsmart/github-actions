@@ -1,5 +1,5 @@
 {
-    "name": "update-datadog-downtime",
+    "name": "create-datadog-downtime",
     "version": "1.0.0",
     "description": "A Github Action to update a Datadog downtime",
     "main": "lib/main.js",
