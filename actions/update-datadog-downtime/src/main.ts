@@ -30,7 +30,7 @@ async function run() {
     }
   }
 
-  const resp = await req.post(DowntimeURL, config.json)
+  const resp = await req.post(DowntimeURL, config.json())
 
   const statusCode = resp.message.statusCode
   const body = await resp.readBody()

@@ -41,6 +41,7 @@ describe('config tests', () => {
     expect(config.appKey).toEqual("mock-app-key")
     expect(config.end).toEqual('2024-09-09T22:09:27.992Z')
     expect(config.start).toEqual('2024-09-09T22:09:27.993Z')
+    expect(config.scope).toEqual('application:www,environment:staging')
     expect(config.message).toEqual('Test message')
     expect(config.monitorId).toEqual('id-123456789')
     expect(config.monitorTags).toEqual(['one:two', 'three:four'])
@@ -87,12 +88,12 @@ describe('config tests', () => {
   it('should output a proper payload', () => {
     const config = new Config()
 
-    expect(config.payload).toEqual(minimalPayload)
+    expect(config.payload()).toEqual(minimalPayload)
   })
 
   it('should output a proper payload as json', () => {
     const config = new Config()
 
-    expect(config.json).toEqual(JSON.stringify(minimalPayload))
+    expect(config.json()).toEqual(JSON.stringify(minimalPayload))
   })
 })

@@ -52,7 +52,7 @@ class Config {
         }
         return { monitor_tags: this.monitorTags };
     }
-    get payload() {
+    payload() {
         return {
             data: {
                 type: 'downtime',
@@ -68,8 +68,8 @@ class Config {
             },
         };
     }
-    get json() {
-        return JSON.stringify(this.payload);
+    json() {
+        return JSON.stringify(this.payload());
     }
 }
 exports.Config = Config;
@@ -142,7 +142,7 @@ function run() {
                 [Headers.AppKey]: config.appKey,
             }
         };
-        const resp = yield req.post(DowntimeURL, config.json);
+        const resp = yield req.post(DowntimeURL, config.json());
         const statusCode = resp.message.statusCode;
         const body = yield resp.readBody();
         core.setOutput("status-code", statusCode);

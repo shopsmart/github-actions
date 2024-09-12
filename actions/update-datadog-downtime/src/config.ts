@@ -34,7 +34,7 @@ export class Config {
     return {monitor_tags: this.monitorTags}
   }
 
-  get payload(): any {
+  payload(): any {
     return {
       data: {
         type: 'downtime',
@@ -51,7 +51,7 @@ export class Config {
     }
   }
 
-  get json(): string {
-    return JSON.stringify(this.payload)
+  json(): string {
+    return JSON.stringify(this.payload())
   }
 }
