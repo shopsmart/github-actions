@@ -36,8 +36,8 @@ export class Config {
 
   get payload(): any {
     return {
-      type: 'downtime',
       data: {
+        type: 'downtime',
         attributes: {
           message: this.message,
           monitor_identifier: this.monitorIdentifier,
@@ -46,7 +46,6 @@ export class Config {
             start: this.start,
           },
           scope: this.scope,
-          status: 'active',
         },
       },
     }

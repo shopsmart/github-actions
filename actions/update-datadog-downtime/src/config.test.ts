@@ -70,8 +70,8 @@ describe('config tests', () => {
   })
 
   const minimalPayload = {
-    type: 'downtime',
     data: {
+      type: 'downtime',
       attributes: {
         monitor_identifier: {
           monitor_tags: []
@@ -80,9 +80,8 @@ describe('config tests', () => {
           end: '2024-09-09T22:09:27.992Z',
         },
         scope: 'application:www,environment:staging',
-        status: 'active'
-      }
-    }
+      },
+    },
   }
 
   it('should output a proper payload', () => {

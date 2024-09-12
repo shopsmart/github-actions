@@ -58,8 +58,8 @@ class Config {
     }
     get payload() {
         return {
-            type: 'downtime',
             data: {
+                type: 'downtime',
                 attributes: {
                     message: this.message,
                     monitor_identifier: this.monitorIdentifier,
@@ -68,7 +68,6 @@ class Config {
                         start: this.start,
                     },
                     scope: this.scope,
-                    status: 'active',
                 },
             },
         };
