@@ -146,7 +146,7 @@ function run() {
                 [Headers.AppKey]: config.appKey,
             }
         };
-        const resp = yield req.post(DowntimeURL, config.payload());
+        const resp = yield req.post(DowntimeURL, config.json);
         core.setOutput("status-code", resp.message.statusCode);
         core.setOutput("body", yield resp.readBody());
         if (resp.message.statusCode != httpm.HttpCodes.OK) {
