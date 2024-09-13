@@ -197,7 +197,7 @@ jobs:
 
       - name: 'Notify datadog of deployment'
         if: inputs.notify-datadog == true
-        uses: shopsmart/github-actions/actions/create-datadog-downtime@feature/datadog-downtime
+        uses: shopsmart/github-actions/actions/create-datadog-downtime@v3
         with:
           datadog-api-key: ${{ secrets.datadog-api-key }}
           datadog-app-key: ${{ secrets.datadog-app-key }}
