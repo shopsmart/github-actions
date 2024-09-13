@@ -21,6 +21,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'Setup node'
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: actions/create-datadog-downtime/.nvmrc
+          cache: npm
+          cache-dependency-path: actions/create-datadog-downtime/package-lock.json
+
+      - name: 'Install dependencies'
+        run: npm ci
+        working-directory: actions/create-datadog-downtime
+
       - name: 'Run pre-commit'
         uses: pre-commit/action@v2.0.0
         with:
@@ -41,3 +55,29 @@ jobs:
 
       - name: 'Run action tests'
         run: bats -r actions/*/*.bats
+
+  node-tests:
+    name: 'Run node unit tests'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        action:
+          - create-datadog-downtime
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2
+
+      - name: 'Setup node'
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: actions/${{ matrix.action }}/.nvmrc
+          cache: npm
+          cache-dependency-path: actions/${{ matrix.action }}/package-lock.json
+
+      - name: 'Install dependencies'
+        run: npm ci
+        working-directory: actions/${{ matrix.action }}
+
+      - name: 'Run tests'
+        run: npm test
+        working-directory: actions/${{ matrix.action }}

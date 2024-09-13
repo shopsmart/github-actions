@@ -104,13 +104,57 @@ on:
         type: string
         required: false
 
+      # notify-datadog
+      notify-datadog:
+        description: 'Indicates if a datadog downtime should be posted'
+        type: boolean
+        default: false
+      allow-datadog-to-fail:
+        description: 'If true, will not fail the pipeline if the datadog downtime action fails'
+        type: boolean
+        default: true
+
+      datadog-scope:
+        description: 'The scope to which the downtime applies. Must follow the [common search syntax](https://docs.datadoghq.com/logs/explorer/search_syntax/)'
+        type: string
+        required: false
+      datadog-message:
+        description: 'A message to include with notifications for this downtime. Email notifications can be sent to specific users by using the same @username notation as events.'
+        type: string
+        required: false
+      datadog-monitor-tags:
+        description: 'A comma delimited list of monitor tags. For example, tags that are applied directly to monitors, not tags that are used in monitor queries (which are filtered by the scope parameter), to which the downtime applies. The resulting downtime applies to monitors that match all provided monitor tags. Setting monitor_tags to [*] configures the downtime to mute all monitors for the given scope.'
+        type: string
+        required: false
+      datadog-monitor-id:
+        description: 'ID of the monitor to prevent notifications.'
+        type: string
+        required: false
+      datadog-end:
+        description: 'ISO-8601 Datetime to end the downtime.  Additionally, one can specify time from now as `XhXmXs`.'
+        type: string
+        required: false
+      datadog-start:
+        description: 'ISO-8601 Datetime to start the downtime.  Additionally, one can specify time from now as `XhXmXs`.'
+        type: string
+        required: false
+
     secrets:
       aws-account-id:
         description: 'The AWS account id that the ecr repository lives under'
         required: true
 
+      # notify-slack
       slack-webhook-url:
         description: 'The webhook URL to send the slack notification to; requires notify-slack to be true'
+        required: false
+
+      # notify-datadog
+      datadog-api-key:
+        description: 'The secret API key to authenticate the request with'
+        required: false
+      datadog-app-key:
+        description: 'The app key to authenticate the request with (pairs with the api key)'
         required: false
 
     outputs:
@@ -150,6 +194,20 @@ jobs:
           template: ${{ inputs.slack-template }}
           version: ${{ inputs.version }}
           slack-webhook-url: ${{ secrets.slack-webhook-url }}
+
+      - name: 'Notify datadog of deployment'
+        if: inputs.notify-datadog == true
+        uses: shopsmart/github-actions/actions/create-datadog-downtime@v3
+        with:
+          datadog-api-key: ${{ secrets.datadog-api-key }}
+          datadog-app-key: ${{ secrets.datadog-app-key }}
+          scope: ${{ inputs.datadog-scope }}
+          message: ${{ inputs.datadog-message }}
+          monitor-id: ${{ inputs.datadog-monitor-id }}
+          monitor-tags: ${{ inputs.datadog-monitor-tags }}
+          start: ${{ inputs.datadog-start }}
+          end: ${{ inputs.datadog-end }}
+        continue-on-error: ${{ inputs.allow-datadog-to-fail }}
 
       - name: 'Download task-definition'
         uses: actions/download-artifact@v3
