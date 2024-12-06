@@ -198,7 +198,7 @@ jobs:
       # deploy
       - name: 'Deploy'
         id: deploy
-        uses: shopsmart/github-actions/actions/deploy-lambda-function@feature/lambda-update-alias
+        uses: shopsmart/github-actions/actions/deploy-lambda-function@v3
         with:
           zip-file: ${{ inputs.pattern }}
           function-name: ${{ inputs.function-name }}
