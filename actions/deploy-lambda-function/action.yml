@@ -83,7 +83,7 @@ runs:
       id: publish-version
       if: inputs.publish-version == 'true'
       shell: bash
-      run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.version-tag || github.sha }}"
+      run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.version-description || github.sha }}"
 
     - name: 'Update the alias'
       if: inputs.update-alias == 'true' && inputs.publish-version == 'true'
