@@ -27,6 +27,12 @@ inputs:
   version-description:
     description: 'The description of the version being published (if publish-version is true)'
     default: ${{ github.sha }}
+  update-alias:
+    description: 'If true, the alias will be updated to the new version'
+    default: 'false'
+  alias-name:
+    description: 'The name of the alias to update. Required if update-alias is true'
+    default: ''
 
   # s3 options
   upload-to-s3:
@@ -78,3 +84,8 @@ runs:
       if: inputs.publish-version == 'true'
       shell: bash
       run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.version-tag || github.sha }}"
+
+    - name: 'Update the alias'
+      if: inputs.update-alias == 'true'
+      shell: bash
+      run: ${{ github.action_path }}/alias-lambda.sh "${{ inputs.function-name }}" "${{ inputs.alias-name }}" "${{ steps.publish-version.outputs.version }}"

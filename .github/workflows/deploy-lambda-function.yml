@@ -74,6 +74,14 @@ on:
         description: 'The description of the version being published (if publish-version is true)'
         type: string
         default: ${{ github.sha }}
+      update-alias:
+        description: 'If true, the alias will be updated to the new version'
+        type: boolean
+        default: false
+      alias-name:
+        description: 'The name of the alias to update. Required if update-alias is true'
+        type: string
+        default: ''
 
       # s3 options
       upload-to-s3:
@@ -190,7 +198,7 @@ jobs:
       # deploy
       - name: 'Deploy'
         id: deploy
-        uses: shopsmart/github-actions/actions/deploy-lambda-function@v3
+        uses: shopsmart/github-actions/actions/deploy-lambda-function@feature/lambda-update-alias
         with:
           zip-file: ${{ inputs.pattern }}
           function-name: ${{ inputs.function-name }}
@@ -199,6 +207,8 @@ jobs:
             ${{ inputs.function-tags }}
           publish-version: ${{ inputs.publish-version }}
           version-description: ${{ inputs.version }}
+          update-alias: ${{ inputs.update-alias }}
+          alias-name: ${{ inputs.alias-name }}
           upload-to-s3: ${{ inputs.upload-to-s3 }}
           s3-bucket: ${{ inputs.s3-bucket }}
           s3-key: ${{ inputs.s3-key }}
