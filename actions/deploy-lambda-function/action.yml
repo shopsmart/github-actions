@@ -28,7 +28,7 @@ inputs:
     description: 'The description of the version being published (if publish-version is true)'
     default: ${{ github.sha }}
   update-alias:
-    description: 'If true, the alias will be updated to the new version'
+    description: 'If true, the alias will be updated to the new version.  Also requires publish-version to be true'
     default: 'false'
   alias-name:
     description: 'The name of the alias to update. Required if update-alias is true'
@@ -86,6 +86,6 @@ runs:
       run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.version-tag || github.sha }}"
 
     - name: 'Update the alias'
-      if: inputs.update-alias == 'true'
+      if: inputs.update-alias == 'true' && inputs.publish-version == 'true'
       shell: bash
       run: ${{ github.action_path }}/update-alias.sh "${{ inputs.function-name }}" "${{ inputs.alias-name }}" "${{ steps.publish-version.outputs.version }}"
