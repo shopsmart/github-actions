@@ -70,6 +70,10 @@ on:
         description: 'If true, a lambda version will be published'
         type: boolean
         default: true
+      version-description:
+        description: 'The description of the version being published (if publish-version is true)'
+        type: string
+        default: ${{ github.sha }}
 
       # s3 options
       upload-to-s3:
@@ -194,6 +198,7 @@ jobs:
             version=${{ inputs.version }}
             ${{ inputs.function-tags }}
           publish-version: ${{ inputs.publish-version }}
+          version-description: ${{ inputs.version }}
           upload-to-s3: ${{ inputs.upload-to-s3 }}
           s3-bucket: ${{ inputs.s3-bucket }}
           s3-key: ${{ inputs.s3-key }}

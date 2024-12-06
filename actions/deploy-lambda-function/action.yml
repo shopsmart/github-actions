@@ -24,6 +24,9 @@ inputs:
   publish-version:
     description: If true, a lambda version will be published
     default: 'true'
+  version-description:
+    description: 'The description of the version being published (if publish-version is true)'
+    default: ${{ github.sha }}
 
   # s3 options
   upload-to-s3:
@@ -74,4 +77,4 @@ runs:
       id: publish-version
       if: inputs.publish-version == 'true'
       shell: bash
-      run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.tag || github.sha }}"
+      run: ${{ github.action_path }}/version-lambda.sh "${{ inputs.function-name }}" "${{ inputs.version-tag || github.sha }}"
