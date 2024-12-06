@@ -88,4 +88,4 @@ runs:
     - name: 'Update the alias'
       if: inputs.update-alias == 'true'
       shell: bash
-      run: ${{ github.action_path }}/alias-lambda.sh "${{ inputs.function-name }}" "${{ inputs.alias-name }}" "${{ steps.publish-version.outputs.version }}"
+      run: ${{ github.action_path }}/update-alias.sh "${{ inputs.function-name }}" "${{ inputs.alias-name }}" "${{ steps.publish-version.outputs.version }}"
