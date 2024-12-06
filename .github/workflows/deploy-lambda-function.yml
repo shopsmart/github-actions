@@ -206,7 +206,7 @@ jobs:
             version=${{ inputs.version }}
             ${{ inputs.function-tags }}
           publish-version: ${{ inputs.publish-version }}
-          version-description: ${{ inputs.version }}
+          version-description: ${{ inputs.version-description }}
           update-alias: ${{ inputs.update-alias }}
           alias-name: ${{ inputs.alias-name }}
           upload-to-s3: ${{ inputs.upload-to-s3 }}
