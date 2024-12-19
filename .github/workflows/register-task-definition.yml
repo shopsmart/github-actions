@@ -215,7 +215,7 @@ jobs:
           name: ${{ inputs.artifact-name }}
 
       - name: 'Configure AWS Credentials'
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v4.0.2
         with:
           aws-region: ${{ inputs.aws-region }}
           role-to-assume: ${{ env.DEPLOY_IAM_ROLE }}
