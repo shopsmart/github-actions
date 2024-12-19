@@ -11,9 +11,10 @@ updates:
       - "maintenance"
       - "dependencies"
     groups:
-      patterns:
-        - ".*"
-      exclude-patterns:
-        # These actions require major release updates
-        - "actions/upload-artifact"
-        - "actions/download-artifact"
+      all-actions:
+        patterns:
+          - ".*"
+        exclude-patterns:
+          # These actions require major release updates
+          - "actions/upload-artifact"
+          - "actions/download-artifact"
