@@ -5,9 +5,8 @@ updates:
   - package-ecosystem: "github-actions"
     directories:
       - "/"
-      - "/.github/actions"
-      - "/.github/workflows"
-      - "/actions"
+      - "/.github/actions/**"
+      - "/actions/**"
     schedule:
       # Check for updates to GitHub Actions every week
       interval: "weekly"
