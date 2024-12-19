@@ -125,7 +125,7 @@ runs:
 
     - name: 'Post message to slack'
       id: slack
-      uses: slackapi/slack-github-action@v1
+      uses: slackapi/slack-github-action@v2
       with:
         payload: ${{ steps.render.outputs.content }}
       env:

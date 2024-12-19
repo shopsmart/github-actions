@@ -14,10 +14,10 @@ runs:
       run: brew install bats-core
 
     - name: 'Checkout actions'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: 'Checkout hello world project'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         repository: mike-carey/hello-world-nodejs
         path: ./hello-world

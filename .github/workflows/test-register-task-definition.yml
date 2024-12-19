@@ -24,7 +24,7 @@ jobs:
       ACTION_PATH: .github/actions/test-register-task-definition
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 'Rewrite task definition file'
         shell: bash
@@ -57,7 +57,7 @@ jobs:
       TASK_DEFINITION_ARN: arn:aws:ecs:us-east-1:${{ secrets.AWS_ACCOUNT_ID }}:task-definition/github-actions-tests:${{ needs.run-register-task-definition-workflow.outputs.revision-number }}
     steps:
       - name: 'Checkout actions'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 'Test register-task-definition workflow'
         uses: ./.github/actions/test-register-task-definition
