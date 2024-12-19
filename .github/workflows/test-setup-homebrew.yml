@@ -20,7 +20,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: 'Checkout actions'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 'Test setup-brew action'
         uses: ./.github/actions/test-setup-homebrew
