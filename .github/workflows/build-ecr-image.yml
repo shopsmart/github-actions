@@ -289,7 +289,7 @@ jobs:
 
       - name: 'Notify slack of build started'
         if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v2
+        uses: shopsmart/github-actions/actions/notify-slack@v3
         with:
           application: ${{ inputs.application }}
           status: started
@@ -301,7 +301,7 @@ jobs:
       - name: 'Is github release?'
         id: is-gh-release
         if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
-        uses: shopsmart/github-actions/actions/is-gh-release@v2
+        uses: shopsmart/github-actions/actions/is-gh-release@v3
         with:
           ref: ${{ inputs.ref }}
 
@@ -415,7 +415,7 @@ jobs:
 
       - name: 'Notify slack of build status'
         if: always() && (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v2
+        uses: shopsmart/github-actions/actions/notify-slack@v3
         with:
           application: ${{ inputs.application }}
           status: ${{ job.status }}
