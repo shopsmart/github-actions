@@ -8,12 +8,12 @@ updates:
       # Check for updates to GitHub Actions every week
       interval: "weekly"
     labels:
-      - "maintenance"
       - "dependencies"
     groups:
       all-actions:
+        applies-to: version-updates
         patterns:
-          - ".*"
+          - "*"
         exclude-patterns:
           # These actions require major release updates
           - "actions/upload-artifact"
