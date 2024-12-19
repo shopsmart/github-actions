@@ -270,7 +270,7 @@ jobs:
           role-duration-seconds: 1200
 
       - name: 'Login to Amazon ECR'
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: 'Check if the image already exists'
         id: already-exists
