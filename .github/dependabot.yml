@@ -20,27 +20,11 @@ updates:
         applies-to: version-updates
         patterns:
           - "*"
-
-  # Artifact actions causing breaking changes.  When this repo updates the upload-artifact action,
-  #   the consuming repo must also update the download-artifact action and vice-versa.
-  - package-ecosystem: "github-actions"
-    directories:
-      - "/"
-      - "/.github/actions/**"
-      - "/actions/**"
-    schedule:
-      # Check for updates to Github Actions every week
-      interval: "weekly"
-    labels:
-      - "breaking changes"
-      - "dependencies"
-    ignore:
-      - dependency-name: '*'
-    allow:
-      - dependency-name: 'actions/upload-artifact'
-      - dependency-name: 'actions/download-artifact'
-    groups:
+        exclude-patterns:
+          - "actions/*-artifact"
+      # Artifact actions causing breaking changes.  When this repo updates the upload-artifact action,
+      #   the consuming repo must also update the download-artifact action and vice-versa.
       artifact-actions:
         applies-to: version-updates
         patterns:
-          - "*"
+          - "actions/*-artifact"
