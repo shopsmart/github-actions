@@ -210,7 +210,7 @@ jobs:
         continue-on-error: ${{ inputs.allow-datadog-to-fail }}
 
       - name: 'Download task-definition'
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
 
