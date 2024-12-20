@@ -18,6 +18,10 @@ updates:
         patterns:
           - "*"
         exclude-patterns:
-          # These actions require major release updates
-          - "actions/upload-artifact"
-          - "actions/download-artifact"
+          - "actions/*-artifact"
+      # Artifact actions causing breaking changes.  When this repo updates the upload-artifact action,
+      #   the consuming repo must also update the download-artifact action and vice-versa.
+      artifact-actions:
+        applies-to: version-updates
+        patterns:
+          - "actions/*-artifact"
