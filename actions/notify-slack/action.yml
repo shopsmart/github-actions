@@ -125,9 +125,10 @@ runs:
 
     - name: 'Post message to slack'
       id: slack
-      uses: slackapi/slack-github-action@v1
+      uses: slackapi/slack-github-action@v2
       with:
         payload: ${{ steps.render.outputs.content }}
+        webhook-type: incoming-webhook
       env:
         SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

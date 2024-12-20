@@ -39,7 +39,7 @@ jobs:
     needs: run-render-task-definition-workflow
     steps:
       - name: 'Checkout actions'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 'Test render-task-definition workflow'
         uses: ./.github/actions/test-render-task-definition

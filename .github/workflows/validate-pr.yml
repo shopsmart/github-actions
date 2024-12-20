@@ -17,15 +17,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: 'Checkout'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 'Setup node'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: actions/create-datadog-downtime/.nvmrc
           cache: npm
@@ -36,7 +36,7 @@ jobs:
         working-directory: actions/create-datadog-downtime
 
       - name: 'Run pre-commit'
-        uses: pre-commit/action@v2.0.0
+        uses: pre-commit/action@v3.0.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 'Setup Homebrew'
         uses: Homebrew/actions/setup-homebrew@master
@@ -65,10 +65,10 @@ jobs:
           - create-datadog-downtime
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: 'Setup node'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: actions/${{ matrix.action }}/.nvmrc
           cache: npm

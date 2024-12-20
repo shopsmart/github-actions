@@ -184,7 +184,7 @@ jobs:
     steps:
       - name: 'Notify slack of deployment started'
         if: inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v2
+        uses: shopsmart/github-actions/actions/notify-slack@v3
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
@@ -215,14 +215,14 @@ jobs:
           name: ${{ inputs.artifact-name }}
 
       - name: 'Configure AWS Credentials'
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ inputs.aws-region }}
           role-to-assume: ${{ env.DEPLOY_IAM_ROLE }}
 
       - name: 'Register task definition'
         id: register
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ inputs.task-definition }}
           service: ${{ inputs.service }}
@@ -236,14 +236,14 @@ jobs:
           force-new-deployment: ${{ inputs.force-new-deployment }}
 
       - name: 'Tag the task definition'
-        uses: shopsmart/github-actions/actions/tag-ecs-resource@v2
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@v3
         with:
           resource-arn: ${{ steps.register.outputs.task-definition-arn }}
           tags: ${{ inputs.task-definition-tags }}
 
       - name: 'Tag the ECS Service'
         if: inputs.service != ''
-        uses: shopsmart/github-actions/actions/tag-ecs-resource@v2
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@v3
         with:
           resource-arn: ${{ env.ECS_SERVICE_ARN }}
           tags: ${{ inputs.service-tags }}
@@ -256,7 +256,7 @@ jobs:
 
       - name: 'Notify slack of deployment status'
         if: always() && inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v2
+        uses: shopsmart/github-actions/actions/notify-slack@v3
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}

@@ -19,13 +19,13 @@ runs:
       run: brew install bats-core
 
     - name: 'Checkout'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Use local actions'
       uses: ./.github/actions/use-local-actions
 
     - name: 'Configure AWS Credentials'
-      uses: aws-actions/configure-aws-credentials@v1-node16
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: 'us-east-1'
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
@@ -38,7 +38,7 @@ runs:
 
     - name: 'Publish a new revision of the task definition'
       id: new-revision
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v2
       with:
         task-definition: ${{ github.action_path }}/task-definition.yml
 

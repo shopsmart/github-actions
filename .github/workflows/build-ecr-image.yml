@@ -252,7 +252,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref }}
 
@@ -263,14 +263,14 @@ jobs:
           echo "sha=$sha" >> $GITHUB_OUTPUT
 
       - name: 'Configure AWS credentials'
-        uses: aws-actions/configure-aws-credentials@v1-node16
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ inputs.aws-region }}
           role-to-assume: ${{ env.DEPLOY_IAM_ROLE }}
           role-duration-seconds: 1200
 
       - name: 'Login to Amazon ECR'
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
 
       - name: 'Check if the image already exists'
         id: already-exists
@@ -289,7 +289,7 @@ jobs:
 
       - name: 'Notify slack of build started'
         if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v2
+        uses: shopsmart/github-actions/actions/notify-slack@v3
         with:
           application: ${{ inputs.application }}
           status: started
@@ -301,7 +301,7 @@ jobs:
       - name: 'Is github release?'
         id: is-gh-release
         if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
-        uses: shopsmart/github-actions/actions/is-gh-release@v2
+        uses: shopsmart/github-actions/actions/is-gh-release@v3
         with:
           ref: ${{ inputs.ref }}
 
@@ -328,13 +328,13 @@ jobs:
       # for private dependencies
       - name: 'Install SSH Key'
         if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && steps.ssh.outputs.ssh != ''
-        uses: webfactory/ssh-agent@v0.7.0
+        uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.ssh-private-key }}
 
       - name: 'Setup docker buildx'
         if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
         with:
           version: ${{ inputs.buildx-version }}
           driver: ${{ inputs.driver }}
@@ -350,7 +350,7 @@ jobs:
 
       - name: 'Build docker image'
         if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           add-hosts: ${{ inputs.add-hosts }}
           allow: ${{ inputs.allow }}
@@ -407,7 +407,7 @@ jobs:
 
       - name: 'Upload docker image'
         if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && steps.is-gh-release.outputs.is-release == 'true'
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.ref }}
           files: docker-image-*.tgz
@@ -415,7 +415,7 @@ jobs:
 
       - name: 'Notify slack of build status'
         if: always() && (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v2
+        uses: shopsmart/github-actions/actions/notify-slack@v3
         with:
           application: ${{ inputs.application }}
           status: ${{ job.status }}
