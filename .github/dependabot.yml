@@ -12,12 +12,35 @@ updates:
       interval: "weekly"
     labels:
       - "dependencies"
+    ignore:
+      - dependency-name: 'actions/upload-artifact'
+      - dependency-name: 'actions/download-artifact'
     groups:
       all-actions:
         applies-to: version-updates
         patterns:
           - "*"
-        exclude-patterns:
-          # These actions require major release updates
-          - "actions/upload-artifact"
-          - "actions/download-artifact"
+
+  # Artifact actions causing breaking changes.  When this repo updates the upload-artifact action,
+  #   the consuming repo must also update the download-artifact action and vice-versa.
+  - package-ecosystem: "github-actions"
+    directories:
+      - "/"
+      - "/.github/actions/**"
+      - "/actions/**"
+    schedule:
+      # Check for updates to Github Actions every week
+      interval: "weekly"
+    labels:
+      - "breaking changes"
+      - "dependencies"
+    ignore:
+      - dependency-name: '*'
+    allow:
+      - dependency-name: 'actions/upload-artifact'
+      - dependency-name: 'actions/download-artifact'
+    groups:
+      artifact-actions:
+        applies-to: version-updates
+        patterns:
+          - "*"
