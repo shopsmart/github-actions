@@ -37,7 +37,7 @@ jobs:
           zip archive.zip ./index.js
 
       - name: 'Upload the archive file'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: lambda-function
           path: .github/actions/test-deploy-lambda-function-workflow/archive.zip
