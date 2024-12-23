@@ -148,7 +148,7 @@ jobs:
 
       - name: 'Render task definition'
         id: render
-        uses: shopsmart/github-actions/actions/render-jinjanator-template@v3
+        uses: shopsmart/github-actions/actions/render-jinjanator-template@v4
         with:
           working-directory: ${{ inputs.working-directory }}
           template: ${{ inputs.template }}

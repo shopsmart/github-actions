@@ -158,7 +158,7 @@ jobs:
     steps:
       - name: 'Notify slack of deployment started'
         if: inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v3
+        uses: shopsmart/github-actions/actions/notify-slack@v4
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
@@ -198,7 +198,7 @@ jobs:
       # deploy
       - name: 'Deploy'
         id: deploy
-        uses: shopsmart/github-actions/actions/deploy-lambda-function@v3
+        uses: shopsmart/github-actions/actions/deploy-lambda-function@v4
         with:
           zip-file: ${{ inputs.pattern }}
           function-name: ${{ inputs.function-name }}
@@ -232,7 +232,7 @@ jobs:
 
       - name: 'Notify slack of deployment status'
         if: always() && inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v3
+        uses: shopsmart/github-actions/actions/notify-slack@v4
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}

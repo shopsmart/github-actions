@@ -47,7 +47,7 @@ runs:
 
     - name: 'Unpack assets'
       id: unpack
-      uses: shopsmart/github-actions/actions/unpack-archive@v3
+      uses: shopsmart/github-actions/actions/unpack-archive@v4
       with:
         filename: ${{ inputs.pattern }}
         destination: assets
