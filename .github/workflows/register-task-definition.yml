@@ -184,7 +184,7 @@ jobs:
     steps:
       - name: 'Notify slack of deployment started'
         if: inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v3
+        uses: shopsmart/github-actions/actions/notify-slack@v4
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
@@ -197,7 +197,7 @@ jobs:
 
       - name: 'Notify datadog of deployment'
         if: inputs.notify-datadog == true
-        uses: shopsmart/github-actions/actions/create-datadog-downtime@v3
+        uses: shopsmart/github-actions/actions/create-datadog-downtime@v4
         with:
           datadog-api-key: ${{ secrets.datadog-api-key }}
           datadog-app-key: ${{ secrets.datadog-app-key }}
@@ -236,14 +236,14 @@ jobs:
           force-new-deployment: ${{ inputs.force-new-deployment }}
 
       - name: 'Tag the task definition'
-        uses: shopsmart/github-actions/actions/tag-ecs-resource@v3
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@v4
         with:
           resource-arn: ${{ steps.register.outputs.task-definition-arn }}
           tags: ${{ inputs.task-definition-tags }}
 
       - name: 'Tag the ECS Service'
         if: inputs.service != ''
-        uses: shopsmart/github-actions/actions/tag-ecs-resource@v3
+        uses: shopsmart/github-actions/actions/tag-ecs-resource@v4
         with:
           resource-arn: ${{ env.ECS_SERVICE_ARN }}
           tags: ${{ inputs.service-tags }}
@@ -256,7 +256,7 @@ jobs:
 
       - name: 'Notify slack of deployment status'
         if: always() && inputs.notify-slack == true
-        uses: shopsmart/github-actions/actions/notify-slack@v3
+        uses: shopsmart/github-actions/actions/notify-slack@v4
         with:
           application: ${{ inputs.application }}
           environment: ${{ inputs.environment }}
