@@ -45,6 +45,7 @@ runs:
         pattern: 'archive.tgz'
         s3-bucket: shopsmart-github-actions-tests
         s3-bucket-path: ${{ steps.id.outputs.id }}
+        cache-control: max-age=3600
 
     - name: 'Validate'
       shell: bash
@@ -52,3 +53,4 @@ runs:
       env:
         S3_BUCKET: shopsmart-github-actions-tests
         S3_BUCKET_PATH: ${{ steps.id.outputs.id }}
+        CACHE_CONTROL: max-age=3600
