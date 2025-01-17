@@ -12,6 +12,8 @@ function setup() {
 
 function teardown() {
   rm -f "$AWS_CMD_FILE"
+
+  unset CACHE_CONTROL
 }
 
 function aws() {
@@ -34,4 +36,14 @@ function aws() {
   [ "$status" -eq 0 ]
   [ -f "$AWS_CMD_FILE" ]
   [[ "$(< "$AWS_CMD_FILE")" == s3\ cp\ --recursive\ my-path/\ s3://my-s3-bucket/my-s3-path/ ]]
+}
+
+@test "it should set the cache-control" {
+  export CACHE_CONTROL='max-age=36000'
+
+  run upload-assets my-path
+
+  [ "$status" -eq 0 ]
+  [ -f "$AWS_CMD_FILE" ]
+  [[ "$(< "$AWS_CMD_FILE")" == s3\ cp\ --recursive\ my-path/\ s3://my-s3-bucket/\ --cache-control\ max-age=36000 ]]
 }

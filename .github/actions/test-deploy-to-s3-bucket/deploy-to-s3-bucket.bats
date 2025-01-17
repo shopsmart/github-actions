@@ -35,3 +35,15 @@ function teardown() {
   [ "$status" -eq 0 ]
   [[ "$output" =~ $S3_TAG ]]
 }
+
+
+@test "it should have set the cache-control metadata" {
+  run aws s3api head-object --no-cli-pager \
+    --bucket "$S3_BUCKET" \
+    --key "$S3_BUCKET_PATH/style.css" \
+    --query 'CacheControl' \
+    --output text
+
+  [ "$status" -eq 0 ]
+  [ "$output" = "$CACHE_CONTROL" ]
+}
