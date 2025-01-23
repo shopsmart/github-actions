@@ -116,6 +116,10 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
+      - name: 'Resolve the sha'
+        id: sha
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: 'Setup python'
         uses: actions/setup-python@v5
         with:
@@ -157,6 +161,7 @@ jobs:
           format-options: ${{ inputs.format-options }}
           environment: |
             TAG=${{ inputs.ref }}
+            SHA=${{ steps.sha.outputs.sha }}
             AWS_ACCOUNT_ID=${{ secrets.aws-account-id }}
             AWS_REGION=${{ inputs.aws-region }}
             ${{ inputs.environment }}
