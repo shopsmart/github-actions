@@ -23,6 +23,11 @@ function retag-docker-image() {
     return 0
   fi
 
+  docker pull "$source" || {
+    echo "[ERROR] Source image '$source' does not exist or cannot be pulled." >&2
+    return 1
+  }
+
   local retagged_images=()
   for target in "${targets[@]}"; do
     [ -n "$target" ] || continue

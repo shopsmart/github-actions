@@ -17,38 +17,53 @@ function teardown() {
   rm -f "$DOCKER_CMD_FILE"
 }
 
-@test "should error out if no source image is provided" {
+@test "it should error out if no source image is provided" {
   run retag-docker-image
 
   [ "$status" -ne 0 ]
   [ "${lines[0]}" = "Usage: $0 <source-image> [<target-image1> <target-image2> ...]" ]
 }
 
-@test "should not error out if no target images are provided" {
+@test "it should not error out if no target images are provided" {
   run retag-docker-image "source-image"
 
   [ "$status" -eq 0 ]
 }
 
-@test "should retag a single target image" {
+@test "it should error out if source image does not exist" {
+  run retag-docker-image "nonexistent-image"
+
+  [ "$status" -ne 0 ]
+  [[ "${lines[0]}" =~ "[ERROR] Source image 'nonexistent-image' does not exist or cannot be pulled." ]]
+}
+
+@test "it should pull the source image" {
   run retag-docker-image "source-image" "target-image"
 
   [ "$status" -eq 0 ]
   [ -f "$DOCKER_CMD_FILE" ]
-  [ "$(< "$DOCKER_CMD_FILE")" = "docker tag source-image target-image" ]
+  [[ "$(< "$DOCKER_CMD_FILE")" = .*"docker pull source-image" ]]
 }
 
-@test "should retag multiple target images" {
+@test "it should retag a single target image" {
+  run retag-docker-image "source-image" "target-image"
+
+  [ "$status" -eq 0 ]
+  [ -f "$DOCKER_CMD_FILE" ]
+  [[ "$(< "$DOCKER_CMD_FILE")" = .*"docker tag source-image target-image" ]]
+}
+
+@test "it should retag multiple target images" {
   run retag-docker-image "source-image" "target-image1" "target-image2"
 
   [ "$status" -eq 0 ]
   [ -f "$DOCKER_CMD_FILE" ]
-  [[ "$(< "$DOCKER_CMD_FILE")" =~ "docker tag source-image target-image1".* ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image1".* ]]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image2" ]]
   [[ "$(< "$GITHUB_OUTPUT")" =~ "tags=target-image1 target-image2" ]]
 }
 
-@test "should read target images from TARGETS environment variable" {
+@test "it should read target images from TARGETS environment variable" {
   export TARGETS="target-image1
 target-image2"
 
