@@ -3,6 +3,11 @@
 name: 'Test retag-docker-image action'
 description: 'Runs validation agains the retag-docker-image action'
 
+inputs:
+  aws-account-id:
+    description: 'The AWS Account id'
+    required: true
+
 runs:
   using: 'composite'
   steps:
@@ -31,12 +36,12 @@ runs:
       with:
         source: 'scratch:latest'
         targets: |
-          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant1
-          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant2
+          ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant1
+          ${{ inputs.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant2
 
     - name: 'Validate'
       shell: bash
       run: bats -r ${{ github.action_path }}/retag-docker-image.bats
       env:
-        TARGET_IMAGE_VARIANT1: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant1
-        TARGET_IMAGE_VARIANT2: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant2
+        TARGET_IMAGE_VARIANT1: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant1
+        TARGET_IMAGE_VARIANT2: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant2
