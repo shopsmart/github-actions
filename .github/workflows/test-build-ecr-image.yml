@@ -113,8 +113,7 @@ jobs:
       file: .github/actions/test-build-ecr-image/Dockerfile
       repository-name: github-actions-tests
       role-name: github-actions-tests
-      tags: |
-        ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/github-actions-tests:${{ github.run_id }}
+      tags: ${{ github.run_id }}
       ref: ${{ github.sha }}
       skip-if-exists: true
     secrets:
