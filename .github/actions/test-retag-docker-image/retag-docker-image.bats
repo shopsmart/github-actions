@@ -1,12 +1,12 @@
 #!/usr/bin/env bats
 
 @test "it should retag the docker image as variant1" {
-  docker pull "$TARGET_IMAGE_VARIANT1"
+  run docker pull "$TARGET_IMAGE_VARIANT1"
   [ "$status" -eq 0 ]
 }
 
 @test "it should retag the docker image as variant2" {
-  docker pull "$TARGET_IMAGE_VARIANT2"
+  run docker pull "$TARGET_IMAGE_VARIANT2"
   [ "$status" -eq 0 ]
 }
 
