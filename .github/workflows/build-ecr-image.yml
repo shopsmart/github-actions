@@ -305,15 +305,31 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      - name: 'If release, add additional tag'
-        id: additional-tag
+      - name: 'Collect additional tags'
+        id: additional-tags
         if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
         run: |
-          additional_tag=''
+          echo "tags<<EOF" >> "$GITHUB_OUTPUT"
+
+          # Add the release tag if this is a GitHub release
           if [[ "${{ steps.is-gh-release.outputs.is-release }}" == 'true' ]]; then
-            additional_tag="${{ env.DOCKER_IMAGE }}:${{ inputs.ref }}"
+            echo "[INFO ] This is a GitHub release, adding the release tag to the output: ${{ env.DOCKER_IMAGE }}:${{ inputs.ref }}" >&2
+            echo "${{ env.DOCKER_IMAGE }}:${{ inputs.ref }}" >> "$GITHUB_OUTPUT"
           fi
-          echo "tag=$additional_tag" >> $GITHUB_OUTPUT
+
+          while read -r tag; do
+            [ -n "$tag" ] || continue
+
+            # If the tag already has a colon, it is a full image name
+            if ! [[ "$tag" == *:* ]]; then
+              tag="${{ env.DOCKER_IMAGE }}:$tag"
+            fi
+
+            echo "[INFO ] Adding tag: $tag" >&2
+            echo "$tag" >> "$GITHUB_OUTPUT"
+          done <<< "${{ inputs.tags }}"
+
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: 'If ssh private key provided, pass the default ssh agent'
         id: ssh
@@ -387,8 +403,7 @@ jobs:
             ${{ inputs.ssh }}
           tags: |
             ${{ env.DOCKER_IMAGE }}:${{ steps.sha.outputs.sha }}
-            ${{ steps.additional-tag.outputs.tag }}
-            ${{ inputs.tags }}
+            ${{ steps.additional-tags.outputs.tags }}
           target: ${{ inputs.target }}
           ulimit: ${{ inputs.ulimit }}
           github-token: ${{ secrets.github-token || github.token }}
