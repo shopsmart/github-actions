@@ -19,19 +19,17 @@ inputs:
           myregistry/myimage:v1.0.0
     required: true
 
+outputs:
+  tags:
+    description: 'The tags that were applied to the Docker image'
+    value: ${{ steps.retag.outputs.tags }}
+
 runs:
   using: 'composite'
   steps:
     - name: 'Retag Docker Image'
+      id: retag
       run: ${{ github.action_path }}/retag-docker-image.sh ${{ inputs.source }}
       shell: bash
       env:
         TARGETS: ${{ inputs.targets }}
-
-    - name: 'Output Retagged Images'
-      run: |
-        echo "Retagged images:"
-        for target in ${{ inputs.targets }}; do
-          echo "- $target"
-        done
-      shell: bash

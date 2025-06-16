@@ -23,12 +23,16 @@ function retag-docker-image() {
     return 0
   fi
 
+  local retagged_images=()
   for target in "${targets[@]}"; do
     [ -n "$target" ] || continue
 
-    echo "Retagging $source to $target..." >&2
+    echo "[INFO ] Retagging $source to $target..." >&2
     docker tag "$source" "$target"
+    retagged_images+=("$target")
   done
+
+  echo "tags=${retagged_images[*]}" >> "$GITHUB_OUTPUT"
 }
 
 if [ "$0" = "${BASH_SOURCE[0]}" ]; then

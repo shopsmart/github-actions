@@ -3,6 +3,7 @@
 load retag-docker-image.sh
 
 function docker() {
+  export GITHUB_OUTPUT="$BATS_TEST_TMPDIR/output"
   echo "docker $*" >> "$DOCKER_CMD_FILE"
 }
 
@@ -44,6 +45,7 @@ function teardown() {
   [ -f "$DOCKER_CMD_FILE" ]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ "docker tag source-image target-image1".* ]]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image2" ]]
+  [[ "$(< "$GITHUB_OUTPUT")" =~ "tags=target-image1 target-image2" ]]
 }
 
 @test "should read target images from TARGETS environment variable" {
@@ -56,4 +58,5 @@ target-image2"
   [ -f "$DOCKER_CMD_FILE" ]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ "docker tag source-image target-image1".* ]]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image2" ]]
+  [[ "$(< "$GITHUB_OUTPUT")" =~ "tags=target-image1 target-image2" ]]
 }

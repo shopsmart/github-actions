@@ -45,3 +45,4 @@ runs:
       env:
         TARGET_IMAGE_VARIANT1: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant1
         TARGET_IMAGE_VARIANT2: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant2
+        TAGS_OUTPUT: ${{ steps.retag.outputs.tags }}
