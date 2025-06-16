@@ -11,5 +11,5 @@
 }
 
 @test "it should output the tags it retagged" {
-  [ "$TAGS_OUTPUT" =~ "$TARGET_IMAGE_VARIANT1 $TARGET_IMAGE_VARIANT2" ]
+  [ "$TAGS_OUTPUT" = "$TARGET_IMAGE_VARIANT1 $TARGET_IMAGE_VARIANT2" ]
 }

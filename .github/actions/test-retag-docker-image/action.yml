@@ -30,6 +30,9 @@ runs:
         aws-region: 'us-east-1'
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
 
+    - name: 'Login to Amazon ECR'
+      uses: aws-actions/amazon-ecr-login@v2
+
     - name: 'Re-tag docker image'
       id: retag
       uses: ./actions/retag-docker-image
