@@ -34,7 +34,7 @@ runs:
       id: retag
       uses: ./actions/retag-docker-image
       with:
-        source: scratch
+        source: alpine:latest
         targets: |
           ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant1
           ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant2

@@ -23,6 +23,7 @@ function retag-docker-image() {
     return 0
   fi
 
+  echo "[INFO ] Pulling source image '$source'..." >&2
   docker pull "$source" || {
     echo "[ERROR] Source image '$source' does not exist or cannot be pulled." >&2
     return 1
