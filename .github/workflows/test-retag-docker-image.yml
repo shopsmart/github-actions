@@ -1,0 +1,22 @@
+---
+name: 'Run retag-docker-image action'
+
+on:
+  pull_request:
+    paths:
+      - actions/retag-docker-image/*
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-retag-docker-image-action:
+    name: 'Uses the retag-docker-image action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v4
+
+      - name: 'Test retag-docker-image action'
+        uses: ./.github/actions/test-retag-docker-image

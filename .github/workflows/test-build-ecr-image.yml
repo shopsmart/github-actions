@@ -104,3 +104,32 @@ jobs:
       skip-if-exists: true
     secrets:
       aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  # Re-tag the docker image if it already exists
+  run-build-ecr-image-retag-if-exists:
+    needs: run-build-ecr-image-skip-if-exists # The image has to have been created previously
+    uses: ./.github/workflows/build-ecr-image.yml
+    with:
+      file: .github/actions/test-build-ecr-image/Dockerfile
+      repository-name: github-actions-tests
+      role-name: github-actions-tests
+      tags: |
+        ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/github-actions-tests:${{ github.run_id }}
+      ref: ${{ github.sha }}
+      skip-if-exists: true
+    secrets:
+      aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  test-build-ecr-image-retag-if-exists:
+    runs-on: ubuntu-latest
+    needs: run-build-ecr-image-workflow
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v4
+
+      - name: 'Test build-ecr-image workflow'
+        uses: ./.github/actions/test-build-ecr-image
+        with:
+          aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
+          ref: ${{ github.run_id }}
+          version-string: ${{ github.sha }}
