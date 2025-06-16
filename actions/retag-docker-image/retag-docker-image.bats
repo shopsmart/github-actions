@@ -3,11 +3,11 @@
 load retag-docker-image.sh
 
 function docker() {
-  export GITHUB_OUTPUT="$BATS_TEST_TMPDIR/output"
   echo "docker $*" >> "$DOCKER_CMD_FILE"
 }
 
 function setup() {
+  export GITHUB_OUTPUT="$BATS_TEST_TMPDIR/output"
   export DOCKER_CMD_FILE="$BATS_TEST_TMPDIR/docker.cmd"
 
   export -f docker
