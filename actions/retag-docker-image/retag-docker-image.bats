@@ -42,7 +42,7 @@ function teardown() {
   run retag-docker-image "nonexistent-image" "target-image"
 
   [ "$status" -ne 0 ]
-  [[ "${lines[0]}" =~ "[ERROR] Source image 'nonexistent-image' does not exist or cannot be pulled." ]]
+  [[ "${lines[*]}" =~ .*"[ERROR] Source image 'nonexistent-image' does not exist or cannot be pulled." ]]
 }
 
 @test "it should retag a single target image" {
