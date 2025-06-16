@@ -121,7 +121,7 @@ jobs:
 
   test-build-ecr-image-retag-if-exists:
     runs-on: ubuntu-latest
-    needs: run-build-ecr-image-workflow
+    needs: run-build-ecr-image-retag-if-exists
     steps:
       - name: 'Checkout actions'
         uses: actions/checkout@v4
