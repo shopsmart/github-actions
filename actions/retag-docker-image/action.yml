@@ -23,7 +23,7 @@ runs:
   using: 'composite'
   steps:
     - name: 'Retag Docker Image'
-      run: ${{ github.action_path }}/scripts/retag-docker-image.sh ${{ inputs.source }}
+      run: ${{ github.action_path }}/retag-docker-image.sh ${{ inputs.source }}
       shell: bash
       env:
         TARGETS: ${{ inputs.targets }}
