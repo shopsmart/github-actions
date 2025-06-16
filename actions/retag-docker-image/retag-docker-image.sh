@@ -29,16 +29,26 @@ function retag-docker-image() {
     return 1
   }
 
+  local status=$?
+
   local retagged_images=()
   for target in "${targets[@]}"; do
     [ -n "$target" ] || continue
 
     echo "[INFO ] Retagging $source to $target..." >&2
     docker tag "$source" "$target"
+
+    echo "[INFO ] Pushing $target..." >&2
+    docker push "$target" || {
+      echo "[ERROR] Failed to push $target." >&2
+      status=2
+      continue
+    }
     retagged_images+=("$target")
   done
 
   echo "tags=${retagged_images[*]}" >> "$GITHUB_OUTPUT"
+  return $status
 }
 
 if [ "$0" = "${BASH_SOURCE[0]}" ]; then

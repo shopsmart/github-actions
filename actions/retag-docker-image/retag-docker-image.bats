@@ -52,6 +52,7 @@ function teardown() {
   [ -f "$DOCKER_CMD_FILE" ]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker pull source-image".* ]]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image" ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker push target-image".* ]]
 }
 
 @test "it should retag multiple target images" {
@@ -61,7 +62,29 @@ function teardown() {
   [ -f "$DOCKER_CMD_FILE" ]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image1".* ]]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image2" ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker push target-image1".* ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker push target-image2".* ]]
   [[ "$(< "$GITHUB_OUTPUT")" =~ "tags=target-image1 target-image2" ]]
+}
+
+@test "it should continue on push failure" {
+  function docker() {
+    echo "docker $*" >> "$DOCKER_CMD_FILE"
+    if [[ "$1" == "push" && "$2" == "target-image2" ]]; then
+      return 1
+    fi
+  }
+  export -f docker
+
+  run retag-docker-image "source-image" "target-image1" "target-image2"
+  [ "$status" -eq 2 ]
+  [[ "${lines[*]}" =~ .*"[ERROR] Failed to push target-image2.".* ]]
+  [ -f "$DOCKER_CMD_FILE" ]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image1".* ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image2".* ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker push target-image1".* ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker push target-image2".* ]]
+  [[ "$(< "$GITHUB_OUTPUT")" =~ "tags=target-image1" ]]
 }
 
 @test "it should read target images from TARGETS environment variable" {
@@ -74,5 +97,7 @@ target-image2"
   [ -f "$DOCKER_CMD_FILE" ]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ "docker tag source-image target-image1".* ]]
   [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image2" ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker push target-image1".* ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker push target-image2".* ]]
   [[ "$(< "$GITHUB_OUTPUT")" =~ "tags=target-image1 target-image2" ]]
 }
