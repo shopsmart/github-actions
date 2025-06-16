@@ -307,7 +307,6 @@ jobs:
 
       - name: 'Collect additional tags'
         id: additional-tags
-        if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
         run: |
           echo "tags<<EOF" >> "$GITHUB_OUTPUT"
 
