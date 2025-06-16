@@ -31,18 +31,18 @@ function teardown() {
 }
 
 @test "it should error out if source image does not exist" {
-  run retag-docker-image "nonexistent-image"
+  function docker() {
+    echo "docker $*" >> "$DOCKER_CMD_FILE"
+    if [ "$1" = "pull" ] && [ "$2" = "nonexistent-image" ]; then
+      return 1
+    fi
+  }
+  export -f docker
+
+  run retag-docker-image "nonexistent-image" "target-image"
 
   [ "$status" -ne 0 ]
   [[ "${lines[0]}" =~ "[ERROR] Source image 'nonexistent-image' does not exist or cannot be pulled." ]]
-}
-
-@test "it should pull the source image" {
-  run retag-docker-image "source-image" "target-image"
-
-  [ "$status" -eq 0 ]
-  [ -f "$DOCKER_CMD_FILE" ]
-  [[ "$(< "$DOCKER_CMD_FILE")" = .*"docker pull source-image" ]]
 }
 
 @test "it should retag a single target image" {
@@ -50,7 +50,8 @@ function teardown() {
 
   [ "$status" -eq 0 ]
   [ -f "$DOCKER_CMD_FILE" ]
-  [[ "$(< "$DOCKER_CMD_FILE")" = .*"docker tag source-image target-image" ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker pull source-image".* ]]
+  [[ "$(< "$DOCKER_CMD_FILE")" =~ .*"docker tag source-image target-image" ]]
 }
 
 @test "it should retag multiple target images" {
