@@ -24,3 +24,5 @@ jobs:
 
       - name: 'Test retag-docker-image action'
         uses: ./.github/actions/test-retag-docker-image
+        with:
+          aws-account-id: ${{ secrets.AWS_ACCOUNT_ID }}
