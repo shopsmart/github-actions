@@ -6,6 +6,10 @@ on:
     paths:
       - actions/retag-docker-image/*
 
+permissions:
+  id-token: write
+  contents: read
+
 defaults:
   run:
     shell: bash
