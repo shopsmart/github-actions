@@ -300,7 +300,6 @@ jobs:
 
       - name: 'Is github release?'
         id: is-gh-release
-        if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
         uses: shopsmart/github-actions/actions/is-gh-release@v4
         with:
           ref: ${{ inputs.ref }}
