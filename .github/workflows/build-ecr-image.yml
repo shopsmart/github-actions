@@ -412,9 +412,7 @@ jobs:
         uses: shopsmart/github-actions/actions/retag-docker-image@DEV-690/do-not-build-docker-image-when-already-built
         with:
           source: ${{ env.DOCKER_IMAGE }}:${{ steps.sha.outputs.sha }}
-          targets: |
-            ${{ steps.additional-tag.outputs.tag }}
-            ${{ inputs.tags }}
+          targets: ${{ steps.additional-tags.outputs.tags }}
 
       - name: 'Pull and package docker image'
         if: steps.is-gh-release.outputs.is-release == 'true'
