@@ -29,7 +29,7 @@ runs:
   steps:
     - name: 'Retag Docker Image'
       id: retag
-      run: ${{ github.action_path }}/retag-docker-image.sh ${{ inputs.source }}
+      run: ${{ github.action_path }}/retag-ecr-image.sh ${{ inputs.source }}
       shell: bash
       env:
         TARGETS: ${{ inputs.targets }}
