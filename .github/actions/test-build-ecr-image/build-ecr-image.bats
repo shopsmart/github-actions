@@ -18,5 +18,5 @@ function teardown() {
   run docker run "$ECR_REPOSITORY:$VERSION_TAG"
 
   [ "$status" -eq 0 ]
-  [ "$output" = "{\"version\": \"$VERSION_TAG\"}" ]
+  [ "$output" = "{\"version\": \"$VERSION_STRING\"}" ]
 }
