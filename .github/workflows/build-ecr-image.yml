@@ -407,11 +407,12 @@ jobs:
           github-token: ${{ secrets.github-token || github.token }}
 
       - name: 'Tag docker image'
-        if: inputs.skip-if-exists == 'true' || steps.already-exists.outputs.answer == 'true'
-        uses: shopsmart/github-actions/actions/retag-ecr-image@DEV-690/do-not-build-docker-image-when-already-built
+        if: inputs.skip-if-exists == true || steps.already-exists.outputs.answer == 'true'
+        uses: shopsmart/github-actions/actions/retag-ecr-image@v4
         with:
           source: ${{ env.DOCKER_IMAGE }}:${{ steps.sha.outputs.sha }}
           targets: ${{ steps.additional-tags.outputs.tags }}
+        continue-on-error: true
 
       - name: 'Pull and package docker image'
         if: steps.is-gh-release.outputs.is-release == 'true'
