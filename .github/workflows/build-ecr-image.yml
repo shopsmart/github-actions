@@ -408,7 +408,7 @@ jobs:
 
       - name: 'Tag docker image'
         if: inputs.skip-if-exists == 'true' || steps.already-exists.outputs.answer == 'true'
-        uses: shopsmart/github-actions/actions/retag-docker-image@DEV-690/do-not-build-docker-image-when-already-built
+        uses: shopsmart/github-actions/actions/retag-ecr-image@DEV-690/do-not-build-docker-image-when-already-built
         with:
           source: ${{ env.DOCKER_IMAGE }}:${{ steps.sha.outputs.sha }}
           targets: ${{ steps.additional-tags.outputs.tags }}
