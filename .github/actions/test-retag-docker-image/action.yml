@@ -1,0 +1,51 @@
+---
+
+name: 'Test retag-docker-image action'
+description: 'Runs validation agains the retag-docker-image action'
+
+inputs:
+  aws-account-id:
+    description: 'The AWS Account id'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup Homebrew'
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Checkout'
+      uses: actions/checkout@v4
+
+    - name: 'Use local actions'
+      uses: ./.github/actions/use-local-actions
+
+    - name: 'Configure AWS Credentials'
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: 'us-east-1'
+        role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
+
+    - name: 'Login to Amazon ECR'
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: 'Re-tag docker image'
+      id: retag
+      uses: ./actions/retag-docker-image
+      with:
+        source: alpine:latest
+        targets: |
+          ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant1
+          ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant2
+
+    - name: 'Validate'
+      shell: bash
+      run: bats -r ${{ github.action_path }}/retag-docker-image.bats
+      env:
+        TARGET_IMAGE_VARIANT1: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant1
+        TARGET_IMAGE_VARIANT2: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests:${{ github.run_id }}-variant2
+        TAGS_OUTPUT: ${{ steps.retag.outputs.tags }}

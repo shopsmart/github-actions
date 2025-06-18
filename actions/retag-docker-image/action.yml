@@ -1,0 +1,35 @@
+---
+name: 'Retag Docker Image'
+description: |
+  Retag a Docker image with a new tag.
+
+inputs:
+  source:
+    description: 'The source Docker image and tag to retag'
+    required: true
+
+  targets:
+    description: |
+      The target Docker image and tags to apply.
+      Multiple tags can be specified as a line-delimited list.
+
+      Example:
+        targets: |
+          myregistry/myimage:latest
+          myregistry/myimage:v1.0.0
+    required: true
+
+outputs:
+  tags:
+    description: 'The tags that were applied to the Docker image'
+    value: ${{ steps.retag.outputs.tags }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Retag Docker Image'
+      id: retag
+      run: ${{ github.action_path }}/retag-docker-image.sh ${{ inputs.source }}
+      shell: bash
+      env:
+        TARGETS: ${{ inputs.targets }}
