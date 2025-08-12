@@ -17,12 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: 'Checkout'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 'Setup node'
         uses: actions/setup-node@v4
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 'Setup Homebrew'
         uses: Homebrew/actions/setup-homebrew@master
@@ -65,7 +65,7 @@ jobs:
           - create-datadog-downtime
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 'Setup node'
         uses: actions/setup-node@v4

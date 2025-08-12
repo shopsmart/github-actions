@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout actions'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 'Test tag-ecs-resource action'
         uses: ./.github/actions/test-tag-ecs-resource

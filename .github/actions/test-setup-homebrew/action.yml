@@ -14,7 +14,7 @@ runs:
       run: brew install bats-core
 
     - name: 'Checkout actions'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: 'Create a Brewfile'
       shell: bash
