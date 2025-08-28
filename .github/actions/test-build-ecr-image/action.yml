@@ -10,6 +10,10 @@ inputs:
   ref:
     description: 'The github ref to expect'
     required: false
+  version-string:
+    description: 'The version string that was used as a build-arg.  This normally is just the ref of the docker image, but when re-tagging, it would take whatever version is already built.'
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
@@ -42,3 +46,4 @@ runs:
       env:
         ECR_REPOSITORY: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests
         VERSION_TAG: ${{ inputs.ref }}
+        VERSION_STRING: ${{ inputs.version-string || inputs.ref }}

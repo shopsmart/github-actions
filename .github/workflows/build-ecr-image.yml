@@ -300,20 +300,34 @@ jobs:
 
       - name: 'Is github release?'
         id: is-gh-release
-        if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
         uses: shopsmart/github-actions/actions/is-gh-release@v4
         with:
           ref: ${{ inputs.ref }}
 
-      - name: 'If release, add additional tag'
-        id: additional-tag
-        if: inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false'
+      - name: 'Collect additional tags'
+        id: additional-tags
         run: |
-          additional_tag=''
+          echo "tags<<EOF" >> "$GITHUB_OUTPUT"
+
+          # Add the release tag if this is a GitHub release
           if [[ "${{ steps.is-gh-release.outputs.is-release }}" == 'true' ]]; then
-            additional_tag="${{ env.DOCKER_IMAGE }}:${{ inputs.ref }}"
+            echo "[INFO ] This is a GitHub release, adding the release tag to the output: ${{ env.DOCKER_IMAGE }}:${{ inputs.ref }}" >&2
+            echo "${{ env.DOCKER_IMAGE }}:${{ inputs.ref }}" >> "$GITHUB_OUTPUT"
           fi
-          echo "tag=$additional_tag" >> $GITHUB_OUTPUT
+
+          while read -r tag; do
+            [ -n "$tag" ] || continue
+
+            # If the tag already has a colon, it is a full image name
+            if ! [[ "$tag" == *:* ]]; then
+              tag="${{ env.DOCKER_IMAGE }}:$tag"
+            fi
+
+            echo "[INFO ] Adding tag: $tag" >&2
+            echo "$tag" >> "$GITHUB_OUTPUT"
+          done <<< "${{ inputs.tags }}"
+
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: 'If ssh private key provided, pass the default ssh agent'
         id: ssh
@@ -344,8 +358,8 @@ jobs:
           use: ${{ inputs.use }}
           endpoint: ${{ inputs.endpoint }}
           platforms: ${{ inputs.platforms }}
-          config: ${{ inputs.config }}
-          config-inline: ${{ inputs.config-inline }}
+          buildkitd-config: ${{ inputs.config }}
+          buildkitd-config-inline: ${{ inputs.config-inline }}
           append: ${{ inputs.append }}
 
       - name: 'Build docker image'
@@ -387,14 +401,21 @@ jobs:
             ${{ inputs.ssh }}
           tags: |
             ${{ env.DOCKER_IMAGE }}:${{ steps.sha.outputs.sha }}
-            ${{ steps.additional-tag.outputs.tag }}
-            ${{ inputs.tags }}
+            ${{ steps.additional-tags.outputs.tags }}
           target: ${{ inputs.target }}
           ulimit: ${{ inputs.ulimit }}
           github-token: ${{ secrets.github-token || github.token }}
 
+      - name: 'Tag docker image'
+        if: inputs.skip-if-exists == true || steps.already-exists.outputs.answer == 'true'
+        uses: shopsmart/github-actions/actions/retag-ecr-image@v4
+        with:
+          source: ${{ env.DOCKER_IMAGE }}:${{ steps.sha.outputs.sha }}
+          targets: ${{ steps.additional-tags.outputs.tags }}
+        continue-on-error: true
+
       - name: 'Pull and package docker image'
-        if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && steps.is-gh-release.outputs.is-release == 'true'
+        if: steps.is-gh-release.outputs.is-release == 'true'
         env:
           NAME: ${{ inputs.repository-name }}
           IMAGE: ${{ env.DOCKER_IMAGE }}:${{ steps.sha.outputs.sha }}
@@ -406,7 +427,7 @@ jobs:
           docker save "$IMAGE" | gzip > "docker-image-$NAME-$TAG.tgz"
 
       - name: 'Upload docker image'
-        if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && steps.is-gh-release.outputs.is-release == 'true'
+        if: steps.is-gh-release.outputs.is-release == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.ref }}
