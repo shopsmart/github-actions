@@ -20,7 +20,7 @@ runs:
       run: brew install bats-core
 
     - name: 'Checkout'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: 'Use local actions'
       uses: ./.github/actions/use-local-actions

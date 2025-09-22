@@ -19,13 +19,13 @@ runs:
       run: brew install bats-core
 
     - name: 'Checkout'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: 'Use local actions'
       uses: ./.github/actions/use-local-actions
 
     - name: 'Configure AWS Credentials'
-      uses: aws-actions/configure-aws-credentials@v4
+      uses: aws-actions/configure-aws-credentials@v5
       with:
         aws-region: 'us-east-1'
         role-to-assume: arn:aws:iam::${{ inputs.aws-account-id }}:role/github-actions-tests
