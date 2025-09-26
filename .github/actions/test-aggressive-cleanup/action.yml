@@ -20,7 +20,7 @@ runs:
       uses: actions/checkout@v4
 
     - name: 'Run the aggressive-cleanup action'
-      uses: ./.github/actions/test-aggressive-cleanup
+      uses: ./actions/aggressive-cleanup
       with:
         skip: 'chromium google'
 
