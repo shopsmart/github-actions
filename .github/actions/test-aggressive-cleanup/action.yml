@@ -26,8 +26,4 @@ runs:
 
     - name: 'Validate'
       shell: bash
-      run: bats --verbose-run -r ${{ github.action_path }}/build-ecr-image.bats
-      env:
-        ECR_REPOSITORY: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests
-        VERSION_TAG: ${{ inputs.ref }}
-        VERSION_STRING: ${{ inputs.version-string || inputs.ref }}
+      run: bats --verbose-run -r ${{ github.action_path }}/aggressive-cleanup.bats
