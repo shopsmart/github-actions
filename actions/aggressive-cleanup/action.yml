@@ -1,6 +1,9 @@
 ---
 name: 'Aggressive Cleanup'
-description: 'Removes pre-installed software packages that will be unused.'
+description: |-
+  Removes pre-installed software packages that will be unused.  This action helps to free up disk
+    space on the GitHub Actions runner by removing unnecessary files and directories making more
+    room for your jobs.
 
 inputs:
   skip:
