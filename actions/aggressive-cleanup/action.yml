@@ -1,0 +1,25 @@
+---
+name: 'Aggressive Cleanup'
+description: 'Removes pre-installed software packages that will be unused.'
+
+inputs:
+  skip:
+    description: 'List of packages to skip from removal.  Options are java, dotnet, swift, ghcup, julia, android, chromium, microsoft, google, azure, powershell.  Separate multiple values with spaces.'
+    required: false
+    default: ''
+
+outputs:
+  removed:
+    description: 'List of packages that were removed.'
+    value: ${{ steps.cleanup.outputs.removed }}
+  skipped:
+    description: 'List of packages that were skipped from removal.'
+    value: ${{ steps.cleanup.outputs.skipped }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Aggressive Cleanup'
+      id: cleanup
+      shell: bash
+      run: ${{ github.action_path }}/cleanup.sh ${{ inputs.skip }}

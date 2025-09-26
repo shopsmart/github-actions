@@ -1,0 +1,25 @@
+---
+
+name: 'Run aggressive-cleanup action'
+
+on:
+  pull_request:
+    paths:
+      - actions/aggressive-cleanup/*
+      - .github/actions/test-aggressive-cleanup/*
+      - .github/workflows/test-aggressive-cleanup.yml
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test-aggressive-cleanup-action:
+    name: 'Uses the aggressive-cleanup action'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout actions'
+        uses: actions/checkout@v4
+
+      - name: 'Test aggressive-cleanup action'
+        uses: ./.github/actions/test-aggressive-cleanup

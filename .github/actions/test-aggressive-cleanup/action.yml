@@ -1,0 +1,33 @@
+---
+
+name: 'Test aggressive-cleanup action'
+description: 'Runs validation against the aggressive-cleanup workflow'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Setup brew'
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: 'Install BATS'
+      shell: bash
+      run: brew install bats-core
+
+    - name: 'Set up Docker Buildx'
+      uses: docker/setup-buildx-action@v3
+
+    - name: 'Checkout'
+      uses: actions/checkout@v4
+
+    - name: 'Run the aggressive-cleanup action'
+      uses: ./.github/actions/test-aggressive-cleanup
+      with:
+        skip: 'chromium google'
+
+    - name: 'Validate'
+      shell: bash
+      run: bats --verbose-run -r ${{ github.action_path }}/build-ecr-image.bats
+      env:
+        ECR_REPOSITORY: ${{ inputs.aws-account-id }}.dkr.ecr.us-east-1.amazonaws.com/github-actions-tests
+        VERSION_TAG: ${{ inputs.ref }}
+        VERSION_STRING: ${{ inputs.version-string || inputs.ref }}
