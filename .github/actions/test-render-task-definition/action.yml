@@ -19,7 +19,7 @@ runs:
       run: brew install bats-core
 
     - name: 'Checkout'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: 'Download task-definition'
       uses: actions/download-artifact@v4
