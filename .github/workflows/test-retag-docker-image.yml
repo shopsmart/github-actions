@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout actions'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 'Test retag-docker-image action'
         uses: ./.github/actions/test-retag-docker-image
