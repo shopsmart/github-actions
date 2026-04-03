@@ -6,23 +6,66 @@ description: |-
     room for your jobs.
 
 inputs:
-  skip:
-    description: 'List of packages to skip from removal.  Options are java, dotnet, swift, ghcup, julia, android, chromium, microsoft, google, azure, powershell.  Separate multiple values with spaces.'
+  # Begin AdityaGarg8/remove-unwanted-software@v5 inputs
+  remove-dotnet:
+    description: 'Removes .NET runtime and libraries. (frees ~2 GB)'
     required: false
-    default: ''
-
-outputs:
-  removed:
-    description: 'List of packages that were removed.'
-    value: ${{ steps.cleanup.outputs.removed }}
-  skipped:
-    description: 'List of packages that were skipped from removal.'
-    value: ${{ steps.cleanup.outputs.skipped }}
+    default: 'true'
+  remove-android:
+    description: 'Removes Android SDKs and Tools. (frees ~9 GB)'
+    required: false
+    default: 'true'
+  remove-haskell:
+    description: 'Removes GHC (Haskell) artifacts. (frees ~5.2 GB)'
+    required: false
+    default: 'true'
+  remove-codeql:
+    description: 'Removes CodeQL Action Bundles. (frees ~5.4 GB)'
+    required: false
+    default: 'true'
+  remove-docker-images:
+    description: 'Removes cached Docker images. (frees ~3.2 GB)'
+    required: false
+    default: 'false'
+  remove-large-packages:
+    description: 'Removes unwanted large Apt packages. (frees ~3.1 GB)'
+    required: false
+    default: 'true'
+  remove-cached-tools:
+    description: 'Removes cached tools used by setup actions by GitHub. (frees ~8.3 GB)'
+    required: false
+    default: 'false'
+  remove-swapfile:
+    description: 'Removes the Swapfile. (frees ~4 GB)'
+    required: false
+    default: 'true'
+  verbose:
+    description: 'Enables detailed logging of the action'
+    required: false
+    default: 'false'
+  # end AdityaGarg8/remove-unwanted-software@v5 inputs
 
 runs:
   using: 'composite'
   steps:
+    - name: Maximize build space
+      uses: AdityaGarg8/remove-unwanted-software@v5
+      with:
+        remove-android: ${{ inputs.remove-android }}
+        remove-codeql: ${{ inputs.remove-codeql }}
+        remove-cached-tools: ${{ inputs.remove-cached-tools }}
+        remove-dotnet: ${{ inputs.remove-dotnet }}
+        remove-docker-images: ${{ inputs.remove-docker-images }}
+        remove-haskell: ${{ inputs.remove-haskell }}
+        remove-large-packages: ${{ inputs.remove-large-packages }}
+        remove-swapfile: ${{ inputs.remove-swapfile }}
+        verbose: ${{ inputs.verbose }}
+
     - name: 'Aggressive Cleanup'
       id: cleanup
       shell: bash
       run: ${{ github.action_path }}/cleanup.sh ${{ inputs.skip }}
+
+    - name: 'Check disk space'
+      shell: bash
+      run: df -h
