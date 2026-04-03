@@ -342,7 +342,7 @@ jobs:
       # for private dependencies
       - name: 'Install SSH Key'
         if: (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && steps.ssh.outputs.ssh != ''
-        uses: webfactory/ssh-agent@v0.9.1
+        uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.ssh-private-key }}
 
