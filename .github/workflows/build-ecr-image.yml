@@ -414,26 +414,6 @@ jobs:
           targets: ${{ steps.additional-tags.outputs.tags }}
         continue-on-error: true
 
-      - name: 'Pull and package docker image'
-        if: steps.is-gh-release.outputs.is-release == 'true'
-        env:
-          NAME: ${{ inputs.repository-name }}
-          IMAGE: ${{ env.DOCKER_IMAGE }}:${{ steps.sha.outputs.sha }}
-          TAG: ${{ inputs.ref }}
-        run: |
-          set -eo pipefail
-          echo "[INFO ] Exporting $IMAGE and zipping to docker-image-$NAME-$TAG.tgz" >&2
-          docker pull "$IMAGE"
-          docker save "$IMAGE" | gzip > "docker-image-$NAME-$TAG.tgz"
-
-      - name: 'Upload docker image'
-        if: steps.is-gh-release.outputs.is-release == 'true'
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ inputs.ref }}
-          files: docker-image-*.tgz
-          token: ${{ secrets.github-token || github.token }}
-
       - name: 'Notify slack of build status'
         if: always() && (inputs.skip-if-exists == false || steps.already-exists.outputs.answer == 'false') && inputs.notify-slack == true
         uses: shopsmart/github-actions/actions/notify-slack@v4
