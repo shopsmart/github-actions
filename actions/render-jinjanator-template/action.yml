@@ -1,7 +1,10 @@
 ---
 
 name: 'Render Jinjanator Template'
-description: 'Renders a Jinjanator Template'
+description: |
+  **DEPRECATED** Use the `bd-actions` ECS task definition rendering instead.
+
+  Renders a Jinjanator Template
 
 inputs:
   template:
