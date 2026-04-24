@@ -1,6 +1,7 @@
 ---
+# DEPRECATED: Use the bd-actions ECS task definition rendering instead.
 
-name: 'Render task definition'
+name: '[DEPRECATED] Render task definition'
 
 on:
   workflow_call:
