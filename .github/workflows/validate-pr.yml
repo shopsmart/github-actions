@@ -48,7 +48,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: 'Setup Homebrew'
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@2026.09.13.1
 
       - name: 'Install bats'
         run: brew install bats-core
