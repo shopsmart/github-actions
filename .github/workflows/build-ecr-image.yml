@@ -1,6 +1,7 @@
 ---
+# DEPRECATED: This repository is EOL and will be archived on 2026-10-31. Use shopsmart/bd-actions instead.
 
-name: 'Build docker image for ECR'
+name: '[DEPRECATED] Build docker image for ECR'
 
 on:
   workflow_call:

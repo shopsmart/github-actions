@@ -1,7 +1,10 @@
 ---
 
 name: 'Tag ECS resource'
-description: 'Tags an ECS resource'
+description: |
+  **DEPRECATED** This repository is EOL and will be archived on 2026-10-31. Use [`shopsmart/bd-actions`](https://github.com/shopsmart/bd-actions) instead.
+
+  Tags an ECS resource
 
 inputs:
   resource-arn:

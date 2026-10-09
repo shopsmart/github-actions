@@ -1,6 +1,7 @@
 ---
+# DEPRECATED: This repository is EOL and will be archived on 2026-10-31. Use shopsmart/bd-actions instead.
 
-name: 'Register task definition'
+name: '[DEPRECATED] Register task definition'
 
 on:
   workflow_call:
