@@ -1,7 +1,10 @@
 ---
 
 name: 'Unpack archive'
-description: 'Unpacks a zip archive to a path'
+description: |
+  **DEPRECATED** This repository is EOL and will be archived on 2026-10-31. Use [`shopsmart/bd-actions`](https://github.com/shopsmart/bd-actions) instead.
+
+  Unpacks a zip archive to a path
 
 inputs:
   filename:

@@ -1,7 +1,10 @@
 ---
 
 name: 'Deploy to s3 bucket'
-description: 'Deploys assets to an s3 bucket'
+description: |
+  **DEPRECATED** This repository is EOL and will be archived on 2026-10-31. Use [`shopsmart/bd-actions`](https://github.com/shopsmart/bd-actions) instead.
+
+  Deploys assets to an s3 bucket
 
 inputs:
   pattern:

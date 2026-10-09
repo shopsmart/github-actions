@@ -1,7 +1,10 @@
 ---
 
 name: 'Setup Homebrew'
-description: 'Sets up Homebrew and installs dependencies from a Brewfile'
+description: |
+  **DEPRECATED** This repository is EOL and will be archived on 2026-10-31. Use [`shopsmart/bd-actions`](https://github.com/shopsmart/bd-actions) instead.
+
+  Sets up Homebrew and installs dependencies from a Brewfile
 
 inputs:
   install:

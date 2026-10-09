@@ -1,6 +1,7 @@
 ---
+# DEPRECATED: This repository is EOL and will be archived on 2026-10-31. Use shopsmart/bd-actions instead.
 
-name: 'Deploy lambda function'
+name: '[DEPRECATED] Deploy lambda function'
 
 on:
   workflow_call:

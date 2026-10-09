@@ -1,7 +1,10 @@
 ---
 
 name: 'Is Github release?'
-description: 'Determines if a version string provided from user input is a github release or not'
+description: |
+  **DEPRECATED** This repository is EOL and will be archived on 2026-10-31. Use [`shopsmart/bd-actions`](https://github.com/shopsmart/bd-actions) instead.
+
+  Determines if a version string provided from user input is a github release or not
 
 inputs:
   ref:

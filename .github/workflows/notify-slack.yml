@@ -1,6 +1,7 @@
 ---
+# DEPRECATED: This repository is EOL and will be archived on 2026-10-31. Use shopsmart/bd-actions instead.
 
-name: 'Notify slack'
+name: '[DEPRECATED] Notify slack'
 
 on:
   workflow_call:
