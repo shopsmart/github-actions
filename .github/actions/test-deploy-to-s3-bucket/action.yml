@@ -12,11 +12,9 @@ runs:
   using: 'composite'
   steps:
     - name: 'Setup Homebrew'
-      uses: Homebrew/actions/setup-homebrew@master
-
-    - name: 'Install BATS and jq'
-      shell: bash
-      run: brew install bats-core jq
+      uses: shopsmart/bd-actions/setup-homebrew@feat/setup-homebrew
+      with:
+        packages: bats-core jq
 
     - name: 'Checkout'
       uses: actions/checkout@v6

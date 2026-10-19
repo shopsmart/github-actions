@@ -19,11 +19,9 @@ runs:
   using: 'composite'
   steps:
     - name: 'Setup brew'
-      uses: Homebrew/actions/setup-homebrew@master
-
-    - name: 'Install BATS'
-      shell: bash
-      run: brew install bats-core
+      uses: shopsmart/bd-actions/setup-homebrew@feat/setup-homebrew
+      with:
+        packages: bats-core
 
     - name: 'Set up Docker Buildx'
       uses: docker/setup-buildx-action@v4

@@ -7,11 +7,9 @@ runs:
   using: 'composite'
   steps:
     - name: 'Setup Homebrew'
-      uses: Homebrew/actions/setup-homebrew@master
-
-    - name: 'Install BATS'
-      shell: bash
-      run: brew install bats-core
+      uses: shopsmart/bd-actions/setup-homebrew@feat/setup-homebrew
+      with:
+        packages: bats-core
 
     - name: 'Checkout'
       uses: actions/checkout@v6
